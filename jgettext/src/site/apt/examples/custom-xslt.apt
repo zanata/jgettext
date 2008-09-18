@@ -1,0 +1,118 @@
+ ------
+ Custom XSLT
+ ------
+ Steve Ebersole
+ ------
+ 2 July 2007
+ ------
+
+~~ Copyright © 2007  Red Hat Middleware, LLC. All rights reserved.
+~~
+~~ This copyrighted material is made available to anyone wishing to use, modify,
+~~ copy, or redistribute it subject to the terms and conditions of the GNU
+~~ Lesser General Public License, v. 2.1. This program is distributed in the
+~~ hope that it will be useful, but WITHOUT A WARRANTY; without even the implied
+~~ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+~~ Lesser General Public License for more details. You should have received a
+~~ copy of the GNU Lesser General Public License, v.2.1 along with this
+~~ distribution; if not, write to the Free Software Foundation, Inc.,
+~~ 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+~~
+~~ Red Hat Author(s): Steve Ebersole
+
+Custom XSLT
+
+    The {{{../usage.html}usage}} page describes the formats understood by
+    the <jDocBook Plugin>.  Each of those formats map to a format understood
+    by DocBook itself, in terms of its provided XSLT.  Thus, by default each
+    format is processed by the standard DocBook XSLT for the specified
+    format.  It is possible for a user to redefine how transformations occur
+    for a given format by specifying that a custom XSLT be used instead of the
+    standard DocBook XSLT for that particular format in the configuration.
+    There are two main ways to define the custom xslt that should be used...
+
+* file: URL
+
+    The first approach is to specify a <file://> style URL.  This URL could point
+    to any valid file.  For example, referring to a project-local file for XSLT
+    processing might look like:
+
++----+
+...
+<plugin>
+    ...
+    <configuration>
+        <formats>
+            <format>
+                ...
+                <stylesheetResource>file:${basedir}/src/custom/xslt/mycustom.xsl</stylesheetResource>
+            </format>
+        </formats>
+    </configuration>
+</plugin>
++----+
+
+
+* classpath: URL
+
+    The second approach is to specify a <classpath://> URL.  These will be resolved
+    against the current classpath when the plugin executes.  Typically, these
+    resources would come from a dependency (see {{{../docbook-support.html}}} for
+    example).  Referring to a classpath resource for XSLT processing might look like:
+
++----+
+...
+<plugin>
+    ...
+    <configuration>
+        <formats>
+            <format>
+                ...
+                <stylesheetResource>classpath:/myproject/mycustom.xsl</stylesheetResource>
+            </format>
+        </formats>
+    </configuration>
+</plugin>
++----+
+
+
+* jdocbook-style classpath: URL
+
+    See {{{../style.html}here}} for background discussion.
+
+    As a specific example of using an XSLT defined in a <jdocbook-style> package,
+    consider the following jdocbook-style package distributed by the venerable
+    Acme Corporation:
+
++----+
+acmeskin.docbook-support/
+    xslt/
+        com/
+            acme/
+                fo.xsl
++----+
+
+    Using that would be as simple as:
+
++----+
+<plugin>
+    <groupId>org.jboss.maven.plugins</groupId>
+    <artifacId>maven-jdocbook-plugin</artifactId>
+    <extensions>true</extensions>
+    <dependencies>
+        <dependency>
+            <groupId>com.acme</groupId>
+            <artifactId>acmeskin</artifactId>
+            <type>jdocbook-style</type>
+        </dependency>
+    </dependencies>
+    <configuration>
+        <formats>
+            <format>
+                <formatName>pdf</formatName>
+                <stylesheetResource>classpath:/xslt/com/acme/fo.xsl</stylesheetResource>
+            </format>
+        </formats>
+    </configuration>
+</plugin>
++----+

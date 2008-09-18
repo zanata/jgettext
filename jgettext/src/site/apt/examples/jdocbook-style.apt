@@ -1,0 +1,129 @@
+ ------
+ Complete jdocbook-style Example
+ ------
+ Steve Ebersole
+ ------
+ 2 July 2007
+ ------
+
+~~ Copyright © 2007  Red Hat Middleware, LLC. All rights reserved.
+~~
+~~ This copyrighted material is made available to anyone wishing to use, modify,
+~~ copy, or redistribute it subject to the terms and conditions of the GNU
+~~ Lesser General Public License, v. 2.1. This program is distributed in the
+~~ hope that it will be useful, but WITHOUT A WARRANTY; without even the implied
+~~ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+~~ Lesser General Public License for more details. You should have received a
+~~ copy of the GNU Lesser General Public License, v.2.1 along with this
+~~ distribution; if not, write to the Free Software Foundation, Inc.,
+~~ 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+~~
+~~ Red Hat Author(s): Steve Ebersole
+
+Complete jdocbook-style Example
+
+    The intention in splitting the <jdocbook> plugin and <jdocbook-style> plugin
+    is the notion of separation-of-concerns; namely, let documentation content
+    developers focus on developing content, while documentation style developers
+    develop the "look and feel" of the produced output(s).  This split represents
+    the "sweet spot" for this plugin, and is the main intended use-case.  So let's
+    take a look at this approach from beginning to end.
+
+    Since an example, is worth (probably more than) a thousand words for most
+    of us, lets take a look at an example of the approach of combining these
+    two plugins.  As I mentioned before, the venerable Acme Corporation produces a
+    <jdocbook-style> bundle for all their product manuals.  As the person in charge
+    of Acme's latest product, WhizBang, you'll need to utilize that style bundle in producing
+    your manual.
+
+* The jdocbook-style bundle
+
+    Acme Corporation only produces manuals in PDF format.  And they have a minimum
+    of custom images.  Here is the source layout of the acme-manual-style
+    project:
+
++----+
+acme-manual-style/
+    images/
+        acme-corp-logo.svg
+    xslt/
+        acme-manual.xsl
+    pom.xml
++----+
+
+    <Generally, as a developer of a jdocbook project you would not need to
+    know such details about the source structure of the corresponding
+    jdocbook-style project.  The above is included just in the interest
+    of completeness.>
+
+    That project source produces an artifact named acme-manual-style.jdocbook-style (the
+    artifact is really a jar file, but unfortunately Maven forces the artifact
+    to have an extension matching the name of the packaging, which here is
+    jdocbook-style).  The contents of that archive are as follows:
+
++----+
+    images/
+        acme-corp-logo.svg
+    xslt/
+        acme-manual.xsl
+    META-INF/
+        ....
++----+
+
+    See the documentation of the maven-jdocbook-style-plugin project for more
+    details.  The above was a very brief overview.
+
+* The WhizBang manual project
+
+    First, we create the project directory structure:
+
++----+
+whizbang-manual/
+    src/
+        main/
+            docbook/
+                whizbang.xml
+                whizbang-front.gif
+                whizbang-back.gif
+    pom.xml
++----+
+
+    Let's take a look at the pom.xml for the WhizBang manual...
+
++----+
+<project>
+    ...
+    <groupId>com.acme</groupId>
+    <artifactId>whizbang-manual<artifactId>
+    <type>jdocbook</type>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jboss.maven.plugins</groupId>
+                <artifacId>maven-jdocbook-plugin</artifactId>
+                <extensions>true</extensions>
+                <dependencies>
+                    <!--- This is the jdocbook-style discussed above -->
+                    <dependency>
+                        <groupId>com.acme</groupId>
+                        <artifactId>acme-manual-style</artifactId>
+                        <type>jdocbook-style</type>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <formats>
+                        <format>
+                            <formatName>pdf</formatName>
+                            <stylesheetResource>classpath:/xslt/acme-manual.xsl</stylesheetResource>
+                        </format>
+                    </formats>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
++----+
+
+    Those of you who have developed with DocBook before may not believe this,
+    but that's all there is to it.  The plugin and Maven's dependency mechanism
+    take care of the rest.

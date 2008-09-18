@@ -1,0 +1,51 @@
+ ------
+ Project Local Style
+ ------
+ Steve Ebersole
+ ------
+ 2 July 2007
+ ------
+
+~~ Copyright © 2007  Red Hat Middleware, LLC. All rights reserved.
+~~
+~~ This copyrighted material is made available to anyone wishing to use, modify,
+~~ copy, or redistribute it subject to the terms and conditions of the GNU
+~~ Lesser General Public License, v. 2.1. This program is distributed in the
+~~ hope that it will be useful, but WITHOUT A WARRANTY; without even the implied
+~~ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+~~ Lesser General Public License for more details. You should have received a
+~~ copy of the GNU Lesser General Public License, v.2.1 along with this
+~~ distribution; if not, write to the Free Software Foundation, Inc.,
+~~ 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+~~
+~~ Red Hat Author(s): Steve Ebersole
+
+Project Local Style
+
+    As discussed {{{../style.html}here}}, a jdocbook project may provide custom
+    style elements.  Currently this is limited to images and css.  These are
+    controlled by the <<imageResource>> and <<cssResource>> parameters.  For example,
+    a common approach to developing DocBook-based documentation is to keep the
+    source and images in the same relative directory:
+
++----+
+<plugin>
+    <groupId>org.jboss.maven.plugins</groupId>
+    <artifacId>maven-jdocbook-plugin</artifactId>
+    <extensions>true</extensions>
+    <configuration>
+        <sourceDirectory>src/main/docs</sourceDirectory>
+        <sourceDocumentName>my-doc.xml</sourceDocumentName>
+        <imageResource>
+            <directory>src/main/docs</directory>
+            <includes>
+                <include>**/*.png</include>
+                <include>**/*.svg</include>
+                <include>**/*.gif</include>
+            </includes>
+        </imageResource>
+        ...
+    </configuration>
+</plugin>
++----+
+

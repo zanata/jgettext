@@ -1,0 +1,250 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.jboss</groupId>
+        <artifactId>jboss-parent</artifactId>
+        <version>3</version>
+    </parent>
+
+    <groupId>org.jboss.maven.plugins</groupId>
+    <artifactId>maven-jdocbook-plugin</artifactId>
+    <packaging>maven-plugin</packaging>
+    <version>2.1.0-SNAPSHOT</version>
+    <name>jDocBook Maven Plugin</name>
+    <description>This plugin adds support for Docbook transformations to Maven.</description>
+
+    <inceptionYear>2007</inceptionYear>
+    <organization>
+        <name>JBoss, a division of Red Hat, Inc</name>
+        <url>http://jboss.org/</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <name>Steve Ebersole</name>
+            <email>steve@hibernate.org</email>
+            <organization>JBoss, a division of Red Hat, Inc</organization>
+            <organizationUrl>http://jboss.org</organizationUrl>
+            <timezone>-5</timezone>
+        </developer>
+    </developers>
+
+    <issueManagement>
+        <system>jira</system>
+        <url>http://jira.jboss.org/jira/browse/MPJDOCBOOK</url>
+    </issueManagement>
+
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License</name>
+            <url>http://www.gnu.org/copyleft/lesser.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:svn:http://anonsvn.jboss.org/repos/labs/labs/jbossbuild/maven-plugins/trunk/maven-jdocbook-plugin</connection>
+        <developerConnection>scm:svn:https://svn.jboss.org/repos/labs/labs/jbossbuild/maven-plugins/trunk/maven-jdocbook-plugin</developerConnection>
+        <url>http://anonsvn.jboss.org/repos/labs/labs/jbossbuild/maven-plugins/trunk/maven-jdocbook-plugin</url>
+    </scm>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <tagBase>https://svn.jboss.org/repos/labs/labs/jbossbuild/maven-plugins/tags</tagBase>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>antlr-maven-plugin</artifactId>
+                <version>2.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>antlr</groupId>
+                        <artifactId>antlr</artifactId>
+                        <version>${antlr.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <grammars>catalog.g</grammars>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <minmemory>128m</minmemory>
+                    <maxmemory>512</maxmemory>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </reporting>
+
+    <dependencies>
+        <!-- DocBook (this is the version used, unless user project imports one...) -->
+        <dependency>
+            <groupId>net.sf.docbook</groupId>
+            <artifactId>docbook</artifactId>
+            <version>1.72.0</version>
+        </dependency>
+
+        <!-- XML APIs -->
+        <dependency>
+            <groupId>xml-resolver</groupId>
+            <artifactId>xml-resolver</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+            <version>2.8.0</version>
+        </dependency>
+        <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xmlParserAPIs</artifactId>
+            <version>2.6.2</version>
+        </dependency>
+
+        <!-- depending upon which transformer factory you want to use -->
+        <dependency>
+            <groupId>saxon</groupId>
+            <artifactId>saxon</artifactId>
+            <version>6.5.3</version>
+        </dependency>
+        <dependency>
+            <groupId>xalan</groupId>
+            <artifactId>xalan</artifactId>
+            <version>2.7.0</version>
+        </dependency>
+
+        <!-- Maven Plugin deps -->
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-project</artifactId>
+            <version>2.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.reporting</groupId>
+            <artifactId>maven-reporting-api</artifactId>
+            <version>2.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-archiver</artifactId>
+            <version>1.0-alpha-7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-compiler-api</artifactId>
+            <version>1.5.3</version>
+        </dependency>
+
+        <!-- FOP, used for FO (PDF) processing -->
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>fop</artifactId>
+            <version>0.93</version>
+        </dependency>
+
+        <!-- Batik is used by FOP for SVG, PNG, and TIFF processing -->
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-css</artifactId>
+            <version>${batikVersion}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-dom</artifactId>
+            <version>${batikVersion}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-util</artifactId>
+            <version>${batikVersion}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-xml</artifactId>
+            <version>${batikVersion}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- JAI is used by FOP for GIF and TIFF processing -->
+        <dependency>
+            <groupId>javax.media</groupId>
+            <artifactId>jai-core</artifactId>
+            <version>1.1.3</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.media</groupId>
+            <artifactId>jai-codec</artifactId>
+            <version>1.1.3</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- Used in the gettext support -->
+        <!-- todo : eventually that support should become its own package -->
+        <dependency>
+            <groupId>antlr</groupId>
+            <artifactId>antlr</artifactId>
+            <version>${antlr.version}</version>
+        </dependency>
+
+    </dependencies>
+
+    <properties>
+        <batikVersion>1.6</batikVersion>
+        <antlr.version>2.7.6</antlr.version>
+    </properties>
+
+</project>

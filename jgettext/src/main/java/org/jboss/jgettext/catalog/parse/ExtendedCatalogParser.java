@@ -1,0 +1,135 @@
+/*
+ * Copyright (c) 2007, Red Hat Middleware, LLC. All rights reserved.
+ *
+ * This copyrighted material is made available to anyone wishing to use, modify,
+ * copy, or redistribute it subject to the terms and conditions of the GNU
+ * Lesser General Public License, v. 2.1. This program is distributed in the
+ * hope that it will be useful, but WITHOUT A WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details. You should have received a
+ * copy of the GNU Lesser General Public License, v.2.1 along with this
+ * distribution; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * Red Hat Author(s): Steve Ebersole
+ */
+package org.jboss.jgettext.catalog.parse;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+
+import antlr.collections.AST;
+import antlr.RecognitionException;
+import org.jboss.jgettext.Catalog;
+import org.jboss.jgettext.Message;
+import org.jboss.jgettext.Occurence;
+
+/**
+ * Here we extend the Antlr-generated parser to provide implementations of the supplied callback hooks
+ * in order to transform the AST into a more workable object model.
+ *
+ * @author Steve Ebersole
+ */
+public class ExtendedCatalogParser extends CatalogParser {
+	private Catalog catalog = new Catalog();
+	private Message currentMessage = new Message();
+
+	public ExtendedCatalogParser(File file) throws FileNotFoundException {
+		super( new CatalogLexer( file ) );
+	}
+
+	public Catalog getCatalog() {
+		return catalog;
+	}
+
+	public void reportError(RecognitionException e) {
+		throw new UnexpectedTokenException( e.getMessage(), e.getLine() );
+	}
+
+	public void reportError(String s) {
+		throw new ParseException( "error parsing catalog : " + s, -1 );
+	}
+
+	public void reportWarning(String s) {
+	}
+
+	protected void handleMessageBlock(AST messageBlock) {
+		catalog.addMessage( currentMessage );
+		currentMessage = new Message();
+	}
+
+	protected void handleObsoleteMessageBlock(AST messageBlock) {
+		currentMessage.markObsolete();
+		handleMessageBlock( messageBlock );
+	}
+
+	protected void handleCatalogComment(AST comment) {
+		currentMessage.addComment( extractText( comment ) );
+	}
+
+	protected void handleExtractedComment(AST comment) {
+		currentMessage.addExtractedComment( extractText( comment ) );
+	}
+
+	protected void handleOccurence(AST occurence) {
+		currentMessage.addOccurence( parseOccurence( occurence ) );
+	}
+
+	protected void handleFlag(AST flag) {
+		if ( "fuzzy".equals( flag.getText() ) ) {
+			currentMessage.markFuzzy();
+		}
+		else {
+			currentMessage.addFormat( flag.getText() );
+		}
+	}
+
+	protected void handlePreviousMsgctxt(AST previousMsgctxt) {
+		currentMessage.setPrevMsgctx( extractText( previousMsgctxt ) );
+	}
+
+	protected void handlePreviousMsgid(AST previousMsgid) {
+		currentMessage.setPrevMsgid( extractText( previousMsgid ) );
+	}
+
+	protected void handlePreviousMsgidPlural(AST previousMsgidPlural) {
+		currentMessage.setPrevMsgidPlural( extractText( previousMsgidPlural ) );
+	}
+
+	protected void handleDomain(AST domain) {
+		currentMessage.setDomain( extractText( domain ) );
+	}
+
+	protected void handleMsgctxt(AST msgctxt) {
+		currentMessage.setMsgctxt( extractText( msgctxt ) );
+	}
+
+	protected void handleMsgid(AST msgid) {
+		currentMessage.setMsgid( extractText( msgid ) );
+	}
+
+	protected void handleMsgidPlural(AST msgidPlural) {
+		currentMessage.setMsgidPlural( extractText( msgidPlural ) );
+	}
+
+	protected void handleMsgstr(AST msgstr) {
+		currentMessage.setMsgstr( extractText( msgstr ) );
+	}
+
+	protected void handleMsgstrPlural(AST msgstr, AST plurality) {
+		currentMessage.addMsgstrPlural( extractText( msgstr ), Integer.parseInt( plurality.getText() ) );
+	}
+
+	private String extractText(AST ast) {
+		return ast == null ? "" : ast.getText();
+	}
+
+	private Occurence parseOccurence(AST ast) {
+		String text = ast.getText();
+		int boundary = text.lastIndexOf( ':' );
+		return new Occurence(
+				text.substring( 0, boundary ),
+				Integer.parseInt( text.substring( boundary + 1, text.length() ) )
+		);
+	}
+}

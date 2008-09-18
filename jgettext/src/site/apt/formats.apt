@@ -1,0 +1,144 @@
+ ------
+ Format
+ ------
+ Steve Ebersole
+ ------
+ 7 July 2007
+ ------
+
+~~ Copyright © 2007  Red Hat Middleware, LLC. All rights reserved.
+~~
+~~ This copyrighted material is made available to anyone wishing to use, modify,
+~~ copy, or redistribute it subject to the terms and conditions of the GNU
+~~ Lesser General Public License, v. 2.1. This program is distributed in the
+~~ hope that it will be useful, but WITHOUT A WARRANTY; without even the implied
+~~ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+~~ Lesser General Public License for more details. You should have received a
+~~ copy of the GNU Lesser General Public License, v.2.1 along with this
+~~ distribution; if not, write to the Free Software Foundation, Inc.,
+~~ 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+~~
+~~ Red Hat Author(s): Steve Ebersole
+
+Format
+
+    Format is the term used to describe a particular output option for
+    a DocBook transformation.  For example, we might talk about the PDF
+    output format, or the HTML output format.
+
+* Supported formats
+
+    The <jDocBook Plugin> has support for most of the standard DocBook defined
+    formats as (as of DocBook version 1.70.1 and later).  For completeness,
+    here is the full list of supported formats (as defined by the
+    {{{xref/org/jboss/maven/plugins/jdocbook/gen/util/StandardDocBookFormatSpecification.html}StandardDocBookFormatSpecification}}
+    class):
+
+    * HTML-based
+
+        [eclipse] generates an eclipse documentation bundle
+
+        [html] generates chunked HTML
+
+        [html_single] generated non-chunked HTML
+
+        [htmlhelp] generates HTMLHelp style documentation
+
+        [javahelp] generates JavaHelp style documentation
+
+        [man] generates HTML-based *nix man pages
+
+        [website] generates a website (?)
+
+        [xhtml] generates XHTML-compliant documentation
+
+        []
+
+    * FO-based
+
+        [pdf] generates a PDF document
+
+        []
+
+    []
+
+* Configuring formats
+
+    Configuration of formats occurs via the {{{xref/org/jboss/maven/plugins/jdocbook/Format.html}Format}}
+    class.  The list of configurable properties defined by the Format config
+    class include:
+
+    [formatName] This is the name of the output format.  At least as of this
+        moment, this <<must>> map to one of the standard DocBook formats
+        detailed above; these values, then, simply act as overrides for the
+        values defined by the standard DocBook formats.  This may change in
+        the future to allow arbitrary formats.
+
+    [targetFileExtension] The extension of the target output file.
+
+    [finalName] The final name of the output.
+
+    [stylesheetResource] URL to a custom style sheet.  See {{{examples/custom-xslt.html}here}}
+        for examples of various URLs understood.
+
+    [imagePathSettingRequired] Does this format require the DocBook XSLT parameter
+        <img.src.path> to be set?  Generally this is true only for output formats
+        which embed the images (i.e. PDF); HTML, for example, sets this to false.
+
+    [imageCopyingRequired] Does this format require copying of the image (and
+        css) resources to the format output directory?  Generally, this and
+        the <imagePathSettingRequired> parameter should be mutually exclusive.
+        <Any situations where that is not the case?>
+
+    [doingChunking] Is this format performing chunking?
+
+    []
+
+    These {{{xref/org/jboss/maven/plugins/jdocbook/Format.html}Format}} values
+    are combined with the corresponding
+    {{{xref/org/jboss/maven/plugins/jdocbook/gen/util/StandardDocBookFormatSpecification.html}StandardDocBookFormatSpecification}}
+    values to determine the options used for that output format, with the
+    {{{xref/org/jboss/maven/plugins/jdocbook/Format.html}Format}} values given
+    precedence.
+
+* Minimal format configuragtion:
+
+    Here is a minimal configuration defining PFD and HTML output formats:
+
++----+
+<plugin>
+    <groupId>org.jboss.maven.plugins</groupId>
+    <artifacId>maven-jdocbook-plugin</artifactId>
+    <extensions>true</extensions>
+    <configuration>
+        <formats>
+            <format>
+                <formatName>pdf</formatName>
+            </format>
+            <format>
+                <formatName>html</formatName>
+            </format>
+        </formats>
+    </configuration>
+</plugin>
++----+
+
+    Sometimes (especially with chunked html formatting) it is desired to have the main chunk
+    produce a file named 'index.html' instead of '<artifactId>.html':
+
++----+
+<plugin>
+    <groupId>org.jboss.maven.plugins</groupId>
+    <artifacId>maven-jdocbook-plugin</artifactId>
+    <extensions>true</extensions>
+    <configuration>
+        <sourceDocumentName>source.xml</sourceDocumentName>
+        <formats>
+            <format>
+                <formatName>html</formatName>
+                <finalName>index.html</finalN ame>
+            </format>
+        </formats>
+    </configuration>
+</plugin>
++----+

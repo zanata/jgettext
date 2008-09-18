@@ -1,0 +1,13 @@
+###############################################################################
+## Catalog with a mixed up obsolete message block (partially obsolete)
+###############################################################################
+msgid ""
+msgstr ""
+"Header entries..."
+
+
+# Simple obsolete entry (obsolete1)
+#. Extracted comment
+#: SomeFile.java:1
+msgid "obsolete1"
+#~ msgstr "obsolete1"

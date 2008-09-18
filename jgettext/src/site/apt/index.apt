@@ -1,0 +1,106 @@
+ ------
+ Introduction
+ ------
+ Steve Ebersole
+ ------
+ 2 July 2007
+ ------
+
+~~ Copyright © 2007  Red Hat Middleware, LLC. All rights reserved.
+~~
+~~ This copyrighted material is made available to anyone wishing to use, modify,
+~~ copy, or redistribute it subject to the terms and conditions of the GNU
+~~ Lesser General Public License, v. 2.1. This program is distributed in the
+~~ hope that it will be useful, but WITHOUT A WARRANTY; without even the implied
+~~ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+~~ Lesser General Public License for more details. You should have received a
+~~ copy of the GNU Lesser General Public License, v.2.1 along with this
+~~ distribution; if not, write to the Free Software Foundation, Inc.,
+~~ 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+~~
+~~ Red Hat Author(s): Steve Ebersole
+
+jDocBook Plugin
+
+    DocBook is, in part, "an XML vocabulary that lets you create documents in a
+    presentation-neutral form that captures the logical structure of your
+    content".  Another aspect of DocBook is the rendering of that content into
+    various formats using DocBook-supplied (or custom) XSLT stylesheets.
+    Basically, DocBook allows you to write and maintain a single source for
+    documentation, and to then render that single source into multiple formats
+    such as PDF or HTML.
+
+    The aim of the <jDocBook Plugin> is to allow these DocBook transformations
+    to occur as a natural part of the users Maven build.  The main difficulty
+    with this has always been the fact that DocBook transformations were usually
+    very closely tied to the user's local environment.  The design goal with
+    writing this plugin was to utilize Maven's dependency mechanism to bring
+    all the pieces together "on demand".  Those pieces are:
+
+    [[1]] the DocBook distribution;
+
+    [[2]] custom XSLT;
+
+    [[3]] custom fonts;
+
+    [[4]] custom images;
+
+    [[5]] custom css.
+
+    []
+
+    These are the ingredients that when mixed with the source file(s) and
+    stirred with an XSLT transformer produce the desired output(s).
+
+    XLST, fonts, images and css collectively define a "style".  See the
+    maven-jdocbook-style-plugin for more information about the ability to 
+    develop styles separately from the source documents.  In fact a hope with
+    creating the jdocbook-style plugin in the first place is creation of
+    shareable styles reusable across many projects.  {{{style.html}Here}}
+    is a discussion of using jdocbook-style bundles within jdobcook projects.
+
+    Currently, only SAXON is supported as the transformer factory.  I have
+    had issues getting XALAN to work properly.
+
+* Goals Overview
+
+    The <jDocBook Plugin> defines a dedicated project packaging ("jdocbook").
+    In part, this packaging is used to redefine a suitable set of lifecycle
+    phases pertinent to performing DocBook transformations.  Below are the
+    defined lifecycle phases, with the goals attached to them:
+
+    [process-resources] binds the {{{resources-mojo.html}jdocbook:resources}}
+    goal which "stages" the resources need for the XSLT transformations such as
+    fonts, images and css.
+
+    [compile] binds the {{{generate-mojo.html}jdocbook:generate}} goal
+    which performs the actual XSLT transformations.
+
+    [package] binds the {{{bundle-mojo.html}jdocbook:bundle}} goal
+    which takes all the output formats, archives them as WARs and attaches the
+    WARs to the project with the format name as the artifact classifier.
+
+    [install] binds the standard install goal.
+
+    [deploy] binds the standard deploy goal.
+
+    []
+
+* Usage
+
+    Detailed usage instructions for the <jDocBook Plugin> can be found {{{usage.html}here}}.
+
+* Examples
+
+    To provide you with better understanding of some usages of the <jDocBook Plugin>,
+    you can take a look at the following examples:
+
+    * {{{examples/jdocbook-style.html}Complete jdocbook-style example}}
+
+    * {{{examples/project-local-style.html}Using custom project-local images/css}}
+
+    * {{{examples/arbitrary-styles.html}Using arbitrary style images/css}}
+
+    * {{{examples/custom-xslt.html}Using custom XSLT}}
+
+    * {{{examples/docbook-version.html}Specifying DocBook version}}

@@ -1,0 +1,83 @@
+ ------
+ Styles
+ ------
+ Steve Ebersole
+ ------
+ 2 July 2007
+ ------
+
+~~ Copyright © 2007  Red Hat Middleware, LLC. All rights reserved.
+~~
+~~ This copyrighted material is made available to anyone wishing to use, modify,
+~~ copy, or redistribute it subject to the terms and conditions of the GNU
+~~ Lesser General Public License, v. 2.1. This program is distributed in the
+~~ hope that it will be useful, but WITHOUT A WARRANTY; without even the implied
+~~ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+~~ Lesser General Public License for more details. You should have received a
+~~ copy of the GNU Lesser General Public License, v.2.1 along with this
+~~ distribution; if not, write to the Free Software Foundation, Inc.,
+~~ 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+~~
+~~ Red Hat Author(s): Steve Ebersole
+
+Styles
+
+    Styles are composed of XSLT, images, css and fonts.  These style components
+    may be pulled together from a number of different locations.  Mainly, it is
+    intended that there are 2 main types of style components:
+
+    [jdocbook-style] - These are style components that are developed as part of
+        a separate project and packaged into a <jdocbook-style> artifact.  The
+        intention is for these style bundles to be deployed into a Maven repo
+        and referenced just as a other project dependencies (with
+        type=jdocbook-style).
+
+    [project local] - These are style elements defined as part of the local
+        jdocbook project.  Typically, these would indicated either:
+
+        [[1]] overrides of some shared (ala, jdocbook-style) style element
+
+        [[2]] style elements specific to the local project (e.g. images
+            referred to from the project DocBook sources.
+
+        []
+
+        project local elements are generally limited to images and css.
+
+    []
+
+* jdocbook-style integration
+
+    <jdocbook-style> is another maven packaging type, defined by the
+    org.jboss.maven.plugins:maven-jdocbook-style-plugin plugin.  The goal
+    of the <jdocbook-style> is to define a common, resuable packaging bundle
+    for DocBook style elements such as XSLT, images, fonts and css.
+    The <jDocBook Plugin> can take advantage of a <jdocbook-style> dependency
+    in two ways:
+
+    [[1]] Because
+
+        [[a]] dependencies are added to the classpath
+
+        [[b]] the <jDocBook Plugin> can locate XSLT via classpath resources (see {{{examples/custom-xslt.html} example}})
+
+        []
+
+        users can reference XSLT stylesheets from a <jdocbook-style> dependency
+        as a custom stylesheet (see the {{{usage.html}usage}} page).
+
+    [[2]] Given the {{{staging.html}staging}} approach taken by this plugin
+        for dealing with with resources (css, fonts and images) it automatically
+        stages any css, font or image resources found inside a dependency of
+        type <jdocbook-style>.
+
+    []
+
+    See the {{{examples/jdocbook-style.html}example}} illustrating complete jdocbook-style
+    usage.
+
+* Project local elements
+
+    <todo : this section need writing... ;)>
+
+    See {{{staging.html}staging}}.

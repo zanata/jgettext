@@ -1,0 +1,48 @@
+ ------
+ Specific DocBook Version
+ ------
+ Steve Ebersole
+ ------
+ 2 July 2007
+ ------
+
+~~ Copyright © 2007  Red Hat Middleware, LLC. All rights reserved.
+~~
+~~ This copyrighted material is made available to anyone wishing to use, modify,
+~~ copy, or redistribute it subject to the terms and conditions of the GNU
+~~ Lesser General Public License, v. 2.1. This program is distributed in the
+~~ hope that it will be useful, but WITHOUT A WARRANTY; without even the implied
+~~ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+~~ Lesser General Public License for more details. You should have received a
+~~ copy of the GNU Lesser General Public License, v.2.1 along with this
+~~ distribution; if not, write to the Free Software Foundation, Inc.,
+~~ 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+~~
+~~ Red Hat Author(s): Steve Ebersole
+
+Specific DocBook Version
+
+    The version of DocBook to use is itself defined as dependency.  By default,
+    the version defined by the <jDocBook Plugin> is used, so that would depend
+    on the version of the <jDocBook Plugin> used.
+
+    It is however, possible to override that and say to use another version of
+    DocBook instead, simply by defining the new version as a dependency.
+
++----+
+<plugin>
+    <groupId>org.jboss.maven.plugins</groupId>
+    <artifacId>maven-jdocbook-plugin</artifactId>
+    <extensions>true</extensions>
+    <dependencies>
+        <dependency>
+            <!-- This is the groupId/artifactId used for the repackaging of DocBook -->
+            <!-- This needs to match, or you will have two versions of DocBook accessible -->
+            <groupId>net.sf.docbook</groupId>
+            <artifactId>docbook</artifactId>
+            <!-- Whichever version you wanted to use instead -->
+            <version>latest.and.greatest</version>
+        </dependency>
+    </dependencies>
+</plugin>
++----+

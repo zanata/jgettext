@@ -1,0 +1,67 @@
+ ------
+ Usage
+ ------
+ Steve Ebersole
+ ------
+ 2 July 2007
+ ------
+
+~~ Copyright © 2007  Red Hat Middleware, LLC. All rights reserved.
+~~
+~~ This copyrighted material is made available to anyone wishing to use, modify,
+~~ copy, or redistribute it subject to the terms and conditions of the GNU
+~~ Lesser General Public License, v. 2.1. This program is distributed in the
+~~ hope that it will be useful, but WITHOUT A WARRANTY; without even the implied
+~~ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+~~ Lesser General Public License for more details. You should have received a
+~~ copy of the GNU Lesser General Public License, v.2.1 along with this
+~~ distribution; if not, write to the Free Software Foundation, Inc.,
+~~ 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+~~
+~~ Red Hat Author(s): Steve Ebersole
+
+Usage
+
+    To understand usage of the <jDocBook Plugin>, there are really a few concepts
+    you must understand.
+
+    [[1]] {{{formats.apt}Formats}} define the type of output(s) you wish to produce.
+
+    [[2]] {{{style.apt}Styles}} define how those format outputs should look.
+
+    []
+
+    If you want to use local style elements, it is also a good idea to understand
+    {{{staging.html}staging}} as well.
+
+* Minimal configuration
+
+    The most basic configuration of the <jDocBook Plugin> is to simply tell it:
+
+    [[1]] The DocBook soure file to be transformed
+
+    [[2]] The formats into which the source should be transformed.
+
+    []
+
+    Here is a minimal configuration defining PDF and HTML output formats, for a
+    source file named source.xml:
+
++----+
+<plugin>
+    <groupId>org.jboss.maven.plugins</groupId>
+    <artifactId>maven-jdocbook-plugin</artifactId>
+    <extensions>true</extensions>
+    <configuration>
+        <sourceDocumentName>source.xml</sourceDocumentName>
+        <formats>
+            <format>
+                <formatName>pdf</formatName>
+            </format>
+            <format>
+                <formatName>html</formatName>
+            </format>
+        </formats>
+    </configuration>
+</plugin>
++----+

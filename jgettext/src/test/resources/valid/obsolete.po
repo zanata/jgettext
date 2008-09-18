@@ -1,0 +1,27 @@
+# Here we have a file with a series of obsolete message blocks.
+msgid ""
+msgstr ""
+"Header entries..."
+
+
+# Simple obsolete entry (obsolete1)
+#. Extracted comment
+#: SomeFile.java:1
+#~ msgid "obsolete1"
+#~ msgstr "obsolete1"
+
+# Plural obsolete entry (obsolete2)
+#. Extracted comment
+#: SomeFile.java:1
+#~ msgid "obsolete2"
+#~ msgid_plural "obsolete2_plural"
+#~ msgstr[0] "obsolete2-0"
+#~ msgstr[1] "obsolete2-1"
+#~ msgstr[2] "obsolete2-2"
+
+# Simple obsolete entry with context (obsolete3)
+#. Extracted comment
+#: SomeFile.java:1
+#~ msgctxt "xyz"
+#~ msgid "obsolete3"
+#~ msgstr "obsolete3"

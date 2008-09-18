@@ -1,0 +1,49 @@
+ ------
+ Staging
+ ------
+ Steve Ebersole
+ ------
+ 7 July 2007
+ ------
+
+~~ Copyright © 2007  Red Hat Middleware, LLC. All rights reserved.
+~~
+~~ This copyrighted material is made available to anyone wishing to use, modify,
+~~ copy, or redistribute it subject to the terms and conditions of the GNU
+~~ Lesser General Public License, v. 2.1. This program is distributed in the
+~~ hope that it will be useful, but WITHOUT A WARRANTY; without even the implied
+~~ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+~~ Lesser General Public License for more details. You should have received a
+~~ copy of the GNU Lesser General Public License, v.2.1 along with this
+~~ distribution; if not, write to the Free Software Foundation, Inc.,
+~~ 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+~~
+~~ Red Hat Author(s): Steve Ebersole
+
+Staging
+
+    The <jDocBook Plugin> uses staging for handling of images, css and fonts in
+    a consistent manner.  All of these resources might come from multiple sources
+    and DocBook, generally speaking, only allows defining a single path for
+    resources.  To get around that, the <jDocBook Plugin> collects all those
+    resources together under a single staging directory.  By default, this
+    is the <target/staging> directory, and each type of resource is under that.
+
+    In general there is not much to configure here, although you can point at alternate
+    source directories for css, fonts and images:
+
+    Or to an alternate location to use for staging:
+
++----+
+<plugin>
+    <groupId>org.jboss.maven.plugins</groupId>
+    <artifacId>maven-jdocbook-plugin</artifactId>
+    <extensions>true</extensions>
+    <configuration>
+        ...
+        <stagingDirectory>path/to/alternate/staging/dir</stagingDirectory>
+    </configuration>
+</plugin>
++----+
+
+    <todo : flesh this out, possibly with some examples of 'alternative staging'>
