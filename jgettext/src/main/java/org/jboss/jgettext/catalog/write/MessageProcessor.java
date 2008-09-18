@@ -65,7 +65,7 @@ public class MessageProcessor implements Catalog.MessageProcessor {
 			}
 
 			for ( Occurence occurence : message.getOccurences() ) {
-				writer.write( "#: " + occurence.getFileName() + ":" + occurence.getLine() );
+				writer.write( "#: " + occurence.toString() );
 				writer.write( '\n' );
 			}
 

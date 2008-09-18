@@ -18,11 +18,12 @@ package org.jboss.jgettext.catalog.parse;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import antlr.collections.AST;
-import antlr.RecognitionException;
 import org.jboss.jgettext.Catalog;
 import org.jboss.jgettext.Message;
 import org.jboss.jgettext.Occurence;
+
+import antlr.RecognitionException;
+import antlr.collections.AST;
 
 /**
  * Here we extend the Antlr-generated parser to provide implementations of the supplied callback hooks
@@ -127,6 +128,8 @@ public class ExtendedCatalogParser extends CatalogParser {
 	private Occurence parseOccurence(AST ast) {
 		String text = ast.getText();
 		int boundary = text.lastIndexOf( ':' );
+		if (boundary < 0)
+		    return new Occurence(text);
 		return new Occurence(
 				text.substring( 0, boundary ),
 				Integer.parseInt( text.substring( boundary + 1, text.length() ) )

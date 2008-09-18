@@ -23,10 +23,26 @@ package org.jboss.jgettext;
 public class Occurence {
 	private final String fileName;
 	private final int line;
+	private boolean lineSet;
 
 	public Occurence(String fileName, int line) {
 		this.fileName = fileName;
 		this.line = line;
+		this.lineSet = true;
+	}
+
+	public Occurence(String fileName) {
+	    this.fileName = fileName;
+	    this.line = -1;
+	    this.lineSet = false;
+	}
+	
+	@Override
+	public String toString() {
+	    if(lineSet)
+		return fileName+":"+line;
+	    else
+		return fileName;
 	}
 
 	public String getFileName() {
