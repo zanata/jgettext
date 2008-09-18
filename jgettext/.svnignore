@@ -1,0 +1,8 @@
+*.class
+*.jar
+*.gz
+build.properties
+.project
+.classpath
+.settings
+target
