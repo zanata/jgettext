@@ -189,6 +189,29 @@ public class Message {
 	public Collection<String> getFormats() {
 		return formats;
 	}
+	
+	/**
+	 * Returns a string representation of the Message, in a format 
+	 * suitable for inclusion in debug messages.
+	 */
+	@Override
+	public String toString() {
+	    StringBuilder sb = new StringBuilder();
+	    sb.append("Message(msgctxt \"").append(msgctxt).
+	    	append("\", msgid \"").append(getMsgid()).
+	    	append("\", msgstr \"").append(getMsgstr());
+	    if(!getComments().isEmpty())
+	    	sb.append("\", transComments \"").append(getComments());
+	    if(!getExtractedComments().isEmpty())
+	    	sb.append("\", extComments \"").append(getExtractedComments());
+	    if(!getFormats().isEmpty())
+	    	sb.append("\", flags \"").append(getFormats());
+	    if(!getOccurences().isEmpty())
+	    	sb.append("\", references \"").append(getOccurences());
+	    	// TODO should include fuzzy, obsolete, plurals, domain, prevMsg
+	    	sb.append("\")");
+	    return sb.toString();
+	}
 
 	private static class OccurenceComparator implements Comparator<Occurence> {
 		public int compare(Occurence o1, Occurence o2) {
