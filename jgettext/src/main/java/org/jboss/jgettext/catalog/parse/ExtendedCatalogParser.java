@@ -44,7 +44,9 @@ public class ExtendedCatalogParser extends CatalogParser {
 	}
 
 	public void reportError(RecognitionException e) {
-		throw new UnexpectedTokenException( e.getMessage(), e.getLine() );
+		UnexpectedTokenException utEx = new UnexpectedTokenException( e.getMessage(), e.getLine() );
+		utEx.initCause(e);
+		throw utEx;
 	}
 
 	public void reportError(String s) {
