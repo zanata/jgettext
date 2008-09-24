@@ -147,10 +147,7 @@ messageBlocks:
  * A message block defines all the lines related to a single translatable message entry.
  */
 messageBlock:
-    ( catalogComment )*
-    ( extractedComment )*
-    ( occurence )*
-    ( flag )*
+    ( catalogComment | extractedComment | occurence | flag )*
     ( previousMsgctxt )?
     ( previousMsgid )?
     ( previousMsgidPlural )?
