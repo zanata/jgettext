@@ -50,106 +50,116 @@ public class MessageProcessor implements Catalog.MessageProcessor {
 		if ( message == header ) {
 			return;
 		}
+		writeMessage(message);
+	}
 
-		try {
-			messageStart( message );
+	public void writeMessage(Message message) {
+	    try {
+	    	messageStart( message );
 
-			for ( String comment : message.getComments() ) {
-				writer.write( "#" + comment ); // no space on purpose!!!
-				writer.write( '\n' );
-			}
+	    	for ( String comment : message.getComments() ) {
+	    		writer.write( "#" + comment ); // no space on purpose!!!
+	    		writer.write( '\n' );
+	    	}
 
-			for ( String comment : message.getExtractedComments() ) {
-				writer.write( "#. " + comment );
-				writer.write( '\n' );
-			}
+	    	for ( String comment : message.getExtractedComments() ) {
+	    		writer.write( "#. " + comment );
+	    		writer.write( '\n' );
+	    	}
 
-			for ( Occurence occurence : message.getOccurences() ) {
-				writer.write( "#: " + occurence.toString() );
-				writer.write( '\n' );
-			}
+	    	for ( Occurence occurence : message.getOccurences() ) {
+	    		writer.write( "#: " + occurence.toString() );
+	    		writer.write( '\n' );
+	    	}
 
-			if ( message.isFuzzy() ) {
-				writer.write( "#, fuzzy" );
-				writer.write( '\n' );
-			}
+	    	if ( message.isFuzzy() ) {
+	    		writer.write( "#, fuzzy" );
+	    		writer.write( '\n' );
+	    	}
 
-			for ( String format : message.getFormats() ) {
-				writer.write( "#, " + format );
-				writer.write( '\n' );
-			}
+	    	for ( String format : message.getFormats() ) {
+	    		writer.write( "#, " + format );
+	    		writer.write( '\n' );
+	    	}
 
-			if ( message.getPrevMsgctx() != null ) {
-				writeMsgctxt( "#| ", message.getPrevMsgctx() );
-			}
+	    	if ( message.getPrevMsgctx() != null ) {
+	    		writeMsgctxt( "#| ", message.getPrevMsgctx() );
+	    	}
 
-			if ( message.getPrevMsgid() != null ) {
-				writeMsgid( "#| ", message.getPrevMsgid() );
-			}
+	    	if ( message.getPrevMsgid() != null ) {
+	    		writeMsgid( "#| ", message.getPrevMsgid() );
+	    	}
 
-			if ( message.getPrevMsgidPlural() != null ) {
-				writeMsgidPlural( "#| ", message.getPrevMsgidPlural() );
-			}
+	    	if ( message.getPrevMsgidPlural() != null ) {
+	    		writeMsgidPlural( "#| ", message.getPrevMsgidPlural() );
+	    	}
 
-			String prefix = message.isObsolete() ? "#~ " : "";
-			if ( message.getMsgctxt() != null ) {
-				writeMsgctxt( prefix, message.getMsgctxt() );
-			}
+	    	String prefix = message.isObsolete() ? "#~ " : "";
+	    	if ( message.getMsgctxt() != null ) {
+	    		writeMsgctxt( prefix, message.getMsgctxt() );
+	    	}
 
-			writeMsgid( prefix, message.getMsgid() );
+	    	writeMsgid( prefix, message.getMsgid() );
 
-			if ( message.getMsgidPlural() != null ) {
-				writeMsgidPlural( prefix, message.getMsgidPlural() );
-			}
+	    	if ( message.getMsgidPlural() != null ) {
+	    		writeMsgidPlural( prefix, message.getMsgidPlural() );
+	    	}
 
-			writeMsgstr( prefix, message.getMsgstr() );
+	    	writeMsgstr( prefix, message.getMsgstr() );
 
-			writeMsgstrPlurals( prefix, message.getMsgstrPlural() );
+	    	writeMsgstrPlurals( prefix, message.getMsgstrPlural() );
 
-			messageEnd( message );
+	    	messageEnd( message );
 
-			writer.flush();
-		}
-		catch ( IOException e ) {
-			throw new RuntimeException( "Problem writing message : " + e.getMessage(), e );
-		}
-
+	    	writer.flush();
+	    }
+	    catch ( IOException e ) {
+	    	throw new RuntimeException( "Problem writing message : " + e.getMessage(), e );
+	    }
 	}
 
 	protected void messageStart(Message message) throws IOException {
 	}
 
 	protected void messageEnd(Message message) throws IOException {
+		writer.write( '\n' );
+	}
+	
+	private void writeString(String s) throws IOException {
+	    String split = s.replace("\\n", "\\n\"\n\"");
+	    if (split.contains("\n"))
+		writer.write("\"\"\n");
+	    writer.write("\""+split+"\"\n");
 	}
 
 	private void writeMsgctxt(String prefix, String ctxt) throws IOException {
-		writer.write( prefix + "msgctxt \"" + ctxt + "\"");
-		writer.write( '\n' );
+		writer.write( prefix + "msgctxt ");
+		writeString(ctxt);
 	}
 
 	private void writeMsgid(String prefix, String msgid) throws IOException {
-		writer.write( prefix + "msgid \"" + msgid + "\"");
-		writer.write( '\n' );
+		writer.write( prefix + "msgid ");
+		writeString(msgid);
 	}
 
 	private void writeMsgidPlural(String prefix, String msgidPlural) throws IOException {
-		writer.write( prefix + "msgid_plural \"" + msgidPlural + "\"");
-		writer.write( '\n' );
+		writer.write( prefix + "msgid_plural ");
+		writeString(msgidPlural);
 	}
 
 	private void writeMsgstr(String prefix, String msgstr) throws IOException {
 		if ( msgstr == null ) {
 			msgstr = "";
 		}
-		writer.write( prefix + "msgstr \"" + msgstr + "\"");
-		writer.write( '\n' );
+		writer.write( prefix + "msgstr ");
+		writeString(msgstr);
 	}
 
 	private void writeMsgstrPlurals(String prefix, List<String> msgstrPlurals) throws IOException {
 		int i = 0;
 		for ( String msgstr : msgstrPlurals ) {
-			writer.write( prefix + "msgstr[" + i + "] \"" +  msgstr + "\"" );
-			writer.write( '\n' );
+			writer.write( prefix + "msgstr[" + i + "] ");
+			writeString(msgstr);
 			i++;
 		}
 	}

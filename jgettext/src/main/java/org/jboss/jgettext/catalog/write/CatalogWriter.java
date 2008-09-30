@@ -41,10 +41,10 @@ public class CatalogWriter {
 	void writeTo(MessageProcessor processor) {
 		final Message existingHeader = catalog.locateHeader();
 		if ( existingHeader == null ) {
-			processor.processMessage( generateHeader() );
+			processor.writeMessage( generateHeader() );
 		}
 		else {
-			processor.processMessage( existingHeader );
+			processor.writeMessage( existingHeader );
 		}
 
 		catalog.processMessages( processor );
