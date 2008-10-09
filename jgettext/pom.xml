@@ -15,7 +15,10 @@
     <packaging>jar</packaging>
     <version>0.1-SNAPSHOT</version>
     <name>JGettext</name>
-    <description>This library provides the ability to read/parse and write Gettext catalog files (PO and POT files)</description>
+    <url>http://code.google.com/p/camouflage/</url>
+    <description>
+    ${name} provides the ability to read/parse and write GNU Gettext catalog files (PO and POT files)
+    </description>
 
     <inceptionYear>2007</inceptionYear>
     <organization>
