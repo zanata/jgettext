@@ -26,15 +26,41 @@
         <url>http://jboss.org/</url>
     </organization>
 
-    <developers>
+    <developers> 
         <developer>
+            <name>Asgeir Frimannsson</name>
+            <email>asgeirf@redhat.com</email>
+            <organization>Red Hat</organization>
+            <organizationUrl>http://www.redhat.com/</organizationUrl>
+              <roles>
+                <role>developer</role>
+              </roles>
+            <timezone>10</timezone>
+        </developer>
+        <developer>
+            <name>Sean Flanigan</name>
+            <email>sflaniga@redhat.com</email>
+            <organization>Red Hat</organization>
+            <organizationUrl>http://www.redhat.com/</organizationUrl>
+              <roles>
+                <role>developer</role>
+              </roles>
+            <timezone>10</timezone>
+        </developer>
+    </developers>
+  <contributors>
+    <contributor>
             <name>Steve Ebersole</name>
             <email>steve@hibernate.org</email>
             <organization>JBoss, a division of Red Hat, Inc</organization>
             <organizationUrl>http://jboss.org</organizationUrl>
+	      <roles>
+	        <role>original developer</role>
+	      </roles>
             <timezone>-5</timezone>
-        </developer>
-    </developers>
+    </contributor>
+  </contributors>
+
 <!-- 
     <issueManagement>
         <system>jira</system>
@@ -138,8 +164,6 @@
             <version>2.0.4</version>
         </dependency>
 
-        <!-- Used in the gettext support -->
-        <!-- todo : eventually that support should become its own package -->
         <dependency>
             <groupId>antlr</groupId>
             <artifactId>antlr</artifactId>
