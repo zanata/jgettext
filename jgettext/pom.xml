@@ -5,12 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 <!-- 
     <parent>
-        <groupId>org.jboss</groupId>
-        <artifactId>jboss-parent</artifactId>
-        <version>3</version>
+            <groupId>org.fedorahosted.tennera</groupId>
+            <artifactId>tennera</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <relativePath>../tennera/pom.xml</relativePath>
     </parent>
  -->
-    <groupId>org.jboss.jgettext</groupId>
+    <groupId>org.fedorahosted.tennera</groupId>
     <artifactId>jgettext</artifactId>
     <packaging>jar</packaging>
     <version>0.1-SNAPSHOT</version>
@@ -121,7 +122,145 @@
             </plugin>
         </plugins>
     </build>
+  <!-- Reporting -->
+  <reporting>
+    <!-- Reports Configurations -->
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.1</version>
+        <configuration>
+          <links>
+            <link>http://java.sun.com/j2se/1.4.2/docs/api</link>
+<!-- 
+            <link>http://plexus.codehaus.org/ref/1.0-alpha-9/apidocs</link>
+ -->
+          </links>
+          <maxmemory>256m</maxmemory>
+          <aggregate>true</aggregate>
+        </configuration>
+      </plugin>
 
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+        <version>2.3</version>
+        <configuration>
+          <showSuccess>false</showSuccess>
+        </configuration>
+      </plugin>
+<!-- 
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-changelog-plugin</artifactId>
+        <version>2.0</version>
+        <configuration>
+          <displayFileDetailUrl>http://svn.apache.org/viewvc%FILE%?view=markup</displayFileDetailUrl>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-changes-plugin</artifactId>
+        <version>2.0-beta-2</version>
+        <configuration>
+          <statusIds>Closed</statusIds>
+        </configuration>
+      </plugin>
+ -->
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+        <version>2.1</version>
+        <configuration>
+          <aggregate>true</aggregate>
+        </configuration>
+      </plugin>
+
+<!-- 
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>2.1</version>
+        <configuration>
+          <rulesets>
+            <ruleset>/rulesets/basic.xml</ruleset>
+            <ruleset>/rulesets/imports.xml</ruleset>
+            <ruleset>/rulesets/unusedcode.xml</ruleset>
+            <ruleset>/rulesets/strictexception.xml</ruleset>
+          </rulesets>
+          <minimumTokens>10</minimumTokens>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>2.1</version>
+        <configuration>
+          <configLocation>http://svn.apache.org/repos/asf/maven/plugins/trunk/maven-checkstyle-plugin/src/main/resources/config/maven_checks.xml</configLocation>
+          <headerLocation>src/checkstyle/checkstyle-header.txt</headerLocation>
+        </configuration>
+      </plugin>
+ -->
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clover-plugin</artifactId>
+        <version>2.4</version>
+      </plugin>
+<!--
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>cobertura-maven-plugin</artifactId>
+        <version>2.1</version>
+      </plugin>
+-->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+        <version>1.1.1</version>
+        <configuration>
+          <effort>Max</effort>
+          <threshold>Exp</threshold>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>taglist-maven-plugin</artifactId>
+        <version>2.0</version>
+        <configuration>
+          <tags>
+            <tag>TODO</tag>
+            <tag>@todo</tag>
+            <tag>FIXME</tag>
+            <tag>XXX</tag>
+            <tag>@fixme</tag>
+          </tags>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>clirr-maven-plugin</artifactId>
+        <version>2.1.1</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>javancss-maven-plugin</artifactId>
+        <version>2.0-beta-2</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jdepend-maven-plugin</artifactId>
+        <version>2.0-beta-1</version>
+      </plugin>
+    </plugins>
+  </reporting>
 <!-- 
     <reporting>
         <plugins>
@@ -174,6 +313,7 @@
 
     <properties>
         <antlr.version>2.7.6</antlr.version>
+        <site.generateReports>true</site.generateReports>
     </properties>
 
 </project>
