@@ -23,6 +23,7 @@ import java.util.List;
 import org.jboss.jgettext.Catalog;
 import org.jboss.jgettext.Message;
 import org.jboss.jgettext.Occurence;
+import org.jboss.jgettext.catalog.util.StringUtil;
 
 /**
  * MessageProcessor implementation
@@ -52,24 +53,31 @@ public class MessageProcessor implements Catalog.MessageProcessor {
 		}
 		writeMessage(message);
 	}
+	
+	private void writeComment(String prefix, String comment) throws IOException {
+	    String[] lines = comment.split("\n");
+	    for (String line : lines) {
+		writer.write(prefix);
+		writer.write(line);
+		writer.write('\n');
+	    }
+	    
+	}
 
 	public void writeMessage(Message message) {
 	    try {
 	    	messageStart( message );
 
 	    	for ( String comment : message.getComments() ) {
-	    		writer.write( "#" + comment ); // no space on purpose!!!
-	    		writer.write( '\n' );
+	    	    writeComment("#", comment); // no space on purpose!!!
 	    	}
 
 	    	for ( String comment : message.getExtractedComments() ) {
-	    		writer.write( "#. " + comment );
-	    		writer.write( '\n' );
+	    	    writeComment("#. ", comment);
 	    	}
 
 	    	for ( Occurence occurence : message.getOccurences() ) {
-	    		writer.write( "#: " + occurence.toString() );
-	    		writer.write( '\n' );
+	    	    writeComment("#: ", occurence.toString());
 	    	}
 
 	    	if ( message.isFuzzy() ) {
@@ -126,7 +134,9 @@ public class MessageProcessor implements Catalog.MessageProcessor {
 	}
 	
 	private void writeString(String s) throws IOException {
+	    s = StringUtil.addEscapes(s);
 	    String split = s.replace("\\n", "\\n\"\n\"");
+	    // multiline strings are preceded by a blank line for neatness:
 	    if (split.contains("\n"))
 		writer.write("\"\"\n");
 	    writer.write("\""+split+"\"\n");
