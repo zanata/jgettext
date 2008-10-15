@@ -1,0 +1,185 @@
+<?xml version="1.0"?>
+
+<project name="regex2pot" default="pot" basedir="..">
+	<property file="example/build.properties" />
+        <property name="m2repo" value="${user.home}/.m2/repository"/>
+	<property name="_jgettext" value="../maven-jdocbook-plugin/target/classes;${m2repo}/antlr/antlr/2.7.6/antlr-2.7.6.jar"/>
+        <property name="jgettext" value="../jgettext/target/classes;${m2repo}/antlr/antlr/2.7.6/antlr-2.7.6.jar"/>
+        <property name="_openprops" value="${m2repo}/org/fedorahosted/openprops/openprops/0.2/openprops-0.2.jar"/>
+        <property name="openprops" value="../openprops/target/classes"/>
+        <property name="formatpo" value="../org.camouflage.format.po/bin;../org.camouflage.format.po/lib/commons-lang-2.3.jar"/>
+	
+	<taskdef name="regex2pot" classname="org.fedorahosted.tennera.antgettext.Regex2PotTask" 
+		classpath="target/classes" />
+	<taskdef name="prop2pot" classname="org.fedorahosted.tennera.antgettext.Prop2PotTask" 
+		classpath="target/classes;${openprops}" />
+<!--
+        <taskdef name="pot2en" classname="org.fedorahosted.tennera.antgettext.Pot2EnTask"
+                classpath="target/classes;${formatpo}" />
+	<taskdef name="po2prop" classname="org.fedorahosted.tennera.antgettext.Po2PropTask" 
+		classpath="target/classes;${openprops};${formatpo}" />
+-->
+	<taskdef name="pot2en" classname="org.fedorahosted.tennera.antgettext.Pot2EnTask"
+		classpath="target/classes;${jgettext}" />
+	<taskdef name="po2prop" classname="org.fedorahosted.tennera.antgettext.Po2PropTask" 
+                classpath="target/classes;${openprops};${jgettext}" />
+	<taskdef name="verifyprop" classname="org.fedorahosted.tennera.antgettext.VerifyPropTask" 
+		classpath="target/classes" />
+
+	<target name="prop2pot" description="">
+		<prop2pot srcDir="src/test/data/1prop" dstDir="src/test/data/prop2pot2pot_" />
+	</target>
+
+	<target name="po2prop" description="">
+		<po2prop srcDir="src/test/data/po2prop1po" dstDir="src/test/data/po2prop2prop_" />
+	</target>
+
+	<target name="roundtrip">
+		<prop2pot srcDir="src/test/data/1prop" dstDir="src/test/data/rt2pot_" />
+		<pot2en srcDir="src/test/data/rt2pot_" dstDir="src/test/data/rt3en_" />
+		<po2prop srcDir="src/test/data/rt3en_" dstDir="src/test/data/rt4prop_" />
+		<verifyprop dir1="src/test/data/1prop" dir2="src/test/data/rt4prop_" />
+	</target>
+
+	<target name="pot" description="Extract translation templates (POT) from the JBoss consoles' source code">
+		<antcall target="-pot">
+			<param name="module" value="console" />
+		</antcall>
+		<antcall target="-pot">
+			<param name="module" value="varia" />
+		</antcall>
+	</target>
+
+	<target name="-pot">
+		<property name="src" value="${jboss.srcdir}/${module}/src" />
+		<property name="pot" value="${jboss.srcdir}/${module}/po/${module}.pot" />
+		<regex2pot srcDir="${src}" includes="**/*.jsp **/*.java **/*.bsh" regex="${regex.pattern}" pathPrefix="../src/" target="${pot}" />
+	</target>
+
+	<target name="xgettext" depends="pot" description="Uses xgettext -a to find untranslated strings">
+		<antcall target="-xgettext">
+			<param name="module" value="console" />
+		</antcall>
+		<antcall target="-xgettext">
+			<param name="module" value="varia" />
+		</antcall>
+	</target>
+
+	<target name="-xgettext">
+		<property name="src" value="${jboss.srcdir}/${module}/src/main" />
+		<property name="podir" value="${jboss.srcdir}/${module}/po" />
+		<property name="pot" value="${podir}/${module}.pot" />
+		<property name="xpot" value="${podir}/${module}.xgettext.pot" />
+		<!-- 
+		<fileset id="srcfiles" dir="${podir}" includes="../src/**/*.java,../src/**/*.bsh"/>
+		 -->
+		<fileset id="srcfiles" dir="${src}" includes="**/*.java,**/*.bsh" />
+		<tempfile property="temp.filelist" />
+
+		<!-- 
+		This generates a properties file with one value, with filenames
+		separated by semicolons.  
+		 -->
+		<property name="srcfiles.value" refid="srcfiles" />
+		<echoproperties prefix="srcfiles.value" destfile="${temp.filelist}" />
+		<!--
+		Turn the properties file into something like a standard filelist, 
+		ie one filename per line.  This still leaves some comment lines at 
+		the top, but xgettext doesn't complain about these missing "files". 
+		 -->
+		<replace file="${temp.filelist}" token="srcfiles.value=" />
+		<replace file="${temp.filelist}" token=";">
+			<replacevalue>
+				<![CDATA[
+]]>
+			</replacevalue>
+		</replace>
+
+		<exec dir="${src}" executable="xgettext">
+			<!-- This has the useful side-effect of suppressing lots of warnings about empty strings: -->
+			<arg value="--omit-header" />
+			<!-- JBoss seems to use ISO-8859-1 in some @author comments -->
+			<arg value="--from-code=ISO-8859-1" />
+			<arg value="--files-from" />
+			<arg file="${temp.filelist}" />
+			<arg value="--extract-all" />
+			<arg value="--output=${xpot}" />
+			<arg value="--language=Java" />
+			<!-- subtract ${pot} strings from ${xpot} -->
+			<arg value="--exclude-file=${pot}" />
+		</exec>
+		<echo>The file ${xpot} contains a list of strings picked up by "xgettext -a" that are not included in ${pot}.</echo>
+		<!-- 
+		<echo>${temp.filelist}</echo>
+		-->
+		<delete file="${temp.filelist}" />
+	</target>
+
+	<target name="podebug" description="Generates a debug PO for locale 'xxx' from the template POT">
+		<antcall target="-podebug">
+			<param name="module" value="console" />
+		</antcall>
+		<antcall target="-podebug">
+			<param name="module" value="varia" />
+		</antcall>
+	</target>
+
+	<target name="-podebug">
+		<property name="podir" value="${jboss.srcdir}/${module}/po" />
+		<exec dir="${podir}" executable="msginit">
+			<arg value="--input" />
+			<arg value="${module}.pot" />
+			<arg value="--no-translator" />
+			<arg value="--locale=en_autogen" />
+		</exec>
+		<exec dir="${podir}" executable="podebug">
+			<arg value="-f" />
+			<arg value="[xxx] " />
+			<arg value="--rewrite=xxx" />
+			<arg value="en_autogen.po" />
+			<arg value="xxx.po" />
+		</exec>
+		<delete file="${podir}/en_autogen.po" />
+	</target>
+
+	<!-- 
+	We need to call _bundle for each combo of project {console,varia} and locale {es,ja,de,etc} 		
+	-->
+	<target name="bundle" description="Converts a translated PO file into a Java ResourceBundle (.properties)">
+		<antcall target="-bundle">
+			<param name="module" value="console" />
+			<param name="locale" value="xxx" />
+			<param name="respath" value="org/jboss/console" />
+		</antcall>
+		<antcall target="-bundle">
+			<param name="module" value="varia" />
+			<param name="locale" value="xxx" />
+			<param name="respath" value="i18n/org/jboss/jmx/console" />
+		</antcall>
+	</target>
+
+	<target name="-bundle">
+		<property name="podir" value="${jboss.srcdir}/${module}/po" />
+		<!--
+		Generated .properties files go into the src tree, so that devs can 
+		pick up translations without having to install/run GNU gettext. 
+		-->
+		<property name="resdir" value="${jboss.srcdir}/${module}/src/resources/${respath}" />
+		<!--
+		If we decide we would prefer to check .po files into SVN (not .properties), we could use the following
+		definition for resdir instead (might do this if we replace msgcat with a pure-Java utility):
+		<property name="resdir" value="${jboss.srcdir}/${module}/output/resources/${respath}"/> 
+		-->
+		<exec dir="${podir}" executable="msgcat">
+			<arg value="-o" />
+			<arg value="${resdir}/messages_${locale}.properties" />
+			<arg value="--properties-output" />
+			<arg value="${locale}.po" />
+		</exec>
+	</target>
+
+	<target name="test" description="Runs the regex2pot task against some test data">
+		<regex2pot srcDir="src/test/java" includes="**/*" regex="${regex.pattern}" pathPrefix="../src/test/java/" target="target/messages.pot" />
+	</target>
+
+</project>
