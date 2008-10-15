@@ -18,6 +18,7 @@ package org.jboss.jgettext.catalog.write;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 
 import org.jboss.jgettext.Catalog;
 import org.jboss.jgettext.Message;
@@ -35,9 +36,13 @@ public class CatalogWriter {
 	}
 
 	public void writeTo(File file) throws IOException {
-		writeTo( new MessageProcessor( catalog.locateHeader(), new FileWriter( file ) ) );
+	    writeTo(new FileWriter( file ));
 	}
 
+	public void writeTo(Writer writer) {
+		writeTo( new MessageProcessor( catalog.locateHeader(), writer ) );
+	}
+	
 	void writeTo(MessageProcessor processor) {
 		final Message existingHeader = catalog.locateHeader();
 		if ( existingHeader == null ) {
@@ -61,4 +66,5 @@ public class CatalogWriter {
 
 		return header;
 	}
+
 }
