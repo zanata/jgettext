@@ -27,6 +27,10 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.MatchingTask;
+import org.jboss.jgettext.Catalog;
+import org.jboss.jgettext.Message;
+import org.jboss.jgettext.Occurence;
+import org.jboss.jgettext.catalog.write.CatalogWriter;
 
 /**
  * Extracts strings which match a regular expression into a gettext template file (POT).
@@ -224,12 +228,34 @@ public class Regex2PotTask extends MatchingTask
 
    protected void generatePot(BufferedWriter out) throws IOException
    {
-      PotWritingUtil.writePotHeader(out);
-      for (Map.Entry<String, Set<String>> mapEntry : mapKeyToLocationSet.entrySet())
-      {
-         PotWritingUtil.writePotEntry(
-               out, null, locationSetToString(mapEntry.getValue()), true, null, mapEntry.getKey());
-      }
+       Catalog cat = new Catalog();
+       CatalogWriter writer = new CatalogWriter(cat);
+       for (Map.Entry<String, Set<String>> mapEntry : mapKeyToLocationSet.entrySet())
+       {
+	   Message message = new Message();
+//	   message.addExtractedComment(null);
+	   message.addOccurence(new Occurence(locationSetToString(mapEntry.getValue())));
+	   message.addFormat("java-format"); // FIXME check this
+//	   message.setMsgctxt(null);
+	   message.setMsgid(mapEntry.getKey());
+	   cat.addMessage(message);
+       }
+       writer.writeTo(out);
+       
+//      PotWritingUtil.writePotHeader(out);
+//      for (Map.Entry<String, Set<String>> mapEntry : mapKeyToLocationSet.entrySet())
+//      {
+//         PotWritingUtil.writePotEntry(
+//               out, null, locationSetToString(mapEntry.getValue()), true, null, mapEntry.getKey());
+       /*
+           BufferedWriter out, 
+           String extractedComment, 
+           String locationReference, 
+           boolean isJavaFormat, 
+           String context, 
+           String key) throws IOException
+        */
+//      }
    }
    
    private String locationSetToString(Set<String> locationSet)

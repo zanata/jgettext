@@ -12,7 +12,7 @@
 	<taskdef name="regex2pot" classname="org.fedorahosted.tennera.antgettext.Regex2PotTask" 
 		classpath="target/classes" />
 	<taskdef name="prop2pot" classname="org.fedorahosted.tennera.antgettext.Prop2PotTask" 
-		classpath="target/classes;${openprops}" />
+		classpath="target/classes;${openprops};${jgettext}" />
 <!--
         <taskdef name="pot2en" classname="org.fedorahosted.tennera.antgettext.Pot2EnTask"
                 classpath="target/classes;${formatpo}" />
