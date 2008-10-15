@@ -1,0 +1,9 @@
+${messages["double quotes jsp"]}
+${messages['single quotes jsp']}
+
+${messages["double quotes 
+multiline jsp"]}
+
+
+gettext("gettext java/bsh");
+gettext("text containing escape codes for tab, quote, newline, backslash: \t\"\n\\");
