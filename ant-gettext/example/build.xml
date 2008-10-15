@@ -35,7 +35,14 @@
 	</target>
 
 	<target name="roundtrip">
-		<prop2pot srcDir="src/test/data/1prop" dstDir="src/test/data/rt2pot_" />
+		<deltree dir="src/test/data/rt2pot_"/>
+                <deltree dir="src/test/data/rt3en_"/>
+                <deltree dir="src/test/data/rt4prop_"/>
+		<prop2pot srcDir="src/test/data/1prop" dstDir="src/test/data/rt2pot_" >
+		        <include name="**/*.properties"/>
+		        <exclude name="build.properties"/>
+		        <exclude name="plugin.properties"/>
+		</prop2pot>
 		<pot2en srcDir="src/test/data/rt2pot_" dstDir="src/test/data/rt3en_" />
 		<po2prop srcDir="src/test/data/rt3en_" dstDir="src/test/data/rt4prop_" />
 		<verifyprop dir1="src/test/data/1prop" dir2="src/test/data/rt4prop_" />
