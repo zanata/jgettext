@@ -62,9 +62,6 @@ public class Prop2PotTask extends MatchingTask
       try
       {
          DirectoryScanner ds = super.getDirectoryScanner(srcDir);
-         ds.setIncludes(new String[] {"**/*.properties"});
-         // FIXME
-         ds.setExcludes(new String[] {"build.properties", "plugin.properties"});
          ds.scan();
          String[] files = ds.getIncludedFiles();
 
