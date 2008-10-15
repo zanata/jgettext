@@ -399,29 +399,7 @@ public class POUnmarshallerImpl implements POUnmarshaller {
 		setMode(MODE_COMMENT);
 		
 		line = line.substring(2).trim();
-
-		StringTokenizer tok = new StringTokenizer(line, " ");
-		// TODO fails on xmldoc style references
-		while(tok.hasMoreTokens()){
-			String ref = tok.nextToken();
-			String[] refX = ref.split(":");
-			if(refX.length != 2){
-				// support translate toolkit # style separators...
-				refX = ref.split("#");
-				if(refX.length > 2){
-					throw new ParseException("Unexpected reference token: " + ref );
-				}
-			}
-			POReference poRef = getEntry().getReferences().get(refX[0]);
-			if(poRef == null){
-				poRef = new POReference(refX[0]);
-				getEntry().getReferences().put(poRef.getFile(), poRef);
-			}
-			if(refX.length == 2){
-				poRef.getLocations().add(refX[1]);
-			}
-		}
-		
+		getEntry().addReference(line);
 	}
 
 	private void parseFlagLine(String line, boolean obsolete) throws ParseException {

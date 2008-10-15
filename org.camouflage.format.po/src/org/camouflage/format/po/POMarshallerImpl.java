@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -76,15 +75,7 @@ public class POMarshallerImpl implements POMarshaller {
 			}
 		}
 		
-		Map<String,POReference> references = entry.getReferences();
-		if(references.size() !=0){
-			if(entry.isObsolete()){
-				writer.write("#~ ");
-			}
-			writer.write("#: ");
-			writeReferences(references, writer);
-			writer.write("\n");
-		}
+		writeReferences(entry.getReferences(), writer, entry.isObsolete());
 		
 		List<String> flags = entry.getFlags();
 		if(flags.size() !=0){
@@ -213,19 +204,17 @@ public class POMarshallerImpl implements POMarshaller {
 		
 	}
 
-	private void writeReferences(Map<String,POReference> references, Writer writer) throws IOException {
+	private void writeReferences(List<String> references, Writer writer, boolean obsolete) throws IOException {
 		
-		StringBuffer refString = new StringBuffer(64);
-		Collection<POReference> refs = references.values();
-		for (POReference reference : refs) {
-			for (String location : reference.getLocations()) {
-				refString.append(reference.getFile());
-				refString.append(":");
-				refString.append(location);
-				refString.append(" ");
+		for(String ref : references) {
+			if(obsolete){
+				writer.write("#~ ");
 			}
+			writer.write("#: ");
+			writer.write(ref);
+			writer.write("\n");
+			
 		}
-		writer.write(refString.toString().trim());
 		
 	}
 

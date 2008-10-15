@@ -13,12 +13,12 @@ public class POEntry {
 	// header items
 	private String comment;
 	private String autoComment;
-	private List<String> flags;
-	private Map<String, POReference> references;
+	private final List<String> flags = new ArrayList<String>();
+	private final List<String> references = new ArrayList<String>();
 	private String prevMsgId;
 	private String prevMsgIdPlural;
 	private String prevMsgCtxt;
-	private Map<String,String> unknownComment;
+	private final Map<String,String> unknownComment = new HashMap<String,String>();
 	private boolean obsolete;
 	
 	
@@ -35,8 +35,6 @@ public class POEntry {
 	public POEntry(){
 		this.comment = null;
 		this.autoComment = null;
-		this.flags = new ArrayList<String>();
-		this.references = new HashMap<String,POReference>();
 		this.prevMsgId = null;
 		this.prevMsgIdPlural = null;
 		this.prevMsgCtxt = null;
@@ -44,7 +42,6 @@ public class POEntry {
 		this.msgIdPlural = null;
 		this.msgStrings = new ArrayList<String>();
 		this.msgCtxt = null;
-		this.unknownComment = new HashMap<String,String>();
 		this.obsolete = false;
 	}
 
@@ -97,24 +94,17 @@ public class POEntry {
 	}
 
 	/**
-	 * @param flags the flags to set
-	 */
-	public void setFlags(List<String> flags) {
-		this.flags = flags;
-	}
-
-	/**
 	 * @return the references
 	 */
-	public Map<String,POReference> getReferences() {
+	public List<String> getReferences() {
 		return references;
 	}
 
 	/**
-	 * @param references the references to set
+	 * @param reference the reference to add
 	 */
-	public void setReferences(Map<String,POReference> references) {
-		this.references = references;
+	public void addReference(String reference) {
+		references.add(reference);
 	}
 
 	/**
@@ -259,13 +249,6 @@ public class POEntry {
 	 */
 	public Map<String, String> getUnknownComment() {
 		return unknownComment;
-	}
-
-	/**
-	 * @param unknownComment the unknownComment to set
-	 */
-	public void setUnknownComment(Map<String, String> unknownComment) {
-		this.unknownComment = unknownComment;
 	}
 
 	/**
