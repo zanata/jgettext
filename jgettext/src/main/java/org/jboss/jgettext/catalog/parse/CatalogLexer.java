@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jboss.jgettext.catalog.util.StringUtil;
+
 import antlr.TokenStream;
 
 /**
@@ -220,29 +222,29 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 				throw new ParseException( "expecting continuation context", lineNumber() );
 			}
 
-			entryCollector.collect( stripQuotes( line ) );
+			entryCollector.collect( interpretString( line ) );
 		}
 
 		private void processEntry(String line) {
 			if ( line.startsWith( DOMAIN_TXT ) ) {
-				processDomain( stripQuotes( line.substring( DOMAIN_TXT.length() ) ) );
+				processDomain( interpretString( line.substring( DOMAIN_TXT.length() ) ) );
 			}
 			else if ( line.startsWith( MSGCTXT_TXT ) ) {
-				processMessageContext( stripQuotes( line.substring( MSGCTXT_TXT.length() ) ) );
+				processMessageContext( interpretString( line.substring( MSGCTXT_TXT.length() ) ) );
 			}
 			else if ( line.startsWith( MSGID_PLURAL_TXT ) ) {
-				processMsgidPlural( stripQuotes( line.substring( MSGID_PLURAL_TXT.length() ) ) );
+				processMsgidPlural( interpretString( line.substring( MSGID_PLURAL_TXT.length() ) ) );
 			}
 			else if ( line.startsWith( MSGSTR_PLURAL_TXT ) ) {
 				int pos = line.indexOf( ']' );
 				String n = line.substring( MSGSTR_PLURAL_TXT.length(), pos );
-				processTranslationPlural( Integer.parseInt( n ), stripQuotes( line.substring( pos + 1 ) ) );
+				processTranslationPlural( Integer.parseInt( n ), interpretString( line.substring( pos + 1 ) ) );
 			}
 			else if ( line.startsWith( MSGSTR_TXT ) ) {
-				processTranslation( stripQuotes( line.substring( MSGSTR_TXT.length() ) ) );
+				processTranslation( interpretString( line.substring( MSGSTR_TXT.length() ) ) );
 			}
 			else if ( line.startsWith( MSGID_TXT ) ) {
-				processMsgid( stripQuotes( line.substring( MSGID_TXT.length() ) ) );
+				processMsgid( interpretString( line.substring( MSGID_TXT.length() ) ) );
 			}
 			else {
 				throw new UnexpectedTokenException( "unrecognized entry directive [" + line + "]", lineNumber() );
@@ -280,9 +282,11 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 			this.entryCollector = entryCollector;
 		}
 
-		private String stripQuotes(String line) {
-			line = line.trim();
-			return line.substring( 1, line.length() - 1 );
+		private String interpretString(String quotedString) {
+		    	quotedString = StringUtil.removeEscapes(quotedString);
+			quotedString = quotedString.trim();
+			// remove quotes:
+			return quotedString.substring( 1, quotedString.length() - 1 );
 		}
 
 		private class MsgctxtCollector extends EntryCollector {
