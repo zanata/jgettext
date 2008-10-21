@@ -27,7 +27,7 @@
 		classpath="target/classes" />
 
 	<target name="prop2pot" description="">
-		<prop2pot srcDir="src/test/data/1prop" dstDir="src/test/data/prop2pot2pot_" />
+		<prop2pot srcDir="src/test/data/1prop" dstDir="src/test/data/prop2pot2pot_" includes="**/*.properties" />
 	</target>
 
 	<target name="po2prop" description="">
