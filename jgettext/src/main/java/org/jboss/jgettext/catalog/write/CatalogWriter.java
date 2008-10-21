@@ -15,10 +15,14 @@
  */
 package org.jboss.jgettext.catalog.write;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.io.Writer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.jboss.jgettext.Catalog;
 import org.jboss.jgettext.Message;
@@ -54,14 +58,37 @@ public class CatalogWriter {
 
 		catalog.processMessages( processor );
 	}
-
+	
 	private Message generateHeader() {
 		Message header = new Message();
 		header.setMsgid( "" );
-		header.setMsgstr( "" );
-		header.addComment( "SOME DESCRIPTIVE TITLE." );
-		header.addComment( "FIRST AUTHOR <EMAIL@ADDRESS>, YEAR." );
-		header.addComment( "" );
+
+		header.addComment("SOME DESCRIPTIVE TITLE."); //$NON-NLS-1$
+		header.addComment("Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER"); //$NON-NLS-1$
+		header.addComment("This file is distributed under the same license as the PACKAGE package."); //$NON-NLS-1$
+		header.addComment("FIRST AUTHOR <EMAIL@ADDRESS>, YEAR."); //$NON-NLS-1$
+		header.addComment(""); //$NON-NLS-1$
+
+		StringWriter sw = new StringWriter();
+		BufferedWriter out = new BufferedWriter(sw);
+
+		try {
+		    out.write("Project-Id-Version: PACKAGE VERSION\\n");out.newLine(); //$NON-NLS-1$
+		    out.write("Report-Msgid-Bugs-To: \\n");out.newLine(); //$NON-NLS-1$
+		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mmZ"); //$NON-NLS-1$
+		    out.write("POT-Creation-Date: "+dateFormat.format(new Date())+"\\n");out.newLine(); //$NON-NLS-1$ //$NON-NLS-2$
+		    out.write("PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n");out.newLine(); //$NON-NLS-1$
+		    out.write("Last-Translator: FULL NAME <EMAIL@ADDRESS>\\n");out.newLine(); //$NON-NLS-1$
+		    out.write("Language-Team: LANGUAGE <LL@li.org>\\n");out.newLine(); //$NON-NLS-1$
+		    out.write("MIME-Version: 1.0\\n");out.newLine(); //$NON-NLS-1$
+		    out.write("Content-Type: text/plain; charset=UTF-8\\n");out.newLine(); //$NON-NLS-1$
+		    out.write("Content-Transfer-Encoding: 8bit\\n");out.newLine();  //$NON-NLS-1$
+		} catch (IOException e) {
+		    throw new RuntimeException(e);
+		}
+
+		header.setMsgstr(sw.toString());
+		
 		header.markFuzzy();
 
 		return header;

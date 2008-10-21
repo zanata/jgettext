@@ -228,7 +228,7 @@ public class Regex2PotTask extends MatchingTask
 
    protected void generatePot(BufferedWriter out) throws IOException
    {
-       Catalog cat = new Catalog();
+       Catalog cat = new Catalog(true);
        CatalogWriter writer = new CatalogWriter(cat);
        for (Map.Entry<String, Set<String>> mapEntry : mapKeyToLocationSet.entrySet())
        {

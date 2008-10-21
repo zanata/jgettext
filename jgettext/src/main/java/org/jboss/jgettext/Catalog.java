@@ -24,9 +24,27 @@ import java.util.LinkedHashMap;
  */
 public class Catalog {
 	// todo : segment by domain?
-
+    	
+        /**
+         * Is this a POT (template)? Or a PO?
+         */
+        private boolean template;
+        
+    	public Catalog(boolean template) {
+    	    this.template = template;
+    	}
+    
+    
 	private final LinkedHashMap<MessageHashKey,Message> messageMap = new LinkedHashMap<MessageHashKey,Message>();
 
+	public void setTemplate(boolean template) {
+	    this.template = template;
+	}
+	
+	public boolean isTemplate() {
+	    return template;
+	}
+	
 	public void addMessage(Message message) {
 		messageMap.put( new MessageHashKey( message ), message );
 	}

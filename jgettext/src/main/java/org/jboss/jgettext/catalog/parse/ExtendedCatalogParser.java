@@ -32,11 +32,16 @@ import antlr.collections.AST;
  * @author Steve Ebersole
  */
 public class ExtendedCatalogParser extends CatalogParser {
-	private Catalog catalog = new Catalog();
+	private final Catalog catalog;
 	private Message currentMessage = new Message();
 
 	public ExtendedCatalogParser(File file) throws FileNotFoundException {
 		super( new CatalogLexer( file ) );
+		catalog = new Catalog(isPot(file));
+	}
+	
+	private static boolean isPot(File file) {
+	    return file.getName().toLowerCase().endsWith(".pot");
 	}
 
 	public Catalog getCatalog() {

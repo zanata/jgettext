@@ -63,6 +63,7 @@ public class Pot2EnTaskTest extends BuildFileTest {
 	ExtendedCatalogParser parser = new ExtendedCatalogParser(targetFile);
 	parser.catalog();
 	Catalog catalog = parser.getCatalog();
+	catalog.setTemplate(targetName.endsWith(".pot"));
 	catalog.processMessages(processor);
 	assertEquals(1, numHeaders);
     }
