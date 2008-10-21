@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project basedir="." default="cleanup">
+<project basedir="." default="">
   <import file="classpaths.xml" />
 
   <taskdef name="pot2en" classname="org.fedorahosted.tennera.antgettext.Pot2EnTask"
@@ -10,28 +10,23 @@
     classpath="bin;${jgettext}" />
 
   <target name="testBasic">
+    <delete dir="pot2en_basic" />
     <pot2en srcDir="pot2en" dstDir="pot2en_basic" />
   </target>
 
   <target name="testPseudo">
-    <pot2en pseudo="true" srcDir="pot2en" dstDir="pot2en_pseudo" />
+    <delete dir="pot2en_pseudo" />
+    <pot2en pseudo="true" srcDir="pot2en" dstDir="pot2en_pseudo" includes="**/*.pot" />
   </target>
 
   <target name="testProp2Pot">
-    <prop2pot srcDir="prop2pot" dstDir="prop2pot_pot" />
+    <delete dir="prop2pot_pot" />
+    <prop2pot srcDir="prop2pot" dstDir="prop2pot_pot"  />
   </target>
 
   <target name="cleanup">
-  <!-- 
-    <delete dir="pot2en_basic" />
-    <delete dir="pot2en_pseudo" />
-    <delete dir="prop2pot_pot" />
-   -->
   </target>
 
   <target name="prepare">
-    <mkdir dir="pot2en_basic"/>
-    <mkdir dir="pot2en_pseudo"/>
-    <mkdir dir="prop2pot_pot" />
   </target>
 </project>
