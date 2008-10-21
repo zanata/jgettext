@@ -13,6 +13,7 @@ import java.util.Collection;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.MatchingTask;
 import org.fedorahosted.openprops.Properties;
 import org.jboss.jgettext.Catalog;
@@ -78,7 +79,8 @@ public class Po2PropTask extends MatchingTask
             String propFilename = poFilename.substring(0, poFilename.length()-"po".length())+"properties";
             File propFile = new File(dstDir, propFilename);
             final Properties props = new Properties();
-            System.out.println("Generating "+propFile+" from "+poFile);
+            log("Generating "+propFile+" from "+poFile, Project.MSG_VERBOSE);
+
             propFile.getParentFile().mkdirs();
             BufferedWriter out = new BufferedWriter(new FileWriter(propFile));
             try
@@ -101,7 +103,7 @@ public class Po2PropTask extends MatchingTask
 			    sb.append(comm).append("\n");
 			}
 			String poComment = sb.toString();
-System.err.println("Processing "+entry.toString());
+			//System.err.println("Processing "+entry.toString());
 			if (ctxt == null)
 			{
 			    // TODO gettext tools and the POUnmarshaller do not preserve whitespace in references 

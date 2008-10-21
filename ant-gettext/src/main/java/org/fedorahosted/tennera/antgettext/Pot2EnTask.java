@@ -12,6 +12,7 @@ import java.io.FileWriter;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.MatchingTask;
 import org.jboss.jgettext.Catalog;
 import org.jboss.jgettext.Message;
@@ -68,7 +69,7 @@ public class Pot2EnTask extends MatchingTask
             String poFilename = potFilename.substring(0, potFilename.length()-"pot".length())+"po";
             File poFile = new File(dstDir, poFilename);
             
-            System.out.println("Generating "+poFile+" from "+potFile);
+            log("Generating "+poFile+" from "+potFile, Project.MSG_VERBOSE);
             poFile.getParentFile().mkdirs();
             BufferedWriter out = new BufferedWriter(new FileWriter(poFile));
             try

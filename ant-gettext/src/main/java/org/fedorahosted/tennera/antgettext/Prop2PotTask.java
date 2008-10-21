@@ -14,6 +14,7 @@ import java.io.FileWriter;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.MatchingTask;
 import org.fedorahosted.openprops.Properties;
 import org.jboss.jgettext.Catalog;
@@ -77,7 +78,7 @@ public class Prop2PotTask extends MatchingTask
             Properties props = new Properties();
             BufferedReader in = new BufferedReader(new FileReader(propFile));
             props.load(in);
-            System.out.println("Generating "+potFile+" from "+propFile);
+            log("Generating "+potFile+" from "+propFile, Project.MSG_VERBOSE);
             potFile.getParentFile().mkdirs();
             BufferedWriter out = new BufferedWriter(new FileWriter(potFile));
             try

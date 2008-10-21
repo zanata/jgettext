@@ -13,6 +13,7 @@ import java.util.Properties;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.MatchingTask;
 
 /**
@@ -80,7 +81,7 @@ public class VerifyPropTask extends MatchingTask
                in1.close();
             }
          }
-         System.out.println("Verified .properties files in "+dir1+" against "+dir2);
+         log("Verified .properties files in "+dir1+" against "+dir2, Project.MSG_VERBOSE);
       }
       catch (Exception e)
       {
