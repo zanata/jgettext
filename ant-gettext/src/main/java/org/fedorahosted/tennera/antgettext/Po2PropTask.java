@@ -65,7 +65,9 @@ public class Po2PropTask extends MatchingTask
       try
       {
          DirectoryScanner ds = super.getDirectoryScanner(srcDir);
-         ds.setIncludes(new String[] {"**/*.po"});
+         // use default includes if unset:
+         if(!getImplicitFileSet().hasPatterns())
+             ds.setIncludes(new String[] {"**/*.po"});
          ds.scan();
          String[] files = ds.getIncludedFiles();
 

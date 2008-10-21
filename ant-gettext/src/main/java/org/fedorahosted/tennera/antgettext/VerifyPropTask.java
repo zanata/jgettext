@@ -45,9 +45,9 @@ public class VerifyPropTask extends MatchingTask
       try
       {
          DirectoryScanner ds = super.getDirectoryScanner(dir1);
-         ds.setIncludes(new String[] {"**/*.properties"});
-         // FIXME
-         ds.setExcludes(new String[] {"build.properties", "plugin.properties"});
+         // use default includes if unset:
+         if(!getImplicitFileSet().hasPatterns())
+             ds.setIncludes(new String[] {"**/*.properties"});
          ds.scan();
          String[] files = ds.getIncludedFiles();
 
