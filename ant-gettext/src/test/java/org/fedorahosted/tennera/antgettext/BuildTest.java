@@ -7,37 +7,47 @@
 package org.fedorahosted.tennera.antgettext;
 
 import java.io.File;
+import java.io.FileInputStream;
 
 import org.apache.tools.ant.BuildFileTest;
+import org.fedorahosted.openprops.Properties;
 import org.jboss.jgettext.Catalog;
 import org.jboss.jgettext.Message;
 import org.jboss.jgettext.Catalog.MessageProcessor;
 import org.jboss.jgettext.catalog.parse.ExtendedCatalogParser;
 
-public class Pot2EnTaskTest extends BuildFileTest {
+public class BuildTest extends BuildFileTest {
     private int numHeaders = 0;
 
-    public Pot2EnTaskTest(String name) {
+    public BuildTest(String name) {
 	super(name);
     }
     
     @Override
-//    public void configureProject(String filename) throws BuildException {
-//	// work around maven bug: http://jira.codehaus.org/browse/SUREFIRE-184
-//	System.getProperties().remove("basedir");
-//	File buildFile = new File(filename);
-//	super.configureProject(buildFile.getPath());
-//    }
-
     protected void setUp() throws Exception {
 	// work around maven bug: http://jira.codehaus.org/browse/SUREFIRE-184
 	System.getProperties().remove("basedir");
-	configureProject("src/test/data/taskdefs/pot2en.xml");
+	configureProject("src/test/data/taskdefs/build.xml");
 	executeTarget("prepare");
     }
 
+    @Override
     protected void tearDown() throws Exception {
 	executeTarget("cleanup");
+    }
+    
+    private void runPOGeneratingTest(String taskName, String poTargetName, MessageProcessor processor) throws Exception
+    {
+	executeTarget(taskName);
+	System.out.println(this.getOutput());
+	File targetFile = new File(poTargetName);
+	assertTrue(targetFile.toString(), targetFile.exists());
+	ExtendedCatalogParser parser = new ExtendedCatalogParser(targetFile);
+	parser.catalog();
+	Catalog catalog = parser.getCatalog();
+	catalog.setTemplate(poTargetName.endsWith(".pot"));
+	catalog.processMessages(processor);
+	assertEquals(1, numHeaders);
     }
     
     abstract class BaseProcessor implements MessageProcessor
@@ -54,22 +64,8 @@ public class Pot2EnTaskTest extends BuildFileTest {
 	abstract void checkEntry(Message entry);
     }
     
-    private void runTest(String taskName, String targetName, MessageProcessor processor) throws Exception
-    {
-	executeTarget(taskName);
-	System.out.println(this.getOutput());
-	File targetFile = new File(targetName);
-	assertTrue(targetFile.toString(), targetFile.exists());
-	ExtendedCatalogParser parser = new ExtendedCatalogParser(targetFile);
-	parser.catalog();
-	Catalog catalog = parser.getCatalog();
-	catalog.setTemplate(targetName.endsWith(".pot"));
-	catalog.processMessages(processor);
-	assertEquals(1, numHeaders);
-    }
-
     public void testBasic() throws Exception {
-	runTest("testBasic", 
+	runPOGeneratingTest("testBasic", 
 		"src/test/data/taskdefs/pot2en_basic/messages.po", 
 		new BaseProcessor() 
 	{
@@ -83,7 +79,7 @@ public class Pot2EnTaskTest extends BuildFileTest {
     }
 
     public void testPseudo() throws Exception {
-	runTest("testPseudo", 
+	runPOGeneratingTest("testPseudo", 
 		"src/test/data/taskdefs/pot2en_pseudo/messages.po", 
 		new BaseProcessor() 
 	{
@@ -97,7 +93,7 @@ public class Pot2EnTaskTest extends BuildFileTest {
     }
 
     public void testProp2Pot() throws Exception {
-	runTest("testProp2Pot", 
+	runPOGeneratingTest("testProp2Pot", 
 		"src/test/data/taskdefs/prop2pot_pot/messages.pot", 
 		new BaseProcessor() 
 	{
@@ -108,6 +104,27 @@ public class Pot2EnTaskTest extends BuildFileTest {
 			entry.getMsgstr().equals(""));
 	    }
 	});
+    }
+    
+    private Properties runPropGeneratingTest(String taskName, String propTargetName) throws Exception
+    {
+	executeTarget(taskName);
+	System.out.println(this.getOutput());
+	File targetFile = new File(propTargetName);
+	assertTrue(targetFile.toString(), targetFile.exists());
+	Properties props = new Properties();
+	FileInputStream in = new FileInputStream(targetFile);
+	props.load(in);
+	in.close();
+	return props;
+    }
+    
+    public void testPo2Prop() throws Exception {
+	Properties result = runPropGeneratingTest("testPo2Prop", 
+		"src/test/data/taskdefs/po2prop_prop/messages_qps.properties");
+	Properties expected = new Properties();
+	expected.setProperty("msgctxt A", "msgstr A");
+	assertEquals(expected, result);
     }
 
 }
