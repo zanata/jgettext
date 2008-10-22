@@ -6,10 +6,10 @@
  */
 package org.fedorahosted.tennera.antgettext;
 
-import java.io.BufferedReader;
+import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 
 import org.apache.tools.ant.BuildException;
@@ -76,7 +76,7 @@ public class Prop2PotTask extends MatchingTask
             String potFilename = propFilename.substring(0, propFilename.length()-"properties".length())+"pot";
             File potFile = new File(dstDir, potFilename);
             Properties props = new Properties();
-            BufferedReader in = new BufferedReader(new FileReader(propFile));
+            BufferedInputStream in = new BufferedInputStream(new FileInputStream(propFile));
             props.load(in);
             log("Generating "+potFile+" from "+propFile, Project.MSG_VERBOSE);
             potFile.getParentFile().mkdirs();

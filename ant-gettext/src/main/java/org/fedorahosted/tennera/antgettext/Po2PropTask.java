@@ -6,9 +6,9 @@
  */
 package org.fedorahosted.tennera.antgettext;
 
-import java.io.BufferedWriter;
+import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.util.Collection;
 
 import org.apache.tools.ant.BuildException;
@@ -40,6 +40,7 @@ public class Po2PropTask extends MatchingTask
    // (a) preserve ordering, and (b) find the ResourceBundle key (in case 
    // the #: location comments have been removed).  
 //   private File tmpDir;
+   private String locale = null;
 
    public void setSrcDir(File srcDir)
    {
@@ -54,6 +55,11 @@ public class Po2PropTask extends MatchingTask
    public void setDstDir(File dstDir)
    {
       this.dstDir = dstDir;
+   }
+   
+   public void setLocale(String locale)
+   {
+       this.locale = locale;
    }
    
    @Override
@@ -76,13 +82,19 @@ public class Po2PropTask extends MatchingTask
          {
             String poFilename = files[i];
             File poFile = new File(srcDir, poFilename);
-            String propFilename = poFilename.substring(0, poFilename.length()-"po".length())+"properties";
+            String localeSuffix;
+            if (locale == null)
+		localeSuffix = "";
+	    else
+		localeSuffix = "_" + locale;
+            String basename = poFilename.substring(0, poFilename.length()-".po".length());
+	    String propFilename = basename + localeSuffix + ".properties";
             File propFile = new File(dstDir, propFilename);
             final Properties props = new Properties();
             log("Generating "+propFile+" from "+poFile, Project.MSG_VERBOSE);
 
             propFile.getParentFile().mkdirs();
-            BufferedWriter out = new BufferedWriter(new FileWriter(propFile));
+            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(propFile));
             try
             {
 //               POUnmarshaller unmarshaller = POFactory.createUnmarshaller();
