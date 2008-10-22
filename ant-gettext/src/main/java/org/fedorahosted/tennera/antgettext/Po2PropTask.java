@@ -83,7 +83,7 @@ public class Po2PropTask extends MatchingTask
             String poFilename = files[i];
             File poFile = new File(srcDir, poFilename);
             String localeSuffix;
-            if (locale == null)
+            if (locale == null || locale.length() == 0)
 		localeSuffix = "";
 	    else
 		localeSuffix = "_" + locale;
