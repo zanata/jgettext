@@ -1,0 +1,24 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.fedorahosted.tennera</groupId>
+  <artifactId>tennera</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <name>Tennera</name>
+  <packaging>pom</packaging>
+  <description>Umbrella for several Java internationalisation projects</description>
+
+  <!-- Sub Project Modules to Build -->
+  <modules>
+    <module>../ant-gettext</module>
+    <module>../jgettext</module>
+  </modules>
+  
+<!--
+  <distributionManagement>
+    <site>
+      <id>local-site</id>
+      <url>file://${user.home}/public_html/tennera</url>
+    </site>
+  </distributionManagement>
+-->
+</project>
