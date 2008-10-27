@@ -36,38 +36,52 @@ public class BuildTest extends BuildFileTest {
 	executeTarget("cleanup");
     }
     
-    private void runPOGeneratingTest(String taskName, String poTargetName, MessageProcessor processor) throws Exception
+    private Catalog runPOGeneratingTest(String taskName, String poTargetName, int msgCount, BaseProcessor processor) throws Exception
     {
 	executeTarget(taskName);
 	System.out.println(this.getOutput());
 	File targetFile = new File(poTargetName);
-	assertTrue(targetFile.toString(), targetFile.exists());
+	assertTrue(targetFile.toString() + " should exist", targetFile.exists());
 	ExtendedCatalogParser parser = new ExtendedCatalogParser(targetFile);
 	parser.catalog();
 	Catalog catalog = parser.getCatalog();
 	catalog.setTemplate(poTargetName.endsWith(".pot"));
 	catalog.processMessages(processor);
 	assertEquals(1, numHeaders);
+	assertEquals(msgCount, processor.numMessages);
+	return catalog;
     }
     
     abstract class BaseProcessor implements MessageProcessor
     {
+	int numMessages = 0;
+
 //	@Override
 	public void processMessage(Message entry) {
 	    if (entry.isHeader()) {
 		++numHeaders;
 		return;
 	    }
+	    ++numMessages;
 	    checkEntry(entry);
 	}
 
 	abstract void checkEntry(Message entry);
     }
     
+    private final class EmptyMsgstrChecker extends BaseProcessor {
+	// test that msgstr==""
+	@Override
+	void checkEntry(Message entry) {
+	    assertTrue("msgstr(\""+entry.getMsgstr()+"\") should equal \"\"", 
+		entry.getMsgstr().equals(""));
+	}
+    }
+
     public void testBasic() throws Exception {
 	runPOGeneratingTest("testBasic", 
 		"src/test/data/taskdefs/pot2en_basic/messages.po", 
-		new BaseProcessor() 
+		1, new BaseProcessor() 
 	{
 	    // test that msgstr==msgid
 	    @Override
@@ -81,7 +95,7 @@ public class BuildTest extends BuildFileTest {
     public void testPseudo() throws Exception {
 	runPOGeneratingTest("testPseudo", 
 		"src/test/data/taskdefs/pot2en_pseudo/messages.po", 
-		new BaseProcessor() 
+		1, new BaseProcessor() 
 	{
 	    // test that msgstr==pseudolocalise(msgid)
 	    @Override
@@ -95,15 +109,7 @@ public class BuildTest extends BuildFileTest {
     public void testProp2Pot() throws Exception {
 	runPOGeneratingTest("testProp2Pot", 
 		"src/test/data/taskdefs/prop2pot_pot/messages.pot", 
-		new BaseProcessor() 
-	{
-	    // test that msgstr==""
-	    @Override
-	    void checkEntry(Message entry) {
-		assertTrue("msgstr(\""+entry.getMsgstr()+"\") should equal \"\"", 
-			entry.getMsgstr().equals(""));
-	    }
-	});
+		4, new EmptyMsgstrChecker());
     }
     
     private Properties runPropGeneratingTest(String taskName, String propTargetName) throws Exception
@@ -125,6 +131,12 @@ public class BuildTest extends BuildFileTest {
 	Properties expected = new Properties();
 	expected.setProperty("msgctxt A", "msgstr A");
 	assertEquals(expected, result);
+    }
+    
+    public void testXpath2Pot() throws Exception {
+	runPOGeneratingTest(getName(), 
+		"src/test/data/taskdefs/xpath2pot_pot/meta.pot", 
+		148, new EmptyMsgstrChecker());
     }
 
 }

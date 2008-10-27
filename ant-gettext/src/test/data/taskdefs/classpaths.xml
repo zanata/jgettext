@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-
-<project basedir="." >
-  <property name="m2repo" value="${user.home}/.m2/repository"/>
-  <property name="_jgettext" value="../maven-jdocbook-plugin/target/classes;${m2repo}/antlr/antlr/2.7.6/antlr-2.7.6.jar"/>
-  <property name="jgettext" value="../jgettext/target/classes;${m2repo}/antlr/antlr/2.7.6/antlr-2.7.6.jar"/>
-</project>

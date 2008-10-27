@@ -1,16 +1,7 @@
 <?xml version="1.0"?>
 
-<project basedir="." default="">
-  <import file="classpaths.xml" />
-
-  <taskdef name="pot2en" classname="org.fedorahosted.tennera.antgettext.Pot2EnTask"
-    classpath="bin;${jgettext}" />
-
-  <taskdef name="prop2pot" classname="org.fedorahosted.tennera.antgettext.Prop2PotTask"
-    classpath="bin;${jgettext}" />
-
-  <taskdef name="po2prop" classname="org.fedorahosted.tennera.antgettext.Po2PropTask"
-    classpath="bin;${jgettext}" />
+<project basedir="." default="testRegex2Pot">
+  <import file="taskdefs.xml" />
 
   <target name="testBasic">
     <delete dir="pot2en_basic" />
@@ -30,6 +21,24 @@
   <target name="testPo2Prop">
     <delete dir="po2prop_prop" />
     <po2prop srcDir="po2prop" dstDir="po2prop_prop" locale="qps" />
+  </target>
+
+  <target name="testRegex2Pot">
+    <delete dir="regex2pot_pot" />
+    <mkdir dir="regex2pot_pot"/>
+    <regex2pot srcDir="regex" 
+        includes="**" 
+        regex="gettext\(&quot;(.*)&quot;\)" 
+        target="regex2pot_pot/regex.pot"  />
+  </target>
+
+  <target name="testXpath2Pot">
+    <delete dir="xpath2pot_pot" />
+    <mkdir dir="xpath2pot_pot"/>
+    <xpath2pot srcDir="meta" 
+    	includes="**/*.meta" 
+    	xpath="//@displayName | //XModelAttribute/@name | //XModelAttribute/@default | //Constraint/value/@name" 
+    	target="xpath2pot_pot/meta.pot"  />
   </target>
 
   <target name="cleanup">

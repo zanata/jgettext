@@ -6,16 +6,12 @@
  */
 package org.fedorahosted.tennera.antgettext;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -42,6 +38,8 @@ public abstract class MatchExtractingTask extends MatchingTask
     private File srcDir;
     private File target;
     private String pathPrefix;
+    private String format = "";
+    
     /**
      * Maps an English key to a set of matching source locations
      */
@@ -78,6 +76,11 @@ public abstract class MatchExtractingTask extends MatchingTask
     {
 	this.pathPrefix = prefix;
     }
+    
+    public void setFormat(String format) 
+    {
+	this.format = format;
+    }
 
     @Override
     public void execute() throws BuildException 
@@ -109,7 +112,10 @@ public abstract class MatchExtractingTask extends MatchingTask
 
 	    for (int i = 0; i < files.length; i++)
 	    {
-		processFileByConcatenatedLines(files[i]);
+		String filename = files[i];
+		log("processing " + filename, Project.MSG_VERBOSE);
+		File f = new File(srcDir, filename);
+		processFile(filename, f);
 	    }
 	    generatePot(out);
 	    out.close();
@@ -126,40 +132,14 @@ public abstract class MatchExtractingTask extends MatchingTask
      * @throws IOException
      * @throws BuildException
      */
-    private void processFileByConcatenatedLines(String filename)
-    	throws IOException, BuildException 
-    {
-	log("processing " + filename, Project.MSG_VERBOSE);
-	File f = new File(srcDir, filename);
-	BufferedReader reader = new BufferedReader(new FileReader(f));
+    protected abstract void processFile(String filename, File f) throws IOException; 
 
-	StringBuilder contents = new StringBuilder();
-	Integer[] lineStarts = readByLines(reader, contents);
-	recordMatches(filename, contents, lineStarts);
-    }
-
-    abstract void recordMatches(String filename, CharSequence contents, Integer[] lineStarts); 
-
-    private Integer[] readByLines(BufferedReader reader, StringBuilder contents) throws IOException 
-    {
-	String line;
-	List<Integer> lineStartList = new ArrayList<Integer>();
-	{
-	    int lineNo = 0;
-	    int charNum = 0;
-	    while ((line = reader.readLine()) != null)
-	    {
-		++lineNo;
-		contents.append(line);
-		contents.append('\n');
-		lineStartList.add(charNum);
-		charNum += line.length()+1; // plus 1 for the newline
-	    }
-	}
-	Integer[] lineStarts = lineStartList.toArray(new Integer[0]);
-	return lineStarts;
-    }
-
+    /**
+     * Records a match for later output by generatePot
+     * @param filename
+     * @param key
+     * @param lineNo
+     */
     protected void recordMatch(String filename, String key, int lineNo) 
     {
 	Set<String> set = mapKeyToLocationSet.get(key);
@@ -171,7 +151,7 @@ public abstract class MatchExtractingTask extends MatchingTask
 	set.add(filename+":"+lineNo); //$NON-NLS-1$
     }
 
-    protected void generatePot(BufferedWriter out) throws IOException 
+    private void generatePot(BufferedWriter out) throws IOException 
     {
 	Catalog cat = new Catalog(true);
 	CatalogWriter writer = new CatalogWriter(cat);
@@ -180,7 +160,8 @@ public abstract class MatchExtractingTask extends MatchingTask
 	    Message message = new Message();
 	    //	   message.addExtractedComment(null);
 	    message.addOccurence(new Occurence(locationSetToString(mapEntry.getValue())));
-	    message.addFormat("java-format"); // TODO make this configurable
+	    if (!format.equals(""))
+		message.addFormat(format);
 	    //	   message.setMsgctxt(null);
 	    message.setMsgid(mapEntry.getKey());
 	    cat.addMessage(message);

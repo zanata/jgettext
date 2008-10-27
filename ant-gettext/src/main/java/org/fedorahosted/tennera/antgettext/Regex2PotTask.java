@@ -6,6 +6,12 @@
  */
 package org.fedorahosted.tennera.antgettext;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +36,11 @@ public class Regex2PotTask extends MatchExtractingTask
     * @see #setUnescape(boolean)
     */
    private boolean unescape = true;
+   
+   public Regex2PotTask() {
+       // this may later be overridden by the ant attribute "format"
+       setFormat("java-format");
+   }
 
    /**
     * The regex should include one or more capture groups (in parentheses).  
@@ -52,8 +63,33 @@ public class Regex2PotTask extends MatchExtractingTask
       this.unescape = unescape;
    }
    
-   void recordMatches(String filename, CharSequence contents, Integer[] lineStarts) 
+   Integer[] readByLines(BufferedReader reader, StringBuilder contents) throws IOException 
    {
+	String line;
+	List<Integer> lineStartList = new ArrayList<Integer>();
+	{
+	    int lineNo = 0;
+	    int charNum = 0;
+	    while ((line = reader.readLine()) != null)
+	    {
+		++lineNo;
+		contents.append(line);
+		contents.append('\n');
+		lineStartList.add(charNum);
+		charNum += line.length()+1; // plus 1 for the newline
+	    }
+	}
+	Integer[] lineStarts = lineStartList.toArray(new Integer[0]);
+	return lineStarts;
+   }
+
+   @Override
+   protected void processFile(String filename, File f) throws IOException 
+   {
+       BufferedReader reader = new BufferedReader(new FileReader(f));
+
+       StringBuilder contents = new StringBuilder();
+       Integer[] lineStarts = readByLines(reader, contents);
        Pattern pat = Pattern.compile(regex);
        Matcher matcher = pat.matcher(contents);
 
