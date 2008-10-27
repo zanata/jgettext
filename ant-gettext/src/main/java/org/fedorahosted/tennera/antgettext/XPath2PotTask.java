@@ -7,7 +7,7 @@
 package org.fedorahosted.tennera.antgettext;
 
 
-/*public*/ class XPath2PotTask extends Regex2PotTask {
+/*public*/ class XPath2PotTask extends MatchExtractingTask {
     
     private String xpath;
     
@@ -18,7 +18,7 @@ package org.fedorahosted.tennera.antgettext;
     @Override
     void recordMatches(String filename, CharSequence contents,
             Integer[] lineStarts) {
-	// iterate through contents, recording xpath matches
+	// TODO iterate through contents, recording xpath matches
 //	       recordMatch(filename, key, lineNo);
     }
 
