@@ -152,49 +152,61 @@ public class Regex2PotTask extends MatchingTask
    private void processFileByConcatenatedLines(String filename) throws IOException, BuildException
    {
       log("processing " + filename, Project.MSG_VERBOSE);
-      Pattern pat = Pattern.compile(regex);
-
       File f = new File(srcDir, filename);
       BufferedReader reader = new BufferedReader(new FileReader(f));
-      String line;
-      List<Integer> lineStartList = new ArrayList<Integer>();
+      
       StringBuilder contents = new StringBuilder();
-      {
-         int lineNo = 0;
-         int charNum = 0;
-         while ((line = reader.readLine()) != null)
-         {
-            ++lineNo;
-            contents.append(line);
-            contents.append('\n');
-            lineStartList.add(charNum);
-            charNum += line.length()+1; // plus 1 for the newline
-         }
-      }
-      Integer[] lineStarts = lineStartList.toArray(new Integer[0]);
-      Matcher matcher = pat.matcher(contents);
+      Integer[] lineStarts = readByLines(reader, contents);
+      recordMatches(filename, contents, lineStarts);
+   }
 
-      while (matcher.find())
-      {
-         try
-         {
-            for (int i=1; i<=matcher.groupCount(); i++)
-            {
-               String capture = matcher.group(i);
-               if(capture != null)
-               {
-                  String key = unescapeJava(capture);
-                  int charNo = matcher.start(i);
-                  int lineNo = findLineNumber(lineStarts, charNo);
-                  recordMatch(filename, key, lineNo);
-               }
-            }
-         }
-         catch (IndexOutOfBoundsException e)
-         {
-            throw new BuildException(e);
-         }
-      }
+   void recordMatches(String filename, CharSequence contents, Integer[] lineStarts) 
+   {
+       Pattern pat = Pattern.compile(regex);
+       Matcher matcher = pat.matcher(contents);
+
+       while (matcher.find())
+       {
+	   try
+	   {
+	       for (int i=1; i<=matcher.groupCount(); i++)
+	       {
+		   String capture = matcher.group(i);
+		   if(capture != null)
+		   {
+		       String key = unescapeJava(capture);
+		       int charNo = matcher.start(i);
+		       int lineNo = findLineNumber(lineStarts, charNo);
+		       recordMatch(filename, key, lineNo);
+		   }
+	       }
+	   }
+	   catch (IndexOutOfBoundsException e)
+	   {
+	       throw new BuildException(e);
+	   }
+       }
+   }
+
+   private Integer[] readByLines(BufferedReader reader, StringBuilder contents)
+   	throws IOException 
+   {
+       String line;
+       List<Integer> lineStartList = new ArrayList<Integer>();
+       {
+	   int lineNo = 0;
+	   int charNum = 0;
+	   while ((line = reader.readLine()) != null)
+	   {
+	       ++lineNo;
+	       contents.append(line);
+	       contents.append('\n');
+	       lineStartList.add(charNum);
+	       charNum += line.length()+1; // plus 1 for the newline
+	   }
+       }
+       Integer[] lineStarts = lineStartList.toArray(new Integer[0]);
+       return lineStarts;
    }
 
    /**
