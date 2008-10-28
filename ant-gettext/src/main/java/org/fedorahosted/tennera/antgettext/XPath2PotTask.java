@@ -65,11 +65,10 @@ public class XPath2PotTask extends MatchExtractingTask {
 	    Attr at = (Attr) el;
 	   el = at.getOwnerElement();
 	   
-	   // NB ignoring any namespace.  Apparently xpath 1.0 can't address 
-	   // namespaced attributes except with namespace prefixes
-	   // (which must be passed to the xpath engine when evaluating).
-	   // Thus you can't make a self-contained xpath for them.
-	   xpath = '@'+at.getName();
+	   if (at.getNamespaceURI() == null)
+	       xpath = '@'+at.getName();
+	   else
+	       xpath = "attribute::*[local-name()='"+at.getLocalName()+"' and namespace-uri()='"+at.getNamespaceURI()+"']";
 	}
 	
 	while (el != null && el != doc.getDocumentElement()) {		
@@ -103,7 +102,7 @@ public class XPath2PotTask extends MatchExtractingTask {
     public static void main(String[] args) throws XPathExpressionException {
 	File f = new File("src/test/data/taskdefs/meta/studio_eclipse_option.meta");
 	XPath xpath = XPathFactory.newInstance().newXPath(); 
-	String expression = "//@displayName | //XModelAttribute/@name | //XModelAttribute/@default | //Constraint/value/@name"; 
+	String expression = "//attribute::*[namespace-uri()='http://test.example.org/'] | //@displayName | //XModelAttribute/@name | //XModelAttribute/@default | //Constraint/value/@name"; 
 	InputSource inputSource = new InputSource(f.getPath());
 	NodeList nodes = (NodeList) xpath.evaluate(expression, inputSource, 
 		XPathConstants.NODESET);

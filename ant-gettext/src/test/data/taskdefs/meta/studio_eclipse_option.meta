@@ -10,7 +10,7 @@
   <XChildrenEntities/>
   <XEntityRenderer/>
   <XModelAttributes>
-   <XModelAttribute PROPERTIES="font=courier" name="exceptions">
+   <XModelAttribute PROPERTIES="font=courier" test:name="exceptions">
     <Editor name="Note"/>
    </XModelAttribute>
   </XModelAttributes>
