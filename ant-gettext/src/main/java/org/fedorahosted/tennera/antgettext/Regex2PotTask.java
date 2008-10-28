@@ -105,7 +105,7 @@ public class Regex2PotTask extends MatchExtractingTask
 		       String key = unescapeJava(capture);
 		       int charNo = matcher.start(i);
 		       int lineNo = findLineNumber(lineStarts, charNo);
-		       recordMatch(filename, key, lineNo);
+		       recordMatch(filename, key, String.valueOf(lineNo));
 		   }
 	       }
 	   }

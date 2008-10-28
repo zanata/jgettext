@@ -17,10 +17,7 @@ package org.jboss.jgettext;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 /**
  * Message implementation
@@ -41,7 +38,7 @@ public class Message {
 
 	private Collection<String> comments = new ArrayList<String>();
 	private Collection<String> extractedComments = new ArrayList<String>();
-	private SortedSet<Occurence> occurences = new TreeSet<Occurence>( new OccurenceComparator() );
+	private List<Occurence> occurences = new ArrayList<Occurence>();
 	private Collection<String> formats = new ArrayList<String>();
 
 	private boolean fuzzy;
@@ -153,7 +150,7 @@ public class Message {
 	}
 
 	public Occurence addOccurence(String file, int line) {
-		Occurence o = new Occurence( file, line );
+		Occurence o = new Occurence( file+':'+line );
 		addOccurence( o );
 		return o;
 	}
@@ -174,7 +171,7 @@ public class Message {
 		return msgstrPlural;
 	}
 
-	public SortedSet<Occurence> getOccurences() {
+	public List<Occurence> getOccurences() {
 		return occurences;
 	}
 
@@ -213,21 +210,4 @@ public class Message {
 	    return sb.toString();
 	}
 
-	private static class OccurenceComparator implements Comparator<Occurence> {
-		public int compare(Occurence o1, Occurence o2) {
-			int sub = o1.getFileName().compareTo( o2.getFileName() );
-			if ( sub != 0 ) {
-				return sub;
-			}
-			if ( o1.getLine() == o2.getLine() ) {
-				return 0;
-			}
-			else if ( o1.getLine() < o2.getLine() ) {
-				return -1;
-			}
-			else {
-				return 1;
-			}
-		}
-	}
 }

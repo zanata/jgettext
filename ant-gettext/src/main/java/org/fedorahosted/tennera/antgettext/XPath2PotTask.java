@@ -14,6 +14,8 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.apache.tools.ant.BuildException;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -39,15 +41,53 @@ public class XPath2PotTask extends MatchExtractingTask {
 	    for (int i = 0; i < nodes.getLength(); i++) {
 		Node node = nodes.item(i);
 		String key = node.getTextContent();
-		// TODO use https://svn.apache.org/repos/asf/xerces/java/branches/schemawork/samples/dom/DOMAddLines.java
-		// or https://jaxb2-commons.dev.java.net/xpath-tracker/
-		int lineNo = -1; 
-		recordMatch(filename, key, lineNo);
+		String position = getXPathForElement(node, node.getOwnerDocument());
+		recordMatch(filename, key, position);
 	    }
 	} catch (XPathExpressionException e) {
 	    throw new BuildException(e);
 	} 
     }
+    
+    /**
+     * Returns an xpath to a given node
+     * 
+     * https://developer.mozilla.org/en/Using_XPath#getXPathForElement
+     * @param el
+     * @param doc
+     * @return
+     */
+    public static String getXPathForElement(Node el, Document doc) {
+	String xpath = "";
+	int pos;
+	Node tempitem2;
+	if (el.getNodeType() == Node.ATTRIBUTE_NODE) {
+	    Attr at = (Attr) el;
+	   el = at.getOwnerElement();
+	   xpath = '@'+(el.getNamespaceURI()==null?"":el.getNamespaceURI()+':')+at.getName();
+	}
+	
+	while (el != null && el != doc.getDocumentElement()) {		
+		pos = 0;
+		tempitem2 = el;
+		while (tempitem2 != null) {
+			if (tempitem2.getNodeType() == Node.ELEMENT_NODE && tempitem2.getNodeName().equals(el.getNodeName())) {
+			    // If it is ELEMENT_NODE of the same name
+				++pos;
+			}
+			tempitem2 = tempitem2.getPreviousSibling();
+		}
+		
+		xpath = (el.getNamespaceURI()==null?"":el.getNamespaceURI()+':')+el.getNodeName()+'['+pos+']'+'/'+xpath;
+		el = el.getParentNode();
+	}
+	if (el != null) {
+	    xpath = '/'+(el.getNamespaceURI()==null?"":el.getNamespaceURI()+':')+el.getNodeName()+'/'+xpath;
+	}
+	if (xpath.endsWith("/"))
+	    xpath = xpath.substring(0, xpath.length()-1);
+	return xpath;
+}
     
     public static void main(String[] args) throws XPathExpressionException {
 	File f = new File("src/test/data/taskdefs/meta/studio_eclipse_option.meta");
@@ -59,7 +99,9 @@ public class XPath2PotTask extends MatchExtractingTask {
 	for (int i = 0; i < nodes.getLength(); i++) {
 	    Node node = nodes.item(i);
 	    String key = node.getTextContent();
-	    System.out.println(key);
+	    Document doc = node.getOwnerDocument();
+	    String path = getXPathForElement(node, doc);
+	    System.out.println(key+": "+path);
 	}
     } 
 }

@@ -134,12 +134,6 @@ public class ExtendedCatalogParser extends CatalogParser {
 
 	private Occurence parseOccurence(AST ast) {
 		String text = ast.getText();
-		int boundary = text.lastIndexOf( ':' );
-		if (boundary < 0)
-		    return new Occurence(text);
-		return new Occurence(
-				text.substring( 0, boundary ),
-				Integer.parseInt( text.substring( boundary + 1, text.length() ) )
-		);
+		return new Occurence(text);
 	}
 }

@@ -28,8 +28,9 @@
     <mkdir dir="regex2pot_pot"/>
     <regex2pot srcDir="regex" 
         includes="**" 
-        regex="gettext\(&quot;(.*)&quot;\)" 
-        target="regex2pot_pot/regex.pot"  />
+        regex="gettext\(&quot;(.*)&quot;\)|_\(&quot;(.*)&quot;\)" 
+        target="regex2pot_pot/regex.pot"
+        pathprefix="../regex/" />
   </target>
 
   <target name="testXpath2Pot">

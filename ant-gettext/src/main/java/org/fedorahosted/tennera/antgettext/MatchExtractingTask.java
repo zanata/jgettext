@@ -37,7 +37,7 @@ public abstract class MatchExtractingTask extends MatchingTask
     private BufferedWriter out;
     private File srcDir;
     private File target;
-    private String pathPrefix;
+    private String pathPrefix = "";
     private String format = "";
     
     /**
@@ -138,9 +138,9 @@ public abstract class MatchExtractingTask extends MatchingTask
      * Records a match for later output by generatePot
      * @param filename
      * @param key
-     * @param lineNo
+     * @param location location within the specified file
      */
-    protected void recordMatch(String filename, String key, int lineNo) 
+    protected void recordMatch(String filename, String key, String location) 
     {
 	Set<String> set = mapKeyToLocationSet.get(key);
 	if(set == null)
@@ -148,7 +148,7 @@ public abstract class MatchExtractingTask extends MatchingTask
 	    set = new TreeSet<String>();
 	    mapKeyToLocationSet.put(key, set);
 	}
-	set.add(filename+":"+lineNo); //$NON-NLS-1$
+	set.add(filename+':'+location);
     }
 
     private void generatePot(BufferedWriter out) throws IOException 
@@ -159,7 +159,13 @@ public abstract class MatchExtractingTask extends MatchingTask
 	{
 	    Message message = new Message();
 	    //	   message.addExtractedComment(null);
-	    message.addOccurence(new Occurence(locationSetToString(mapEntry.getValue())));
+	    Set<String> locations = mapEntry.getValue();
+	    
+	    for (String location : locations) 
+	    {
+		message.addOccurence(new Occurence(pathPrefix+location));
+	    }
+	    
 	    if (!format.equals(""))
 		message.addFormat(format);
 	    //	   message.setMsgctxt(null);
@@ -167,19 +173,6 @@ public abstract class MatchExtractingTask extends MatchingTask
 	    cat.addMessage(message);
 	}
 	writer.writeTo(out);
-    }
-
-    private String locationSetToString(Set<String> locationSet) 
-    {
-	StringBuilder sb = new StringBuilder();
-	for (String location : locationSet)
-	{
-	    sb.append(pathPrefix);
-	    sb.append(location);
-	    // TODO don't use a space after last element
-	    sb.append(' ');
-	}
-	return sb.toString();
     }
 
 }
