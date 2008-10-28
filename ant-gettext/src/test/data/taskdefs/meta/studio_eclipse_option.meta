@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE XModelEntityGroup PUBLIC "-//Red Hat, Inc.//DTD Meta 1.0//EN"
-                                   "meta.dtd">
-<XModelEntityGroup>
+
+
+<XModelEntityGroup xmlns:test="http://test.example.org/">
  <VERSION MODULE="Model" VERSION="1.0"/>
  <MAPPINGS/>
  <ICONS/>
@@ -16,13 +16,13 @@
   </XModelAttributes>
   <XActionItem kind="list">
    <XActionItem kind="list" name="EditActions">
-    <XActionItem HandlerClassName="%Edit%" ICON="action.empty"
+    <test:XActionItem HandlerClassName="%Edit%" ICON="action.empty"
      WizardClassName="%Default%" displayName="Edit Exceptions"
      kind="action" name="Edit">
      <EntityData EntityName="ProblemBufferEditor">
       <AttributeData AttributeName="exceptions" Mandatory="no"/>
      </EntityData>
-    </XActionItem>
+    </test:XActionItem>
    </XActionItem>
   </XActionItem>
   <XDependencies/>
