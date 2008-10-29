@@ -15,11 +15,10 @@
  */
 package org.jboss.jgettext.catalog.write;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.StringWriter;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,7 +39,7 @@ public class CatalogWriter {
 	}
 
 	public void writeTo(File file) throws IOException {
-	    writeTo(new FileWriter( file ));
+	    writeTo(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
 	}
 
 	public void writeTo(Writer writer) {
@@ -61,7 +60,7 @@ public class CatalogWriter {
 	
 	private Message generateHeader() {
 		Message header = new Message();
-		header.setMsgid( "" );
+		header.setMsgid( "" ); //$NON-NLS-1$
 
 		header.addComment("SOME DESCRIPTIVE TITLE."); //$NON-NLS-1$
 		header.addComment("Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER"); //$NON-NLS-1$
@@ -69,25 +68,19 @@ public class CatalogWriter {
 		header.addComment("FIRST AUTHOR <EMAIL@ADDRESS>, YEAR."); //$NON-NLS-1$
 		header.addComment(""); //$NON-NLS-1$
 
-		StringWriter sw = new StringWriter();
-		BufferedWriter out = new BufferedWriter(sw);
+		StringBuilder sb = new StringBuilder();
+		sb.append("Project-Id-Version: PACKAGE VERSION\n"); //$NON-NLS-1$
+		sb.append("Report-Msgid-Bugs-To: \n"); //$NON-NLS-1$
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mmZ"); //$NON-NLS-1$
+		sb.append("POT-Creation-Date: "+dateFormat.format(new Date())+"\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		sb.append("PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"); //$NON-NLS-1$
+		sb.append("Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"); //$NON-NLS-1$
+		sb.append("Language-Team: LANGUAGE <LL@li.org>\n"); //$NON-NLS-1$
+		sb.append("MIME-Version: 1.0\n"); //$NON-NLS-1$
+		sb.append("Content-Type: text/plain; charset=UTF-8\n"); //$NON-NLS-1$
+		sb.append("Content-Transfer-Encoding: 8bit\n");  //$NON-NLS-1$
 
-		try {
-		    out.write("Project-Id-Version: PACKAGE VERSION\\n");out.newLine(); //$NON-NLS-1$
-		    out.write("Report-Msgid-Bugs-To: \\n");out.newLine(); //$NON-NLS-1$
-		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mmZ"); //$NON-NLS-1$
-		    out.write("POT-Creation-Date: "+dateFormat.format(new Date())+"\\n");out.newLine(); //$NON-NLS-1$ //$NON-NLS-2$
-		    out.write("PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n");out.newLine(); //$NON-NLS-1$
-		    out.write("Last-Translator: FULL NAME <EMAIL@ADDRESS>\\n");out.newLine(); //$NON-NLS-1$
-		    out.write("Language-Team: LANGUAGE <LL@li.org>\\n");out.newLine(); //$NON-NLS-1$
-		    out.write("MIME-Version: 1.0\\n");out.newLine(); //$NON-NLS-1$
-		    out.write("Content-Type: text/plain; charset=UTF-8\\n");out.newLine(); //$NON-NLS-1$
-		    out.write("Content-Transfer-Encoding: 8bit\\n");out.newLine();  //$NON-NLS-1$
-		} catch (IOException e) {
-		    throw new RuntimeException(e);
-		}
-
-		header.setMsgstr(sw.toString());
+		header.setMsgstr(sb.toString());
 		
 		header.markFuzzy();
 
