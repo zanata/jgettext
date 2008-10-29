@@ -9,9 +9,9 @@
         <property name="openprops" value="../openprops/target/classes"/>
 	
 	<taskdef name="regex2pot" classname="org.fedorahosted.tennera.antgettext.Regex2PotTask" 
-		classpath="target/classes" />
+		classpath="target/classes;${jgettext}" />
         <taskdef name="xpath2pot" classname="org.fedorahosted.tennera.antgettext.XPath2PotTask" 
-                classpath="target/classes" />
+                classpath="target/classes;${jgettext}" />
 	<taskdef name="prop2pot" classname="org.fedorahosted.tennera.antgettext.Prop2PotTask" 
 		classpath="target/classes;${openprops};${jgettext}" />
 <!--
@@ -51,8 +51,8 @@
 	
 	<target name="xpath">
 		<xpath2pot 
-			srcDir="src/test/data/meta" 
-			pathPrefix="../src/test/data/meta" 
+			srcDir="src/test/data/taskdefs/meta" 
+			pathPrefix="../src/test/data/taskdefs/meta" 
 			includes="**/*.meta" 
 			xpath="//@displayName | //XModelAttribute/@name | //XModelAttribute/@default | //Constraint/value/@name" 
 			target="target/xpath.pot" />

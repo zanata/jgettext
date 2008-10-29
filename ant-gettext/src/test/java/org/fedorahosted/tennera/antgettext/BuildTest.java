@@ -136,7 +136,7 @@ public class BuildTest extends BuildFileTest {
     public void testXpath2Pot() throws Exception {
 	runPOGeneratingTest(getName(), 
 		"src/test/data/taskdefs/xpath2pot_pot/meta.pot", 
-		148, new EmptyMsgstrChecker());
+		147, new EmptyMsgstrChecker());
     }
 
 }
