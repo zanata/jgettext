@@ -7,36 +7,77 @@
 package org.fedorahosted.tennera.antgettext;
 
 import java.io.File;
+import java.io.IOException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.types.ResourceLocation;
+import org.apache.tools.ant.types.XMLCatalog;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 
 public class XPath2PotTask extends MatchExtractingTask {
     
     private String xpath;
-    
+    // This is to support <xmlcatalog> and <dtd> subelements, just like XMLValidate
+    private XMLCatalog xmlCatalog = new XMLCatalog();
+
     public void setXpath(String xpath) {
 	this.xpath = xpath;
     }
     
+    // untested
+    public void addConfiguredXMLCatalog(XMLCatalog xmlCatalog)
+    {
+	xmlCatalog.addConfiguredXMLCatalog(xmlCatalog);
+    }
+
+    public void addDTD(ResourceLocation dtd) throws BuildException {
+	xmlCatalog.addDTD(dtd);
+    }
+
+    /*
+     * Not sure if this would make sense
+     */
+//    public void addEntity(ResourceLocation entity) throws BuildException {
+//	xmlCatalog.addEntity(entity);
+//    }
+
+    public void init() throws BuildException
+    {
+      super.init();
+      xmlCatalog.setProject(getProject());
+    }
+
     @Override
     // iterates through contents, recording xpath matches
-    protected void processFile(String filename, File f) {
+    protected void processFile(String filename, File f) throws SAXException, IOException {
 	XPath xpath = XPathFactory.newInstance().newXPath(); 
 	String expression = this.xpath; 
 	InputSource inputSource = new InputSource(f.getPath());
 	try {
-	    NodeList nodes = (NodeList) xpath.evaluate(expression, inputSource, 
+	    // all of this is to let us use the XMLCatalog: 
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            dbf.setNamespaceAware(true);
+            dbf.setValidating(false);
+            DocumentBuilder parser = dbf.newDocumentBuilder();
+            parser.setEntityResolver(xmlCatalog);
+            
+            
+            Document document = parser.parse(inputSource);
+	    NodeList nodes = (NodeList) xpath.evaluate(expression, document, 
 		    XPathConstants.NODESET);
 	    for (int i = 0; i < nodes.getLength(); i++) {
 		Node node = nodes.item(i);
@@ -45,6 +86,8 @@ public class XPath2PotTask extends MatchExtractingTask {
 		recordMatch(filename, key, position);
 	    }
 	} catch (XPathExpressionException e) {
+	    throw new BuildException(e);
+	} catch (ParserConfigurationException e) {
 	    throw new BuildException(e);
 	} 
     }
