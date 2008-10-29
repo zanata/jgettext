@@ -25,6 +25,7 @@ import org.jboss.jgettext.Catalog;
 import org.jboss.jgettext.Message;
 import org.jboss.jgettext.Occurence;
 import org.jboss.jgettext.catalog.write.CatalogWriter;
+import org.xml.sax.SAXException;
 
 /**
  * Extracts strings which match some condition into a gettext template file (POT).
@@ -97,19 +98,12 @@ public abstract class MatchExtractingTask extends MatchingTask
 
 	try
 	{
-	    if(target == null)
-	    {
-		log("Extracting English strings from '" +srcDir+ "' to STDOUT");
-		out = new BufferedWriter(new OutputStreamWriter(System.out));
-	    }
-	    else
-	    {
-		log("Extracting English strings from '" +srcDir+ "' to '"+target+"'");
-		out = new BufferedWriter(new FileWriter(target));
-	    }
 	    DirectoryScanner ds = this.getDirectoryScanner(srcDir);
+	    ds.scan();
 	    String[] files = ds.getIncludedFiles();
 
+	    log("Files to scan: "+files.length, Project.MSG_VERBOSE);
+	    
 	    for (int i = 0; i < files.length; i++)
 	    {
 		String filename = files[i];
@@ -117,11 +111,30 @@ public abstract class MatchExtractingTask extends MatchingTask
 		File f = new File(srcDir, filename);
 		processFile(filename, f);
 	    }
-	    generatePot(out);
-	    out.close();
+	    if (mapKeyToLocationSet.isEmpty()) 
+	    {
+		log("No matching English strings found in '" +srcDir+ "'", Project.MSG_VERBOSE);
+		return;
+	    }
+	    if (target == null)
+	    {
+		log("Extracting "+mapKeyToLocationSet.size()+" English strings from '" +srcDir+ "' to STDOUT");
+		out = new BufferedWriter(new OutputStreamWriter(System.out, "UTF-8"));
+		generatePot(out);
+	    }
+	    else
+	    {
+		target.getParentFile().mkdirs();
+		log("Extracting "+mapKeyToLocationSet.size()+" English strings from '" +srcDir+ "' to '"+target+"'");
+		out = new BufferedWriter(new FileWriter(target));
+		generatePot(out);
+		out.close();
+	    }
 	}
 	catch (IOException e)
 	{
+	    throw new BuildException(e);
+	} catch (SAXException e) {
 	    throw new BuildException(e);
 	}
     }
@@ -130,9 +143,10 @@ public abstract class MatchExtractingTask extends MatchingTask
      * Scans a single file for matches, recording them for later output.  
      * @param filename
      * @throws IOException
+     * @throws SAXException 
      * @throws BuildException
      */
-    protected abstract void processFile(String filename, File f) throws IOException; 
+    protected abstract void processFile(String filename, File f) throws IOException, SAXException; 
 
     /**
      * Records a match for later output by generatePot
