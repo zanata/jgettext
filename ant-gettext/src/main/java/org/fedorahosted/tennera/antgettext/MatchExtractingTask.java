@@ -118,14 +118,14 @@ public abstract class MatchExtractingTask extends MatchingTask
 	    }
 	    if (target == null)
 	    {
-		log("Extracting "+mapKeyToLocationSet.size()+" English strings from '" +srcDir+ "' to STDOUT");
+		log("Extracting "+mapKeyToLocationSet.size()+" English strings from '" +srcDir+ "' to STDOUT", Project.MSG_VERBOSE);
 		out = new BufferedWriter(new OutputStreamWriter(System.out, "UTF-8"));
 		generatePot(out);
 	    }
 	    else
 	    {
 		target.getParentFile().mkdirs();
-		log("Extracting "+mapKeyToLocationSet.size()+" English strings from '" +srcDir+ "' to '"+target+"'");
+		log("Extracting "+mapKeyToLocationSet.size()+" English strings from '" +srcDir+ "' to '"+target+"'", Project.MSG_VERBOSE);
 		out = new BufferedWriter(new FileWriter(target));
 		generatePot(out);
 		out.close();
