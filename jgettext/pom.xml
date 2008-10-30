@@ -15,8 +15,8 @@
     <artifactId>jgettext</artifactId>
     <packaging>jar</packaging>
     <version>0.1-SNAPSHOT</version>
-    <name>JGettext</name>
-    <url>http://code.google.com/p/camouflage/</url>
+    <name>Tennera JGettext</name>
+    <url>https://fedorahosted.org/tennera</url>
     <description>
     ${name} provides the ability to read/parse and write GNU Gettext catalog files (PO and POT files)
     </description>

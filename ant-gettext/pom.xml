@@ -14,7 +14,7 @@
   <packaging>jar</packaging>
   <version>0.1-SNAPSHOT</version>
   <name>Tennera Ant-Gettext</name>
-  <url>http://code.google.com/p/camouflage/</url>
+  <url>https://fedorahosted.org/tennera</url>
   <description>
   ${name} provides several Ant tasks for dealing with GNU Gettext catalog
   files and Java Properties files, including file conversion and comparison, 
