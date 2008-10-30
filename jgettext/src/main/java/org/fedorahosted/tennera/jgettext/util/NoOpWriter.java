@@ -13,29 +13,23 @@
  *
  * Red Hat Author(s): Steve Ebersole
  */
-package org.jboss.jgettext.catalog.parse;
+package org.fedorahosted.tennera.jgettext.util;
+
+import java.io.Writer;
 
 /**
- * ParseException implementation
+ * A writer which does no writing :)
  *
  * @author Steve Ebersole
  */
-public class ParseException extends RuntimeException {
-	private static final long serialVersionUID = -7441231267536604971L;
+public class NoOpWriter extends Writer {
 
-	private final int line;
-
-	public ParseException(String message, int line) {
-		super( message );
-		this.line = line;
+	public void write(char cbuf[], int off, int len) {
 	}
 
-	public ParseException(String message, Throwable cause, int line) {
-		super( message, cause );
-		this.line = line;
+	public void flush() {
 	}
 
-	public String toString() {
-		return super.toString() + " [line=" + line + "]";
+	public void close() {
 	}
 }

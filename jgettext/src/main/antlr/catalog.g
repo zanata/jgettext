@@ -14,7 +14,7 @@ header {
  *
  * Red Hat Author(s): Steve Ebersole
  */
-package org.jboss.jgettext.catalog.parse;
+package org.fedorahosted.tennera.jgettext.catalog.parse;
 }
 
 /**

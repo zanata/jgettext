@@ -13,23 +13,26 @@
  *
  * Red Hat Author(s): Steve Ebersole
  */
-package org.jboss.jdocbook.util;
-
-import java.io.Writer;
+package org.fedorahosted.tennera.jgettext;
 
 /**
- * A writer which does no writing :)
+ * Occurence implementation
  *
  * @author Steve Ebersole
  */
-public class NoOpWriter extends Writer {
+public class Occurence {
+	private final String location;
 
-	public void write(char cbuf[], int off, int len) {
+	public Occurence(String location) {
+		this.location = location;
 	}
 
-	public void flush() {
+	@Override
+	public String toString() {
+	    return location;
 	}
 
-	public void close() {
+	public String getLocation() {
+	    return location;
 	}
 }

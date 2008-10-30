@@ -16,11 +16,11 @@ import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.MatchingTask;
 import org.fedorahosted.openprops.Properties;
-import org.jboss.jgettext.Catalog;
-import org.jboss.jgettext.Message;
-import org.jboss.jgettext.Occurence;
-import org.jboss.jgettext.Catalog.MessageProcessor;
-import org.jboss.jgettext.catalog.parse.ExtendedCatalogParser;
+import org.fedorahosted.tennera.jgettext.Catalog;
+import org.fedorahosted.tennera.jgettext.Message;
+import org.fedorahosted.tennera.jgettext.Occurence;
+import org.fedorahosted.tennera.jgettext.Catalog.MessageProcessor;
+import org.fedorahosted.tennera.jgettext.catalog.parse.ExtendedCatalogParser;
 
 /**
  * 

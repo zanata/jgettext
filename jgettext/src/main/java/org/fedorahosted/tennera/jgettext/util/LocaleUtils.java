@@ -13,7 +13,7 @@
  *
  * Red Hat Author(s): Steve Ebersole
  */
-package org.jboss.jdocbook.util;
+package org.fedorahosted.tennera.jgettext.util;
 
 import java.util.Comparator;
 import java.util.Locale;

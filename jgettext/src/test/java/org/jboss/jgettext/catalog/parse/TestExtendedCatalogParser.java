@@ -18,10 +18,13 @@ import java.io.File;
 import java.io.IOException;
 
 import junit.framework.TestCase;
-import org.jboss.jdocbook.util.NoOpWriter;
-import org.jboss.jgettext.Catalog;
-import org.jboss.jgettext.Message;
-import org.jboss.jgettext.catalog.write.MessageProcessor;
+
+import org.fedorahosted.tennera.jgettext.Catalog;
+import org.fedorahosted.tennera.jgettext.Message;
+import org.fedorahosted.tennera.jgettext.catalog.parse.ExtendedCatalogParser;
+import org.fedorahosted.tennera.jgettext.catalog.parse.ParseException;
+import org.fedorahosted.tennera.jgettext.catalog.write.MessageProcessor;
+import org.fedorahosted.tennera.jgettext.util.NoOpWriter;
 
 /**
  * TestExtendedCatalogParser implementation

@@ -13,26 +13,17 @@
  *
  * Red Hat Author(s): Steve Ebersole
  */
-package org.jboss.jgettext;
+package org.fedorahosted.tennera.jgettext.catalog.parse;
 
 /**
- * Occurence implementation
+ * UnexpectedTokenException implementation
  *
  * @author Steve Ebersole
  */
-public class Occurence {
-	private final String location;
+public class UnexpectedTokenException extends ParseException {
+	private static final long serialVersionUID = -2659398412795354302L;
 
-	public Occurence(String location) {
-		this.location = location;
-	}
-
-	@Override
-	public String toString() {
-	    return location;
-	}
-
-	public String getLocation() {
-	    return location;
+	public UnexpectedTokenException(String message, int line) {
+		super( message, line );
 	}
 }

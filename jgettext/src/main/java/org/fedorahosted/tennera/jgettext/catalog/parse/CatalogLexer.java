@@ -13,7 +13,7 @@
  *
  * Red Hat Author(s): Steve Ebersole
  */
-package org.jboss.jgettext.catalog.parse;
+package org.fedorahosted.tennera.jgettext.catalog.parse;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,7 +25,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jboss.jgettext.catalog.util.StringUtil;
+import org.fedorahosted.tennera.jgettext.catalog.util.StringUtil;
+import org.jboss.jgettext.catalog.parse.CatalogTokenTypes;
 
 import antlr.TokenStream;
 

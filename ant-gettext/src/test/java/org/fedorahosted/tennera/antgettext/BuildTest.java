@@ -11,10 +11,10 @@ import java.io.FileInputStream;
 
 import org.apache.tools.ant.BuildFileTest;
 import org.fedorahosted.openprops.Properties;
-import org.jboss.jgettext.Catalog;
-import org.jboss.jgettext.Message;
-import org.jboss.jgettext.Catalog.MessageProcessor;
-import org.jboss.jgettext.catalog.parse.ExtendedCatalogParser;
+import org.fedorahosted.tennera.jgettext.Catalog;
+import org.fedorahosted.tennera.jgettext.Message;
+import org.fedorahosted.tennera.jgettext.Catalog.MessageProcessor;
+import org.fedorahosted.tennera.jgettext.catalog.parse.ExtendedCatalogParser;
 
 public class BuildTest extends BuildFileTest {
     private int numHeaders = 0;

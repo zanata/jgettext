@@ -13,14 +13,15 @@
  *
  * Red Hat Author(s): Steve Ebersole
  */
-package org.jboss.jgettext.catalog.parse;
+package org.fedorahosted.tennera.jgettext.catalog.parse;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import org.jboss.jgettext.Catalog;
-import org.jboss.jgettext.Message;
-import org.jboss.jgettext.Occurence;
+import org.fedorahosted.tennera.jgettext.Catalog;
+import org.fedorahosted.tennera.jgettext.Message;
+import org.fedorahosted.tennera.jgettext.Occurence;
+import org.jboss.jgettext.catalog.parse.CatalogParser;
 
 import antlr.RecognitionException;
 import antlr.collections.AST;

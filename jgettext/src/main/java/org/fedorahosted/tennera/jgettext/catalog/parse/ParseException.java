@@ -13,17 +13,29 @@
  *
  * Red Hat Author(s): Steve Ebersole
  */
-package org.jboss.jgettext.catalog.parse;
+package org.fedorahosted.tennera.jgettext.catalog.parse;
 
 /**
- * UnexpectedTokenException implementation
+ * ParseException implementation
  *
  * @author Steve Ebersole
  */
-public class UnexpectedTokenException extends ParseException {
-	private static final long serialVersionUID = -2659398412795354302L;
+public class ParseException extends RuntimeException {
+	private static final long serialVersionUID = -7441231267536604971L;
 
-	public UnexpectedTokenException(String message, int line) {
-		super( message, line );
+	private final int line;
+
+	public ParseException(String message, int line) {
+		super( message );
+		this.line = line;
+	}
+
+	public ParseException(String message, Throwable cause, int line) {
+		super( message, cause );
+		this.line = line;
+	}
+
+	public String toString() {
+		return super.toString() + " [line=" + line + "]";
 	}
 }

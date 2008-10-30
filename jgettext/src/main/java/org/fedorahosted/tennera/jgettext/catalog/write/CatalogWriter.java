@@ -13,7 +13,7 @@
  *
  * Red Hat Author(s): Steve Ebersole
  */
-package org.jboss.jgettext.catalog.write;
+package org.fedorahosted.tennera.jgettext.catalog.write;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,8 +23,8 @@ import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.jboss.jgettext.Catalog;
-import org.jboss.jgettext.Message;
+import org.fedorahosted.tennera.jgettext.Catalog;
+import org.fedorahosted.tennera.jgettext.Message;
 
 /**
  * CatalogWriter implementation

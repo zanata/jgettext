@@ -13,17 +13,17 @@
  *
  * Red Hat Author(s): Steve Ebersole
  */
-package org.jboss.jgettext.catalog.write;
+package org.fedorahosted.tennera.jgettext.catalog.write;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.List;
 
-import org.jboss.jgettext.Catalog;
-import org.jboss.jgettext.Message;
-import org.jboss.jgettext.Occurence;
-import org.jboss.jgettext.catalog.util.StringUtil;
+import org.fedorahosted.tennera.jgettext.Catalog;
+import org.fedorahosted.tennera.jgettext.Message;
+import org.fedorahosted.tennera.jgettext.Occurence;
+import org.fedorahosted.tennera.jgettext.catalog.util.StringUtil;
 
 /**
  * MessageProcessor implementation

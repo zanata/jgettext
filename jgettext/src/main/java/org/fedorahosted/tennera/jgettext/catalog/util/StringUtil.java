@@ -4,7 +4,7 @@
  * Distributable under LGPL license.
  * See terms of license at gnu.org.
  */
-package org.jboss.jgettext.catalog.util;
+package org.fedorahosted.tennera.jgettext.catalog.util;
 
 public class StringUtil {
     private StringUtil() {

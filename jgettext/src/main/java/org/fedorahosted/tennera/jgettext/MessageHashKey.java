@@ -13,7 +13,7 @@
  *
  * Red Hat Author(s): Steve Ebersole
  */
-package org.jboss.jgettext;
+package org.fedorahosted.tennera.jgettext;
 
 /**
  * MessageHashKey implementation
