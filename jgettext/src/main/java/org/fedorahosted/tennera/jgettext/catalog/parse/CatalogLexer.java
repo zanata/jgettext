@@ -26,7 +26,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.fedorahosted.tennera.jgettext.catalog.util.StringUtil;
-import org.jboss.jgettext.catalog.parse.CatalogTokenTypes;
 
 import antlr.TokenStream;
 

@@ -21,7 +21,6 @@ import java.io.FileNotFoundException;
 import org.fedorahosted.tennera.jgettext.Catalog;
 import org.fedorahosted.tennera.jgettext.Message;
 import org.fedorahosted.tennera.jgettext.Occurence;
-import org.jboss.jgettext.catalog.parse.CatalogParser;
 
 import antlr.RecognitionException;
 import antlr.collections.AST;
