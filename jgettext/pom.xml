@@ -125,7 +125,7 @@
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-scm</artifactId>
-        <version>1.0-beta-4</version>
+        <version>1.0-beta-3</version>
       </extension>
       <extension>
         <groupId>org.apache.maven.scm</groupId>
