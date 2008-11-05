@@ -77,9 +77,9 @@
         </license>
     </licenses>
     <scm>
-        <connection>scm:svn:http://svn.fedorahosted.org/svn/tennera/trunk/jgettext/</connection>
-        <developerConnection>scm:svn:svn+ssh://svn.fedorahosted.org/svn/tennera/trunk/jgettext/</developerConnection>
-        <url>http://svn.fedorahosted.org/svn/tennera/trunk/jgettext/</url>
+        <connection>scm:svn:http://svn.fedorahosted.org/svn/tennera/trunk/jgettext</connection>
+        <developerConnection>scm:svn:svn+ssh://svn.fedorahosted.org/svn/tennera/trunk/jgettext</developerConnection>
+        <url>https://fedorahosted.org/tennera/browser/trunk/jgettext</url>
     </scm>
 <!-- 
  -->
