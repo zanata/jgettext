@@ -21,13 +21,18 @@
   and also extracting translatable strings from source code using regular 
   expressions.
   </description>
-    <licenses>
-        <license>
-            <name>GNU Lesser General Public License</name>
-            <url>http://www.gnu.org/copyleft/lesser.html</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
+  <licenses>
+      <license>
+          <name>GNU Lesser General Public License</name>
+          <url>http://www.gnu.org/copyleft/lesser.html</url>
+          <distribution>repo</distribution>
+      </license>
+  </licenses>
+  <scm>
+      <connection>scm:svn:http://svn.fedorahosted.org/svn/tennera/trunk/ant-gettext</connection>
+      <developerConnection>scm:svn:svn+ssh://svn.fedorahosted.org/svn/tennera/trunk/ant-gettext</developerConnection>
+      <url>https://fedorahosted.org/tennera/browser/trunk/ant-gettext</url>
+  </scm>
   <build>
     <plugins>
       <plugin>
