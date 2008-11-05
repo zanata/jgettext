@@ -12,7 +12,7 @@
     <groupId>org.fedorahosted.tennera</groupId>
     <artifactId>jgettext</artifactId>
     <packaging>jar</packaging>
-    <version>0.1</version>
+    <version>0.2-SNAPSHOT</version>
     <name>Tennera JGettext</name>
     <url>https://fedorahosted.org/tennera</url>
     <description>
@@ -75,9 +75,9 @@
         </license>
     </licenses>
     <scm>
-        <connection>scm:svn:http://svn.fedorahosted.org/svn/tennera/tags/jgettext-0.1</connection>
-        <developerConnection>scm:svn:svn+ssh://svn.fedorahosted.org/svn/tennera/tags/jgettext-0.1</developerConnection>
-        <url>https://fedorahosted.org/tennera/browser/tags/jgettext-0.1</url>
+        <connection>scm:svn:http://svn.fedorahosted.org/svn/tennera/trunk/jgettext</connection>
+        <developerConnection>scm:svn:svn+ssh://svn.fedorahosted.org/svn/tennera/trunk/jgettext</developerConnection>
+        <url>https://fedorahosted.org/tennera/browser/trunk/jgettext</url>
     </scm>
 
     <build>
