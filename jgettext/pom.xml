@@ -76,12 +76,12 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-<!-- 
     <scm>
-        <connection>scm:svn:http://anonsvn.jboss.org/repos/labs/labs/jbossbuild/maven-plugins/trunk/maven-jdocbook-plugin</connection>
-        <developerConnection>scm:svn:https://svn.jboss.org/repos/labs/labs/jbossbuild/maven-plugins/trunk/maven-jdocbook-plugin</developerConnection>
-        <url>http://anonsvn.jboss.org/repos/labs/labs/jbossbuild/maven-plugins/trunk/maven-jdocbook-plugin</url>
+        <connection>scm:svn:http://svn.fedorahosted.org/svn/tennera/trunk/jgettext/</connection>
+        <developerConnection>scm:svn:https://svn.fedorahosted.org/svn/tennera/trunk/jgettext/</developerConnection>
+        <url>http://svn.fedorahosted.org/svn/tennera/trunk/jgettext/</url>
     </scm>
+<!-- 
  -->
 
     <build>
@@ -121,6 +121,23 @@
                 </executions>
             </plugin>
         </plugins>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-scm</artifactId>
+        <version>1.0-beta-4</version>
+      </extension>
+      <extension>
+        <groupId>org.apache.maven.scm</groupId>
+        <artifactId>maven-scm-manager-plexus</artifactId>
+        <version>1.1</version>
+      </extension>
+      <extension>
+        <groupId>org.apache.maven.scm</groupId>
+        <artifactId>maven-scm-provider-svnexe</artifactId>
+        <version>1.1</version>
+      </extension>
+    </extensions>
     </build>
   <!-- Reporting -->
   <reporting>
@@ -310,6 +327,14 @@
         </dependency>
 
     </dependencies>
+
+  <distributionManagement>
+    <site>
+      <id>tennera.svn.server</id>
+      <url>scm:svn:https://seanf@http://svn.fedorahosted.org/svn/tennera/m2repo</url>
+    </site>
+  </distributionManagement>
+
 
     <properties>
         <antlr.version>2.7.6</antlr.version>
