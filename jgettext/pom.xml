@@ -130,11 +130,6 @@
         </plugins>
     <extensions>
       <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-scm</artifactId>
-        <version>1.0-beta-4</version>
-      </extension>
-      <extension>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-manager-plexus</artifactId>
         <version>1.1</version>
@@ -308,6 +303,25 @@
     </reporting>
  -->
 
+    <repositories>
+    <repository>
+        <name>fhosted.tennera.svn</name>
+        <id>fhosted.tennera.svn</id>
+        <url>http://svn.fedorahosted.org/svn/tennera/m2repo</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <name>hirosnap</name>
+      <id>hiro.m2snap</id>
+      <url>http://hiro.bne.redhat.com:/maven2/snapshot/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    </repositories>
+
     <dependencies>
 
         <!-- Maven Plugin deps -->
@@ -334,12 +348,29 @@
         </dependency>
 
     </dependencies>
-
   <distributionManagement>
-    <site>
-      <id>tennera.svn.server</id>
-      <url>scm:svn:https://seanf@svn.fedorahosted.org/svn/tennera/m2repo</url>
-    </site>
+    <repository>
+      <id>fhosted.tennera.svn</id>
+      <name>fedorahosted tennera svn repository</name>
+      <url>file:///srv/maven2/repo</url>
+    </repository>
+    <snapshotRepository>
+      <id>hiro.m2snap</id>
+      <name>hirosnap</name>
+      <url>scpexe://hiro.bne.redhat.com:/srv/maven2/snapshot/</url>
+    </snapshotRepository>
+  <!-- 
+    <repository>
+      <id>fhosted.tennera.repo</id>
+      <name>fedorahosted tennera repository</name>
+      <url>scpexe://fedorahosted.org:tennera/maven2</url>
+    </repository>
+    <snapshotRepository>
+      <id>fhosted.tennera.snap</id>
+      <name>fedorahosted tennera snapshot repository</name>
+      <url>scpexe://fedorahosted.org:tennera/maven2-snapshot</url>
+    </snapshotRepository>
+   -->
   </distributionManagement>
 
 

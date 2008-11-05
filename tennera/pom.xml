@@ -13,12 +13,34 @@
     <module>../jgettext</module>
   </modules>
   
-<!--
   <distributionManagement>
+<!--
     <site>
       <id>local-site</id>
       <url>file://${user.home}/public_html/tennera</url>
     </site>
-  </distributionManagement>
 -->
+    <repository>
+      <id>fhosted.tennera.svn</id>
+      <name>fedorahosted tennera svn repository</name>
+      <url>file:///srv/maven2/repo</url>
+    </repository>
+    <snapshotRepository>
+      <id>hiro.m2snap</id>
+      <name>hirosnap</name>
+      <url>scpexe://hiro.bne.redhat.com:/srv/maven2/snapshot/</url>
+    </snapshotRepository>
+  <!-- 
+    <repository>
+      <id>fhosted.tennera.repo</id>
+      <name>fedorahosted tennera repository</name>
+      <url>scpexe://fedorahosted.org:tennera/maven2</url>
+    </repository>
+    <snapshotRepository>
+      <id>fhosted.tennera.snap</id>
+      <name>fedorahosted tennera snapshot repository</name>
+      <url>scpexe://fedorahosted.org:tennera/maven2-snapshot</url>
+    </snapshotRepository>
+   -->
+  </distributionManagement>
 </project>
