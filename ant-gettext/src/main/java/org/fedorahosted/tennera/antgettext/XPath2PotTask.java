@@ -73,8 +73,9 @@ public class XPath2PotTask extends MatchExtractingTask {
             dbf.setNamespaceAware(true);
             dbf.setValidating(false);
             DocumentBuilder parser = dbf.newDocumentBuilder();
+            // see http://www.javalobby.org/java/forums/m91839205.html
+            // for a way of skipping DTDs
             parser.setEntityResolver(xmlCatalog);
-            
             
             Document document = parser.parse(inputSource);
 	    NodeList nodes = (NodeList) xpath.evaluate(expression, document, 
