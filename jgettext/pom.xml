@@ -79,50 +79,10 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.1</version>
-        <configuration>
-          <links>
-            <link>http://java.sun.com/j2se/1.5.0/docs/api/</link>
-          </links>
-          <maxmemory>256m</maxmemory>
-          <aggregate>true</aggregate>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-report-plugin</artifactId>
-        <version>2.3</version>
-        <configuration>
-          <showSuccess>false</showSuccess>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-changelog-plugin</artifactId>
-        <version>2.0</version>
-        <configuration>
-          <displayFileDetailUrl>http://svn.apache.org/viewvc%FILE%?view=markup</displayFileDetailUrl>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changes-plugin</artifactId>
         <version>2.0-beta-2</version>
         <configuration>
           <statusIds>Closed</statusIds>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jxr-plugin</artifactId>
-        <version>2.1</version>
-        <configuration>
-          <aggregate>true</aggregate>
         </configuration>
       </plugin>
 
@@ -174,21 +134,6 @@
 
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
-        <artifactId>taglist-maven-plugin</artifactId>
-        <version>2.0</version>
-        <configuration>
-          <tags>
-            <tag>TODO</tag>
-            <tag>@todo</tag>
-            <tag>FIXME</tag>
-            <tag>XXX</tag>
-            <tag>@fixme</tag>
-          </tags>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
         <artifactId>clirr-maven-plugin</artifactId>
         <version>2.1.1</version>
       </plugin>
@@ -204,24 +149,8 @@
         <artifactId>jdepend-maven-plugin</artifactId>
         <version>2.0-beta-1</version>
       </plugin>
-      <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-javadoc-plugin</artifactId>
-          <configuration>
-              <minmemory>128m</minmemory>
-              <maxmemory>512</maxmemory>
-          </configuration>
-      </plugin>
-      <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jxr-plugin</artifactId>
-      </plugin>
-      <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-plugin-plugin</artifactId>
-      </plugin>
-      </plugins>
-    </reporting>
+    </plugins>
+  </reporting>
 -->
 
     <dependencies>
