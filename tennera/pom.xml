@@ -18,6 +18,7 @@
 	</organization>
 	<developers>
 		<developer>
+		        <id>asgeirf</id>
 			<name>Asgeir Frimannsson</name>
 			<email>asgeirf@redhat.com</email>
 			<organization>Red Hat</organization>
@@ -29,6 +30,7 @@
 			<timezone>10</timezone>
 		</developer>
 		<developer>
+                        <id>seanf</id>
 			<name>Sean Flanigan</name>
 			<email>sflaniga@redhat.com</email>
 			<organization>Red Hat</organization>
@@ -99,12 +101,23 @@
 			-->
 		</plugins>
 	</build>
+	<reporting>
+	    <plugins>
+	      <plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-changelog-plugin</artifactId>
+	      </plugin>
+	    </plugins>
+	</reporting>
 	<repositories>
 		<repository>
 			<name>fhosted.tennera.svn</name>
 			<id>fhosted.tennera.svn</id>
 			<url>http://svn.fedorahosted.org/svn/tennera/m2repo
 			</url>
+                        <releases>
+                                <enabled>true</enabled>
+                        </releases>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
@@ -114,6 +127,9 @@
 			<id>hiro.m2snap</id>
 			<url>http://hiro.bne.redhat.com:/maven2/snapshot/
 			</url>
+                        <releases>
+                                <enabled>false</enabled>
+                        </releases>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
