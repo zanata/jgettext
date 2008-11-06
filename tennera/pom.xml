@@ -1,46 +1,161 @@
 <project>
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.fedorahosted.tennera</groupId>
-  <artifactId>tennera</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <name>Tennera</name>
-  <packaging>pom</packaging>
-  <description>Umbrella for several Java internationalisation projects</description>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.fedorahosted.tennera</groupId>
+	<artifactId>tennera</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<name>Tennera</name>
+	<!--
+	FH apparently can't host Maven-generated sites...
+	<url>https://fedorahosted.org/tennera/${artifactId}</url>
+	-->
+	<packaging>pom</packaging>
+	<description>Umbrella for several Java internationalisation
+		projects</description>
+	<inceptionYear>2008</inceptionYear>
+	<organization>
+		<name>Red Hat</name>
+		<url>http://www.redhat.com/</url>
+	</organization>
+	<developers>
+		<developer>
+			<name>Asgeir Frimannsson</name>
+			<email>asgeirf@redhat.com</email>
+			<organization>Red Hat</organization>
+			<organizationUrl>http://www.redhat.com/
+			</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>10</timezone>
+		</developer>
+		<developer>
+			<name>Sean Flanigan</name>
+			<email>sflaniga@redhat.com</email>
+			<organization>Red Hat</organization>
+			<organizationUrl>http://www.redhat.com/
+			</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>10</timezone>
+		</developer>
+	</developers>
 
   <!-- Sub Project Modules to Build -->
-  <modules>
-    <module>../ant-gettext</module>
-    <module>../jgettext</module>
-  </modules>
-  
-  <distributionManagement>
-<!--
-    <site>
-      <id>local-site</id>
-      <url>file://${user.home}/public_html/tennera</url>
-    </site>
--->
-    <repository>
-      <id>fhosted.tennera.svn</id>
-      <name>fedorahosted tennera svn repository</name>
-      <url>file:///srv/maven2/repo</url>
-    </repository>
-    <snapshotRepository>
-      <id>hiro.m2snap</id>
-      <name>hirosnap</name>
-      <url>scpexe://hiro.bne.redhat.com:/srv/maven2/snapshot/</url>
-    </snapshotRepository>
-  <!-- 
-    <repository>
-      <id>fhosted.tennera.repo</id>
-      <name>fedorahosted tennera repository</name>
-      <url>scpexe://fedorahosted.org:tennera/maven2</url>
-    </repository>
-    <snapshotRepository>
-      <id>fhosted.tennera.snap</id>
-      <name>fedorahosted tennera snapshot repository</name>
-      <url>scpexe://fedorahosted.org:tennera/maven2-snapshot</url>
-    </snapshotRepository>
-   -->
-  </distributionManagement>
+	<modules>
+		<module>../ant-gettext</module>
+		<module>../jgettext</module>
+	</modules>
+	<issueManagement>
+		<system>Trac</system>
+		<url>https://fedorahosted.org/tennera
+		</url>
+	</issueManagement>
+	<licenses>
+		<license>
+			<name>GNU Lesser General Public License</name>
+			<url>http://www.gnu.org/copyleft/lesser.txt
+			</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<connection>
+			scm:svn:http://svn.fedorahosted.org/svn/tennera/trunk/${artifactId}
+		</connection>
+		<developerConnection>
+			scm:svn:svn+ssh://svn.fedorahosted.org/svn/tennera/trunk/${artifactId}
+		</developerConnection>
+		<url>https://fedorahosted.org/tennera/browser/trunk/${artifactId}
+		</url>
+	</scm>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.0.2</version>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+					<showDeprecation>true</showDeprecation>
+					<showWarnings>true</showWarnings>
+					<optimize>true</optimize>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.4.3</version>
+			</plugin>
+			<!--
+			<plugin> 
+			    <artifactId>maven-release-plugin</artifactId>
+			    <version>2.0-beta-8</version> 
+			    <configuration> 
+			       <tagBase>scm:svn:svn+ssh://svn.fedorahosted.org/svn/tennera/tags/${artifactId}</tagBase> 
+			    </configuration> 
+			</plugin>
+			-->
+		</plugins>
+	</build>
+	<repositories>
+		<repository>
+			<name>fhosted.tennera.svn</name>
+			<id>fhosted.tennera.svn</id>
+			<url>http://svn.fedorahosted.org/svn/tennera/m2repo
+			</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<name>hirosnap</name>
+			<id>hiro.m2snap</id>
+			<url>http://hiro.bne.redhat.com:/maven2/snapshot/
+			</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<distributionManagement>
+		<!--
+		<site> 
+                        <id>local-site</id>
+                        <url>file://${user.home}/public_html/tennera</url> 
+		</site>
+		-->
+		<repository>
+			<id>fhosted.tennera.svn</id>
+			<name>fedorahosted tennera svn repository</name>
+			<url>file:///srv/maven2/repo</url>
+		</repository>
+		<snapshotRepository>
+			<id>hiro.m2snap</id>
+			<name>hirosnap</name>
+			<url>scpexe://hiro.bne.redhat.com:/srv/maven2/snapshot/
+			</url>
+		</snapshotRepository>
+		<!--
+			<repository> 
+			     <id>fhosted.tennera.repo</id> 
+			     <name>fedorahosted tennera repository</name> 
+			     <url>scpexe://fedorahosted.org:tennera/maven2</url>
+			</repository> 
+			<snapshotRepository> 
+			     <id>fhosted.tennera.snap</id>
+			     <name>fedorahosted tennera snapshot repository</name>
+			     <url>scpexe://fedorahosted.org:tennera/maven2-snapshot</url>
+			</snapshotRepository>
+		-->
+	</distributionManagement>
 </project>

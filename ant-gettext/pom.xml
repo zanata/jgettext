@@ -1,59 +1,28 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <!-- 
   <parent>
-          <groupId>org.fedorahosted.tennera</groupId>
-          <artifactId>tennera</artifactId>
-          <version>1.0-SNAPSHOT</version>
-          <relativePath>../tennera/pom.xml</relativePath>
+      <groupId>org.fedorahosted.tennera</groupId>
+      <artifactId>tennera</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <relativePath>../tennera/pom.xml</relativePath>
   </parent>
-   -->
   <groupId>org.fedorahosted.tennera</groupId>
   <artifactId>ant-gettext</artifactId>
   <packaging>jar</packaging>
   <version>0.1-SNAPSHOT</version>
   <name>Tennera Ant-Gettext</name>
-  <url>https://fedorahosted.org/tennera</url>
   <description>
   ${name} provides several Ant tasks for dealing with GNU Gettext catalog
   files and Java Properties files, including file conversion and comparison, 
   and also extracting translatable strings from source code using regular 
   expressions.
   </description>
-  <licenses>
-      <license>
-          <name>GNU Lesser General Public License</name>
-          <url>http://www.gnu.org/copyleft/lesser.html</url>
-          <distribution>repo</distribution>
-      </license>
-  </licenses>
-  <scm>
-      <connection>scm:svn:http://svn.fedorahosted.org/svn/tennera/trunk/ant-gettext</connection>
-      <developerConnection>scm:svn:svn+ssh://svn.fedorahosted.org/svn/tennera/trunk/ant-gettext</developerConnection>
-      <url>https://fedorahosted.org/tennera/browser/trunk/ant-gettext</url>
-  </scm>
+  <inceptionYear>2008</inceptionYear>
+
+  <!-- Needed when debugging junit tests:
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.0.2</version>
-        <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
-          <showDeprecation>true</showDeprecation>
-          <showWarnings>true</showWarnings>
-          <optimize>true</optimize>
-        </configuration>
-      </plugin>
-	<plugin>
-	 <groupId>org.apache.maven.plugins</groupId>
-	 <artifactId>maven-surefire-plugin</artifactId>
-	 <version>2.4.3</version>
-	</plugin>
-      
-      <!-- Needed when debugging junit tests:
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -62,28 +31,10 @@
           <debugForkedProcess>true</debugForkedProcess>
         </configuration>
       </plugin>
-       -->
     </plugins>
   </build>
-    <repositories>
-    <repository>
-        <name>fhosted.tennera.svn</name>
-        <id>fhosted.tennera.svn</id>
-        <url>http://svn.fedorahosted.org/svn/tennera/m2repo</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <name>hirosnap</name>
-      <id>hiro.m2snap</id>
-      <url>http://hiro.bne.redhat.com:/maven2/snapshot/</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-    </repositories>
-
+  -->
+  
   <dependencies>
     <dependency>
       <groupId>org.apache.ant</groupId>
@@ -109,35 +60,5 @@
       <version>1.7.0</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
-  <distributionManagement>
-    <repository>
-      <id>fhosted.tennera.svn</id>
-      <name>fedorahosted tennera svn repository</name>
-      <url>file:///srv/maven2/repo</url>
-    </repository>
-    <snapshotRepository>
-      <id>hiro.m2snap</id>
-      <name>hirosnap</name>
-      <url>scpexe://hiro.bne.redhat.com:/srv/maven2/snapshot/</url>
-    </snapshotRepository>
-  <!-- 
-    <repository>
-      <id>fhosted.tennera.repo</id>
-      <name>fedorahosted tennera repository</name>
-      <url>scpexe://fedorahosted.org:tennera/maven2</url>
-    </repository>
-    <snapshotRepository>
-      <id>fhosted.tennera.snap</id>
-      <name>fedorahosted tennera snapshot repository</name>
-      <url>scpexe://fedorahosted.org:tennera/maven2-snapshot</url>
-    </snapshotRepository>
-   -->
-  </distributionManagement>
 </project>

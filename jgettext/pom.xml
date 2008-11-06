@@ -1,20 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-<!-- 
     <parent>
-            <groupId>org.fedorahosted.tennera</groupId>
-            <artifactId>tennera</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <relativePath>../tennera/pom.xml</relativePath>
+        <groupId>org.fedorahosted.tennera</groupId>
+        <artifactId>tennera</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../tennera/pom.xml</relativePath>
     </parent>
- -->
     <groupId>org.fedorahosted.tennera</groupId>
     <artifactId>jgettext</artifactId>
     <packaging>jar</packaging>
     <version>0.2-SNAPSHOT</version>
     <name>Tennera JGettext</name>
-    <url>https://fedorahosted.org/tennera</url>
     <description>
     ${name} provides the ability to read/parse and write GNU Gettext catalog files (PO and POT files)
     </description>
@@ -25,28 +22,6 @@
         <url>http://jboss.org/</url>
     </organization>
 
-    <developers> 
-        <developer>
-            <name>Asgeir Frimannsson</name>
-            <email>asgeirf@redhat.com</email>
-            <organization>Red Hat</organization>
-            <organizationUrl>http://www.redhat.com/</organizationUrl>
-              <roles>
-                <role>developer</role>
-              </roles>
-            <timezone>10</timezone>
-        </developer>
-        <developer>
-            <name>Sean Flanigan</name>
-            <email>sflaniga@redhat.com</email>
-            <organization>Red Hat</organization>
-            <organizationUrl>http://www.redhat.com/</organizationUrl>
-              <roles>
-                <role>developer</role>
-              </roles>
-            <timezone>10</timezone>
-        </developer>
-    </developers>
   <contributors>
     <contributor>
             <name>Steve Ebersole</name>
@@ -60,40 +35,8 @@
     </contributor>
   </contributors>
 
-<!-- 
-    <issueManagement>
-        <system>jira</system>
-        <url>http://jira.jboss.org/jira/browse/MPJDOCBOOK</url>
-    </issueManagement>
- -->
-
-    <licenses>
-        <license>
-            <name>GNU Lesser General Public License</name>
-            <url>http://www.gnu.org/copyleft/lesser.html</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-    <scm>
-        <connection>scm:svn:http://svn.fedorahosted.org/svn/tennera/trunk/jgettext</connection>
-        <developerConnection>scm:svn:svn+ssh://svn.fedorahosted.org/svn/tennera/trunk/jgettext</developerConnection>
-        <url>https://fedorahosted.org/tennera/browser/trunk/jgettext</url>
-    </scm>
-
     <build>
         <plugins>
-	    <plugin>
-	        <groupId>org.apache.maven.plugins</groupId>
-	        <artifactId>maven-compiler-plugin</artifactId>
-	        <version>2.0.2</version>
-	        <configuration>
-	            <source>1.5</source>
-	            <target>1.5</target>
-	            <showDeprecation>true</showDeprecation>
-	            <showWarnings>true</showWarnings>
-	            <optimize>true</optimize>
-	        </configuration>
-	    </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>antlr-maven-plugin</artifactId>
@@ -116,17 +59,6 @@
                     </execution>
                 </executions>
             </plugin>
-<!-- 
-	      <plugin>
-	        <artifactId>maven-release-plugin</artifactId>
-	        <version>2.0-beta-8</version>
-	        <configuration>
-	          <tagBase>
-	            scm:svn:svn+ssh://svn.fedorahosted.org/svn/tennera/tags/jgettext
-	          </tagBase>
-	        </configuration>
-	      </plugin>
- -->
         </plugins>
     <extensions>
       <extension>
@@ -142,8 +74,8 @@
     </extensions>
     </build>
   <!-- Reporting -->
+<!-- 
   <reporting>
-    <!-- Reports Configurations -->
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -151,10 +83,7 @@
         <version>2.1</version>
         <configuration>
           <links>
-            <link>http://java.sun.com/j2se/1.4.2/docs/api</link>
-<!-- 
-            <link>http://plexus.codehaus.org/ref/1.0-alpha-9/apidocs</link>
- -->
+            <link>http://java.sun.com/j2se/1.5.0/docs/api/</link>
           </links>
           <maxmemory>256m</maxmemory>
           <aggregate>true</aggregate>
@@ -169,7 +98,7 @@
           <showSuccess>false</showSuccess>
         </configuration>
       </plugin>
-<!-- 
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changelog-plugin</artifactId>
@@ -187,7 +116,6 @@
           <statusIds>Closed</statusIds>
         </configuration>
       </plugin>
- -->
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -198,7 +126,6 @@
         </configuration>
       </plugin>
 
-<!-- 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-pmd-plugin</artifactId>
@@ -222,20 +149,19 @@
           <headerLocation>src/checkstyle/checkstyle-header.txt</headerLocation>
         </configuration>
       </plugin>
- -->
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-clover-plugin</artifactId>
         <version>2.4</version>
       </plugin>
-<!--
+
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>cobertura-maven-plugin</artifactId>
         <version>2.1</version>
       </plugin>
--->
+
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>
@@ -278,105 +204,36 @@
         <artifactId>jdepend-maven-plugin</artifactId>
         <version>2.0-beta-1</version>
       </plugin>
-    </plugins>
-  </reporting>
-<!-- 
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <configuration>
-                    <minmemory>128m</minmemory>
-                    <maxmemory>512</maxmemory>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jxr-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-plugin-plugin</artifactId>
-            </plugin>
-        </plugins>
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <configuration>
+              <minmemory>128m</minmemory>
+              <maxmemory>512</maxmemory>
+          </configuration>
+      </plugin>
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jxr-plugin</artifactId>
+      </plugin>
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-plugin-plugin</artifactId>
+      </plugin>
+      </plugins>
     </reporting>
- -->
-
-    <repositories>
-    <repository>
-        <name>fhosted.tennera.svn</name>
-        <id>fhosted.tennera.svn</id>
-        <url>http://svn.fedorahosted.org/svn/tennera/m2repo</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <name>hirosnap</name>
-      <id>hiro.m2snap</id>
-      <url>http://hiro.bne.redhat.com:/maven2/snapshot/</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-    </repositories>
+-->
 
     <dependencies>
-
-        <!-- Maven Plugin deps -->
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-plugin-api</artifactId>
-            <version>2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-project</artifactId>
-            <version>2.0.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.reporting</groupId>
-            <artifactId>maven-reporting-api</artifactId>
-            <version>2.0.4</version>
-        </dependency>
-
         <dependency>
             <groupId>antlr</groupId>
             <artifactId>antlr</artifactId>
             <version>${antlr.version}</version>
         </dependency>
-
     </dependencies>
-  <distributionManagement>
-    <repository>
-      <id>fhosted.tennera.svn</id>
-      <name>fedorahosted tennera svn repository</name>
-      <url>file:///srv/maven2/repo</url>
-    </repository>
-    <snapshotRepository>
-      <id>hiro.m2snap</id>
-      <name>hirosnap</name>
-      <url>scpexe://hiro.bne.redhat.com:/srv/maven2/snapshot/</url>
-    </snapshotRepository>
-  <!-- 
-    <repository>
-      <id>fhosted.tennera.repo</id>
-      <name>fedorahosted tennera repository</name>
-      <url>scpexe://fedorahosted.org:tennera/maven2</url>
-    </repository>
-    <snapshotRepository>
-      <id>fhosted.tennera.snap</id>
-      <name>fedorahosted tennera snapshot repository</name>
-      <url>scpexe://fedorahosted.org:tennera/maven2-snapshot</url>
-    </snapshotRepository>
-   -->
-  </distributionManagement>
-
 
     <properties>
         <antlr.version>2.7.6</antlr.version>
-        <site.generateReports>true</site.generateReports>
     </properties>
 
 </project>
