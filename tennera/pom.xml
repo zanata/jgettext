@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.fedorahosted.tennera</groupId>
 	<artifactId>tennera</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>0.1-SNAPSHOT</version>
 	<name>Tennera</name>
 	<!--
 	FH apparently can't host Maven-generated sites...
@@ -103,10 +103,17 @@
 	</build>
 	<reporting>
 		<plugins>
+<!--
+	        <plugin>
+	                  <groupId>org.codehaus.mojo</groupId>
+	                  <artifactId>scmchangelog-maven-plugin</artifactId>
+	                  <version>1.0</version>
+	        </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-changelog-plugin</artifactId>
 			</plugin>
+-->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>taglist-maven-plugin</artifactId>
