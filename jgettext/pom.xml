@@ -10,7 +10,7 @@
     <groupId>org.fedorahosted.tennera</groupId>
     <artifactId>jgettext</artifactId>
     <packaging>jar</packaging>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.2</version>
     <name>Tennera JGettext</name>
     <description>
     ${name} provides the ability to read/parse and write GNU Gettext catalog files (PO and POT files)
@@ -164,4 +164,10 @@
     <properties>
         <antlr.version>2.7.6</antlr.version>
     </properties>
+
+  <scm>
+    <connection>scm:svn:http://svn.fedorahosted.org/svn/tennera/tags/jgettext-0.2</connection>
+    <developerConnection>scm:svn:svn+ssh://svn.fedorahosted.org/svn/tennera/tags/jgettext-0.2</developerConnection>
+    <url>https://fedorahosted.org/tennera/browser/tags/jgettext-0.2</url>
+  </scm>
 </project>
