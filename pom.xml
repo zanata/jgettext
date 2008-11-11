@@ -45,8 +45,8 @@
 
   <!-- Sub Project Modules to Build -->
 	<modules>
-		<module>../ant-gettext</module>
-		<module>../jgettext</module>
+		<module>ant-gettext</module>
+		<module>jgettext</module>
 	</modules>
 	<issueManagement>
 		<system>Trac</system>
