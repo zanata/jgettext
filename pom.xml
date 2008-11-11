@@ -62,9 +62,9 @@
 		</license>
 	</licenses>
 	<scm>
-		<connection>scm:svn:http://svn.fedorahosted.org/svn/tennera/trunk/tennera</connection>
-		<developerConnection>scm:svn:svn+ssh://svn.fedorahosted.org/svn/tennera/trunk/tennera</developerConnection>
-		<url>https://fedorahosted.org/tennera/browser/trunk/tennera</url>
+		<connection>scm:svn:http://svn.fedorahosted.org/svn/tennera/trunk</connection>
+		<developerConnection>scm:svn:svn+ssh://svn.fedorahosted.org/svn/tennera/trunk</developerConnection>
+		<url>https://fedorahosted.org/tennera/browser/trunk</url>
 	</scm>
 	<build>
 		<plugins>
