@@ -35,11 +35,6 @@ public class Po2PropTask extends MatchingTask
    private static final boolean INCLUDE_MESSAGE_COMMENTS = true;
    private File srcDir;
    private File dstDir;
-   // In future, we might use the original English properties as a template 
-   // as Translate Toolkit's po2prop does.   po2prop may use templates to 
-   // (a) preserve ordering, and (b) find the ResourceBundle key (in case 
-   // the #: location comments have been removed).  
-//   private File tmpDir;
    private String locale = null;
 
    public void setSrcDir(File srcDir)
@@ -47,11 +42,6 @@ public class Po2PropTask extends MatchingTask
       this.srcDir = srcDir;
    }
 
-//   public void setTmpDir(File tmpDir)
-//   {
-//      this.tmpDir = tmpDir;
-//   }
-   
    public void setDstDir(File dstDir)
    {
       this.dstDir = dstDir;
@@ -67,7 +57,6 @@ public class Po2PropTask extends MatchingTask
    {
       DirUtil.checkDir(srcDir, "srcDir", false);
       DirUtil.checkDir(dstDir, "dstDir", true);
-//      checkDir(tmpDir, "tmpDir");
 
       try
       {

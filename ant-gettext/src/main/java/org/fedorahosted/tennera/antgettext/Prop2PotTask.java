@@ -32,22 +32,12 @@ public class Prop2PotTask extends MatchingTask
 {
    private File srcDir;
    private File dstDir;
-   // In future, we might use the original English properties as a template 
-   // as Translate Toolkit's po2prop does.   po2prop may use templates to 
-   // (a) preserve ordering, and (b) find the ResourceBundle key (in case 
-   // the #: location comments have been removed).  
-//   private File tmpDir;
 
    public void setSrcDir(File srcDir)
    {
       this.srcDir = srcDir;
    }
 
-//   public void setTmpDir(File tmpDir)
-//   {
-//      this.tmpDir = tmpDir;
-//   }
-   
    public void setDstDir(File dstDir)
    {
       this.dstDir = dstDir;
@@ -58,7 +48,6 @@ public class Prop2PotTask extends MatchingTask
    {
       DirUtil.checkDir(srcDir, "srcDir", false);
       DirUtil.checkDir(dstDir, "dstDir", true);
-//      DirUtil.checkDir(tmpDir, "tmpDir", false);
 
       try
       {
