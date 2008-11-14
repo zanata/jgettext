@@ -16,6 +16,8 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.MatchingTask;
+import org.apache.tools.ant.util.FileNameMapper;
+import org.apache.tools.ant.util.GlobPatternMapper;
 import org.fedorahosted.openprops.Properties;
 import org.fedorahosted.tennera.jgettext.Catalog;
 import org.fedorahosted.tennera.jgettext.Message;
@@ -32,6 +34,7 @@ public class Prop2PotTask extends MatchingTask
 {
    private File srcDir;
    private File dstDir;
+   private FileNameMapper mapper;
 
    public void setSrcDir(File srcDir)
    {
@@ -43,18 +46,33 @@ public class Prop2PotTask extends MatchingTask
       this.dstDir = dstDir;
    }
    
+   public void add(FileNameMapper mapper)
+   {
+	   if (this.mapper != null)
+		   throw new BuildException("mapper already set!");
+	   this.mapper = mapper;
+   }
+   
    @Override
    public void execute() throws BuildException
    {
-      DirUtil.checkDir(srcDir, "srcDir", false);
-      DirUtil.checkDir(dstDir, "dstDir", true);
+      DirUtil.checkDir(srcDir, "srcDir", false); //$NON-NLS-1$
+      DirUtil.checkDir(dstDir, "dstDir", true); //$NON-NLS-1$
 
+      if (mapper == null)
+      {
+    	  // use default filename mapping if unset:
+    	  GlobPatternMapper globMap = new GlobPatternMapper();
+    	  globMap.setFrom("*.properties"); //$NON-NLS-1$
+    	  globMap.setTo("*.pot"); //$NON-NLS-1$
+    	  mapper = globMap;
+      }
       try
       {
          DirectoryScanner ds = super.getDirectoryScanner(srcDir);
          // use default includes if unset:
          if(!getImplicitFileSet().hasPatterns())
-             ds.setIncludes(new String[] {"**/*.properties"});
+             ds.setIncludes(new String[] {"**/*.properties"}); //$NON-NLS-1$
          ds.scan();
          String[] files = ds.getIncludedFiles();
 
@@ -62,8 +80,19 @@ public class Prop2PotTask extends MatchingTask
          {
             String propFilename = files[i];
             File propFile = new File(srcDir, propFilename);
-            String potFilename = propFilename.substring(0, propFilename.length()-"properties".length())+"pot";
+            String[] outFile = mapper.mapFileName(propFilename);
+            if (outFile == null || outFile.length == 0)
+            {
+            	log("Skipping "+propFilename+": filename mapped to null", Project.MSG_VERBOSE);
+            	continue;
+            }
+            String potFilename = outFile[0]; // FIXME support multiple output mappings
             File potFile = new File(dstDir, potFilename);
+            if(potFile.lastModified() > propFile.lastModified())
+            {
+            	log("Skipping "+propFilename+": "+potFilename +" is up to date", Project.MSG_VERBOSE);
+            	continue;
+            }
             Properties props = new Properties();
             BufferedInputStream in = new BufferedInputStream(new FileInputStream(propFile));
             props.load(in);
@@ -98,7 +127,7 @@ public class Prop2PotTask extends MatchingTask
         	    Message message = new Message();
         	    message.addExtractedComment(comment);
         	    message.addOccurence(new Occurence(key));
-        	    message.addFormat("java-format"); //  FIXME check this
+        	    message.addFormat("java-format"); //  FIXME check this //$NON-NLS-1$
         	    message.setMsgctxt(key);
         	    message.setMsgid(englishString);
         	    cat.addMessage(message);

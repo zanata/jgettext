@@ -15,6 +15,8 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.MatchingTask;
+import org.apache.tools.ant.util.FileNameMapper;
+import org.apache.tools.ant.util.GlobPatternMapper;
 import org.fedorahosted.openprops.Properties;
 import org.fedorahosted.tennera.jgettext.Catalog;
 import org.fedorahosted.tennera.jgettext.Message;
@@ -35,6 +37,7 @@ public class Po2PropTask extends MatchingTask
    private static final boolean INCLUDE_MESSAGE_COMMENTS = true;
    private File srcDir;
    private File dstDir;
+   private FileNameMapper mapper;
    private String locale = null;
 
    public void setSrcDir(File srcDir)
@@ -42,6 +45,13 @@ public class Po2PropTask extends MatchingTask
       this.srcDir = srcDir;
    }
 
+   public void add(FileNameMapper mapper)
+   {
+	   if (this.mapper != null)
+		   throw new BuildException("mapper already set!");
+	   this.mapper = mapper;
+   }
+   
    public void setDstDir(File dstDir)
    {
       this.dstDir = dstDir;
@@ -55,15 +65,28 @@ public class Po2PropTask extends MatchingTask
    @Override
    public void execute() throws BuildException
    {
-      DirUtil.checkDir(srcDir, "srcDir", false);
-      DirUtil.checkDir(dstDir, "dstDir", true);
+      DirUtil.checkDir(srcDir, "srcDir", false); //$NON-NLS-1$
+      DirUtil.checkDir(dstDir, "dstDir", true); //$NON-NLS-1$
 
+      String localeSuffix;
+      if (locale == null || locale.length() == 0)
+    	  localeSuffix = ""; //$NON-NLS-1$
+      else
+    	  localeSuffix = "_" + locale; //$NON-NLS-1$
+      if (mapper == null)
+      {
+    	  // use default filename mapping if unset:
+    	  GlobPatternMapper globMap = new GlobPatternMapper();
+    	  globMap.setFrom("*.po"); //$NON-NLS-1$
+    	  globMap.setTo("*"+localeSuffix+".properties"); //$NON-NLS-1$ //$NON-NLS-2$
+    	  mapper = globMap;
+      }
       try
       {
          DirectoryScanner ds = super.getDirectoryScanner(srcDir);
          // use default includes if unset:
          if(!getImplicitFileSet().hasPatterns())
-             ds.setIncludes(new String[] {"**/*.po"});
+             ds.setIncludes(new String[] {"**/*.po"}); //$NON-NLS-1$
          ds.scan();
          String[] files = ds.getIncludedFiles();
 
@@ -71,14 +94,21 @@ public class Po2PropTask extends MatchingTask
          {
             String poFilename = files[i];
             File poFile = new File(srcDir, poFilename);
-            String localeSuffix;
-            if (locale == null || locale.length() == 0)
-		localeSuffix = "";
-	    else
-		localeSuffix = "_" + locale;
-            String basename = poFilename.substring(0, poFilename.length()-".po".length());
-	    String propFilename = basename + localeSuffix + ".properties";
+            
+            String[] outFile = mapper.mapFileName(poFilename);
+            if (outFile == null || outFile.length == 0)
+            {
+            	log("Skipping "+poFilename+": filename mapped to null", Project.MSG_VERBOSE);
+            	continue;
+            }
+            String propFilename = outFile[0]; // FIXME support multiple output mappings
             File propFile = new File(dstDir, propFilename);
+            if(propFile.lastModified() > poFile.lastModified())
+            {
+            	log("Skipping "+poFilename+": "+propFilename +" is up to date", Project.MSG_VERBOSE);
+            	continue;
+            }
+            
             final Properties props = new Properties();
             log("Generating "+propFile+" from "+poFile, Project.MSG_VERBOSE);
 
@@ -101,7 +131,7 @@ public class Po2PropTask extends MatchingTask
 			StringBuilder sb = new StringBuilder();
 			for (String comm : poComments) 
 			{
-			    sb.append(comm).append("\n");
+			    sb.append(comm).append("\n"); //$NON-NLS-1$
 			}
 			String poComment = sb.toString();
 			//System.err.println("Processing "+entry.toString());
