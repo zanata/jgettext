@@ -145,10 +145,9 @@
 	</reporting>
 	<repositories>
 		<repository>
-			<name>fhosted.tennera.svn</name>
-			<id>fhosted.tennera.svn</id>
-			<url>http://svn.fedorahosted.org/svn/tennera/m2repo
-			</url>
+			<name>Tennera release repository on fedorahosted.org</name>
+		<id>fhosted.tennera.svn</id>
+			<url>http://svn.fedorahosted.org/svn/tennera/m2repo/</url>
                         <releases>
                                 <enabled>true</enabled>
                         </releases>
@@ -157,13 +156,12 @@
 			</snapshots>
 		</repository>
 		<repository>
-			<name>hirosnap</name>
-			<id>hiro.m2snap</id>
-			<url>http://hiro.bne.redhat.com/maven2/snapshot/
-			</url>
-                        <releases>
-                                <enabled>false</enabled>
-                        </releases>
+			<name>Tennera snapshot repository on fedorapeople.org</name>
+			<id>fpeople.tennera.snap</id>
+			<url>http://seanf.fedorapeople.org/maven2/snapshot/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
@@ -185,15 +183,14 @@
 		</site>
 		-->
 		<repository>
-			<id>fhosted.tennera.svn</id>
-			<name>fedorahosted tennera svn repository</name>
+			<name>Tennera release repository on fedorahosted.org</name>
+			<id>fpeople.tennera.snap.local</id>
 			<url>file:///srv/maven2/repo</url>
 		</repository>
 		<snapshotRepository>
-			<id>hiro.m2snap</id>
-			<name>hirosnap</name>
-			<url>scpexe://hiro.bne.redhat.com:/srv/maven2/snapshot/
-			</url>
+			<name>Tennera snapshot repository on fedorapeople.org</name>
+			<id>fpeople.tennera.snap.local</id>
+			<url>file:///srv/maven2/snapshot</url>
 		</snapshotRepository>
 		<!--
 			<repository> 
