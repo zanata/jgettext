@@ -15,6 +15,7 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.MatchingTask;
+import org.apache.tools.ant.types.Mapper;
 import org.apache.tools.ant.util.FileNameMapper;
 import org.apache.tools.ant.util.GlobPatternMapper;
 import org.fedorahosted.openprops.Properties;
@@ -37,20 +38,37 @@ public class Po2PropTask extends MatchingTask
    private static final boolean INCLUDE_MESSAGE_COMMENTS = true;
    private File srcDir;
    private File dstDir;
-   private FileNameMapper mapper;
+   private Mapper mapper;
    private String locale = null;
+   private boolean failOnNull = false;
 
    public void setSrcDir(File srcDir)
    {
       this.srcDir = srcDir;
    }
 
-   public void add(FileNameMapper mapper)
-   {
-	   if (this.mapper != null)
-		   throw new BuildException("mapper already set!");
-	   this.mapper = mapper;
+   public void addMapper(Mapper mapper) {
+       if (this.mapper != null)
+           throw new BuildException("mapper already set!");
+       this.mapper = mapper;
    }
+   
+   
+   public void add(FileNameMapper filenameMapper)
+   {
+	   Mapper mapper = new Mapper(getProject());
+	   mapper.add(filenameMapper);
+	   addMapper(mapper);
+   }
+   
+//   public Mapper createMapper() throws BuildException {
+//       if (mapperElement != null) {
+//           throw new BuildException(ERROR_MULTIPLE_MAPPERS,
+//                                    getLocation());
+//       }
+//       mapperElement = new Mapper(getProject());
+//       return mapperElement;
+//   }
    
    public void setDstDir(File dstDir)
    {
@@ -62,6 +80,10 @@ public class Po2PropTask extends MatchingTask
        this.locale = locale;
    }
    
+   public void setFailOnNull(boolean failOnSkip) {
+	   this.failOnNull = failOnSkip;
+   }
+
    @Override
    public void execute() throws BuildException
    {
@@ -79,7 +101,7 @@ public class Po2PropTask extends MatchingTask
     	  GlobPatternMapper globMap = new GlobPatternMapper();
     	  globMap.setFrom("*.po"); //$NON-NLS-1$
     	  globMap.setTo("*"+localeSuffix+".properties"); //$NON-NLS-1$ //$NON-NLS-2$
-    	  mapper = globMap;
+    	  add(globMap);
       }
       try
       {
@@ -95,9 +117,11 @@ public class Po2PropTask extends MatchingTask
             String poFilename = files[i];
             File poFile = new File(srcDir, poFilename);
             
-            String[] outFile = mapper.mapFileName(poFilename);
+            String[] outFile = mapper.getImplementation().mapFileName(poFilename);
             if (outFile == null || outFile.length == 0)
             {
+            	if (failOnNull)
+            		throw new BuildException("Input filename "+poFilename+" mapped to null");
             	log("Skipping "+poFilename+": filename mapped to null", Project.MSG_VERBOSE);
             	continue;
             }
