@@ -30,6 +30,7 @@ public class Pot2EnTask extends MatchingTask
 {
    private File srcDir;
    private File dstDir;
+   private String locale;
    private boolean pseudo;
 
    public void setSrcDir(File srcDir)
@@ -42,6 +43,11 @@ public class Pot2EnTask extends MatchingTask
       this.dstDir = dstDir;
    }
    
+   public void setLocale(String locale) 
+   {
+	   this.locale = locale;
+   }
+   
    public void setPseudo(boolean munge)
    {
        this.pseudo = munge;
@@ -50,15 +56,19 @@ public class Pot2EnTask extends MatchingTask
    @Override
    public void execute() throws BuildException
    {
-      DirUtil.checkDir(srcDir, "srcDir", false);
-      DirUtil.checkDir(dstDir, "dstDir", true);
+      DirUtil.checkDir(srcDir, "srcDir", false); //$NON-NLS-1$
+      if (dstDir == null)
+    	  dstDir = srcDir;
+      if (dstDir.equals(srcDir) && locale == null)
+    	  throw new BuildException();
+      DirUtil.checkDir(dstDir, "dstDir", true); //$NON-NLS-1$
 
       try
       {
          DirectoryScanner ds = super.getDirectoryScanner(srcDir);
          // use default includes if unset:
          if(!getImplicitFileSet().hasPatterns())
-             ds.setIncludes(new String[] {"**/*.pot"});
+             ds.setIncludes(new String[] {"**/*.pot"}); //$NON-NLS-1$
          ds.scan();
          String[] files = ds.getIncludedFiles();
 
@@ -66,8 +76,18 @@ public class Pot2EnTask extends MatchingTask
          {
             String potFilename = files[i];
             File potFile = new File(srcDir, potFilename);
-            String poFilename = potFilename.substring(0, potFilename.length()-"pot".length())+"po";
-            File poFile = new File(dstDir, poFilename);
+            File poFile;
+            if (locale != null) 
+            {
+            	File fileDest = new File(dstDir, potFilename).getParentFile();
+				poFile = new File(fileDest, locale+".po"); //$NON-NLS-1$
+			} 
+            else 
+			{
+            	String poFilename;
+				poFilename = potFilename.substring(0, potFilename.length()-"pot".length())+"po"; //$NON-NLS-1$ //$NON-NLS-2$
+				poFile = new File(dstDir, poFilename);
+			}
             
             log("Generating "+poFile+" from "+potFile, Project.MSG_VERBOSE);
             poFile.getParentFile().mkdirs();

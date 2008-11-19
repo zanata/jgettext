@@ -7,10 +7,11 @@ import org.apache.tools.ant.util.FileNameMapper;
 
 public class UnBundleNameMapper implements FileNameMapper
 {
-	private String from = "^([^/\\\\]+)[/\\\\]([^-]+)-(.*)[.]po$"; //$NON-NLS-1$
+	// module/(locale)/(plugin)-(resource).po
+//	private String from = "^[^/\\\\]+[/\\\\]([^/\\\\]+)[/\\\\]([^-]+)-(.*)[.]po$"; //$NON-NLS-1$
+	// (module)/(plugin)-(resource)/(locale).po
+	private String from = "^([^/\\\\]+)[/\\\\]([^-]+)-([^/\\\\]+)[/\\\\](.*)[.]po$"; //$NON-NLS-1$
 	private String to;
-	private String locale;
-	private boolean directoryPerLocale;
 	
 	private Pattern pattern;
 	
@@ -34,42 +35,25 @@ public class UnBundleNameMapper implements FileNameMapper
 	{
 		this.to = to;
 	}
-	
-	public void setLocale(String locale) 
-	{
-		this.locale = locale;
-	}
-	
-	public void setDirectoryPerLocale(boolean directoryPerLocale) 
-	{
-		this.directoryPerLocale = directoryPerLocale;
-	}
+
 	
 	public String[] mapFileName(String sourceFileName) 
 	{
 		Matcher m = pattern.matcher(sourceFileName);
 		if (m.matches())
 		{
-			String bundle, resource;
 			StringBuilder sb = new StringBuilder();
-			switch (m.groupCount())
-			{
-			case 0: case 1: default: return null;
-			case 2:
-				bundle = m.group(1);
-				resource = m.group(2);
-				break;
-			case 3:
-				sb.append(m.group(1)).append('/');
-				bundle = m.group(2);
-				resource = m.group(3);
-				break;
-			}
-			if (directoryPerLocale)
-				sb.append(bundle).append('/');
+//			String locale = m.group(1);
+//			String bundle = m.group(2);
+//			String resource = m.group(3);
+			String module = m.group(1);
+			String bundle = m.group(2);
+			String resource = m.group(3);
+			String locale = m.group(4);
+			sb.append(module).append('/');
+			sb.append(bundle).append('/');
 			sb.append(resource.replace('.', '/'));
-			if (locale != null)
-				sb.append('_').append(locale);
+			sb.append('_').append(locale);
 			sb.append(".properties"); //$NON-NLS-1$
 			return new String[]{sb.toString()};
 		}
