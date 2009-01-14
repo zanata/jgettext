@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.fedorahosted.tennera</groupId>
 	<artifactId>tennera</artifactId>
-	<version>0.2-SNAPSHOT</version>
+	<version>0.4-SNAPSHOT</version>
 	<name>Tennera</name>
 	<!--
 	FH apparently can't host Maven-generated sites...

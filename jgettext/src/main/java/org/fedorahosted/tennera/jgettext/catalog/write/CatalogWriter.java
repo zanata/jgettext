@@ -39,17 +39,22 @@ public class CatalogWriter {
 	}
 
 	public void writeTo(File file) throws IOException {
-	    writeTo(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
+	    writeTo(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")); //$NON-NLS-1$
 	}
 
 	public void writeTo(Writer writer) {
-		writeTo( new MessageProcessor( catalog.locateHeader(), writer ) );
+		writeTo(new MessageProcessor(catalog.locateHeader(), writer),
+				new Date());
+	}
+
+	public void writeTo(Writer writer, Date potDate) {
+		writeTo(new MessageProcessor(catalog.locateHeader(), writer), potDate);
 	}
 	
-	void writeTo(MessageProcessor processor) {
+	void writeTo(MessageProcessor processor, Date potDate) {
 		final Message existingHeader = catalog.locateHeader();
 		if ( existingHeader == null ) {
-			processor.writeMessage( generateHeader() );
+			processor.writeMessage(generateHeader(potDate));
 		}
 		else {
 			processor.writeMessage( existingHeader );
@@ -58,7 +63,7 @@ public class CatalogWriter {
 		catalog.processMessages( processor );
 	}
 	
-	private Message generateHeader() {
+	private Message generateHeader(Date potDate) {
 		Message header = new Message();
 		header.setMsgid( "" ); //$NON-NLS-1$
 
@@ -72,7 +77,7 @@ public class CatalogWriter {
 		sb.append("Project-Id-Version: PACKAGE VERSION\n"); //$NON-NLS-1$
 		sb.append("Report-Msgid-Bugs-To: \n"); //$NON-NLS-1$
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mmZ"); //$NON-NLS-1$
-		sb.append("POT-Creation-Date: "+dateFormat.format(new Date())+"\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		sb.append("POT-Creation-Date: " + dateFormat.format(potDate) + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 		sb.append("PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"); //$NON-NLS-1$
 		sb.append("Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"); //$NON-NLS-1$
 		sb.append("Language-Team: LANGUAGE <LL@li.org>\n"); //$NON-NLS-1$

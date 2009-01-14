@@ -11,6 +11,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.util.Date;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
@@ -132,7 +133,7 @@ public class Prop2PotTask extends MatchingTask
         	    message.setMsgid(englishString);
         	    cat.addMessage(message);
         	}
-        	writer.writeTo(out);
+        	writer.writeTo(out, new Date(propFile.lastModified()));
             }
             finally
             {
