@@ -3,12 +3,12 @@
   <parent>
       <groupId>org.fedorahosted.tennera</groupId>
       <artifactId>tennera</artifactId>
-      <version>0.4-SNAPSHOT</version>
+      <version>0.4</version>
   </parent>
   <groupId>org.fedorahosted.tennera</groupId>
   <artifactId>ant-gettext</artifactId>
   <packaging>jar</packaging>
-  <version>0.4-SNAPSHOT</version>
+  <version>0.4</version>
   <name>Tennera Ant-Gettext</name>
   <description>
   ${name} provides several Ant tasks for dealing with GNU Gettext catalog
@@ -49,7 +49,7 @@
     <dependency>
       <groupId>org.fedorahosted.tennera</groupId>
       <artifactId>jgettext</artifactId>
-      <version>0.4-SNAPSHOT</version>
+      <version>0.4</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

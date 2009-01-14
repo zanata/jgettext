@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.fedorahosted.tennera</groupId>
 	<artifactId>tennera</artifactId>
-	<version>0.4-SNAPSHOT</version>
+	<version>0.4</version>
 	<name>Tennera</name>
 	<!--
 	FH apparently can't host Maven-generated sites...
@@ -62,9 +62,9 @@
 		</license>
 	</licenses>
 	<scm>
-		<connection>scm:svn:http://svn.fedorahosted.org/svn/tennera/trunk</connection>
-		<developerConnection>scm:svn:svn+ssh://svn.fedorahosted.org/svn/tennera/trunk</developerConnection>
-		<url>https://fedorahosted.org/tennera/browser/trunk</url>
+		<connection>scm:svn:http://svn.fedorahosted.org/svn/tennera/tags/tennera-0.4</connection>
+		<developerConnection>scm:svn:svn+ssh://svn.fedorahosted.org/svn/tennera/tags/tennera-0.4</developerConnection>
+		<url>https://fedorahosted.org/tennera/browser/tags/tennera-0.4</url>
 	</scm>
 	<build>
 		<plugins>
