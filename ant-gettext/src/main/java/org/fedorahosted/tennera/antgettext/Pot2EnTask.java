@@ -88,6 +88,11 @@ public class Pot2EnTask extends MatchingTask
 				poFilename = potFilename.substring(0, potFilename.length()-"pot".length())+"po"; //$NON-NLS-1$ //$NON-NLS-2$
 				poFile = new File(dstDir, poFilename);
 			}
+            if (poFile.lastModified() > potFile.lastModified()) {
+				log("Skipping " + potFilename + ": " + poFile.getPath()
+					+ " is up to date", Project.MSG_VERBOSE);
+				continue;
+			}
             
             log("Generating "+poFile+" from "+potFile, Project.MSG_VERBOSE);
             poFile.getParentFile().mkdirs();

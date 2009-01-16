@@ -120,7 +120,8 @@ public class Po2PropTask extends MatchingTask
 				File propFile = new File(dstDir, propFilename);
 				if(propFile.lastModified() > poFile.lastModified())
 				{
-					log("Skipping "+poFilename+": "+propFilename +" is up to date", Project.MSG_VERBOSE);
+					log("Skipping " + poFilename + ": " + propFile.getPath()
+							+ " is up to date", Project.MSG_VERBOSE);
 					continue;
 				}
 

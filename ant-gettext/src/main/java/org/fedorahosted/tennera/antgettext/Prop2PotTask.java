@@ -91,7 +91,8 @@ public class Prop2PotTask extends MatchingTask
             File potFile = new File(dstDir, potFilename);
             if(potFile.lastModified() > propFile.lastModified())
             {
-            	log("Skipping "+propFilename+": "+potFilename +" is up to date", Project.MSG_VERBOSE);
+            	log("Skipping " + propFilename + ": " + potFile.getPath()
+							+ " is up to date", Project.MSG_VERBOSE);
             	continue;
             }
             Properties props = new Properties();
