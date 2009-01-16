@@ -6,9 +6,10 @@
  */
 package org.fedorahosted.tennera.antgettext;
 
-import java.io.BufferedReader;
+import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
 
@@ -110,12 +111,12 @@ public class VerifyPropTask extends MatchingTask
 			File prop2File = new File(dir2, prop2Filename);
             
             Properties props1 = new Properties();
-            BufferedReader in1 = new BufferedReader(new FileReader(prop1File));
+            InputStream in1 = new FileInputStream(prop1File);
             try
             {
                props1.load(in1);
                Properties props2 = new Properties();
-               BufferedReader in2 = new BufferedReader(new FileReader(prop2File));
+               InputStream in2 = new FileInputStream(prop2File);
                try
                {
                   props2.load(in2);
