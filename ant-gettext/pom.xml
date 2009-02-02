@@ -43,7 +43,7 @@
     <dependency>
       <groupId>org.fedorahosted.openprops</groupId>
       <artifactId>openprops</artifactId>
-      <version>0.2</version>
+      <version>0.3-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

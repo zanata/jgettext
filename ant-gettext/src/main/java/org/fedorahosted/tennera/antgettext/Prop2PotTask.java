@@ -36,6 +36,10 @@ public class Prop2PotTask extends MatchingTask
    private File srcDir;
    private File dstDir;
    private FileNameMapper mapper;
+   private boolean includeAll;
+
+   // This should be pretty safe, at least for ISO-8859-1 files
+   private static final String NEWLINE_REGEX = "(\r\n|\r|\n)"; //$NON-NLS-1$
 
    public void setSrcDir(File srcDir)
    {
@@ -45,6 +49,11 @@ public class Prop2PotTask extends MatchingTask
    public void setDstDir(File dstDir)
    {
       this.dstDir = dstDir;
+   }
+   
+   public void setIncludeAll(boolean includeAll) 
+   {
+      this.includeAll = includeAll;
    }
    
    public void add(FileNameMapper mapper)
@@ -108,32 +117,69 @@ public class Prop2PotTask extends MatchingTask
         	Catalog cat = new Catalog(true);
         	CatalogWriter writer = new CatalogWriter(cat);
 
+        	// this will be >0 if we are inside a NON-TRANSLATABLE block
+        	int nonTranslatable = 0;
         	for (String key : props.stringPropertyNames())
         	{
-        	    String englishString = props.getProperty(key);
-        	    // NB java.util.Properties throws away comments...
-        	    String comment = props.getComment(key);
-//String debugMsg = "key="+key+" comment='"+comment+"'";
-//debugMsg = debugMsg.replace("\n", "\\n").replace("\r", "\\r");
-//System.err.println(debugMsg);
-//        	    PotWritingUtil.writePotEntry(
-//        		    out, comment, key, true, key, englishString);
-        	       /*
-        	           BufferedWriter out, 
-        	           String extractedComment, 
-        	           String locationReference, 
-        	           boolean isJavaFormat, 
-        	           String context, 
-        	           String key) throws IOException
-        	        */
-        	    Message message = new Message();
-        	    message.addExtractedComment(comment);
-        	    message.addOccurence(new Occurence(key));
-        	    message.addFormat("java-format"); //  FIXME check this //$NON-NLS-1$
-        	    message.setMsgctxt(key);
-        	    message.setMsgid(englishString);
-        	    cat.addMessage(message);
-        	}
+        	   String englishString = props.getProperty(key);
+        	   // NB java.util.Properties throws away comments...
+
+               String comment;
+               if (includeAll) 
+               {
+                  comment = props.getComment(key);
+               } 
+               else 
+               {
+               	  String raw = props.getRawComment(key);
+
+               	  if (raw != null) 
+                  {
+                     StringBuilder sb = new StringBuilder(raw.length());
+                     String[] lines = raw.split(NEWLINE_REGEX);
+                     for (int j = 0; j < lines.length; j++) 
+                     {
+                        String line = lines[j];
+                        // See http://wiki.eclipse.org/Eclipse_Globalization_Guidelines#Non-translatable_Message_Strings
+                        if (line.equals("# START NON-TRANSLATABLE")) //$NON-NLS-1$ 
+                        {
+                           ++nonTranslatable;
+                        } 
+                        else if (line.equals("# END NON-TRANSLATABLE")) //$NON-NLS-1$
+                        {
+                           --nonTranslatable;
+                           if (nonTranslatable < 0)
+                              throw new BuildException(
+                                    "Found '# END NON-TRANSLATABLE' " +
+                                    "without matching " +
+                                    "'# START NON-TRANSLATABLE': file="+propFile+" key="+key);
+                        } 
+                        else if (nonTranslatable == 0) 
+                        {
+                           sb.append(Properties.cookCommentLine(line));
+                           if (j+1 < lines.length)
+                              sb.append('\n');
+                        }
+                     }
+                     comment = sb.toString();
+                  } 
+                  else 
+                  {
+                     comment = null;
+                  }
+               }
+               if (nonTranslatable == 0) 
+               {
+                  Message message = new Message();
+                  message.addExtractedComment(comment);
+                  message.addOccurence(new Occurence(key));
+                  message.addFormat("java-format"); //  FIXME check this //$NON-NLS-1$
+                  message.setMsgctxt(key);
+                  message.setMsgid(englishString);
+                  cat.addMessage(message);
+               }
+            }
+        	// TODO check that footerComment balances out nonTranslatable count 
         	writer.writeTo(out, new Date(propFile.lastModified()));
             }
             finally
