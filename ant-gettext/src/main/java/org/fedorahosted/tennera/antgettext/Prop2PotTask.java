@@ -37,6 +37,7 @@ public class Prop2PotTask extends MatchingTask
    private File dstDir;
    private FileNameMapper mapper;
    private boolean includeAll;
+   EmptyStringPolicy emptyStringPolicy = EmptyStringPolicy.WARNANDSKIP;
 
    // This should be pretty safe, at least for ISO-8859-1 files
    private static final String NEWLINE_REGEX = "(\r\n|\r|\n)"; //$NON-NLS-1$
@@ -54,6 +55,11 @@ public class Prop2PotTask extends MatchingTask
    public void setIncludeAll(boolean includeAll) 
    {
       this.includeAll = includeAll;
+   }
+   
+   public void setWhenEmptyString(String policy)
+   {
+	   emptyStringPolicy = EmptyStringPolicy.valueOf(policy.toUpperCase());
    }
    
    public void add(FileNameMapper mapper)
@@ -119,9 +125,42 @@ public class Prop2PotTask extends MatchingTask
 
         	// this will be >0 if we are inside a NON-TRANSLATABLE block
         	int nonTranslatable = 0;
-        	for (String key : props.stringPropertyNames())
+        
+PROPERTIES: 
+			for (String key : props.stringPropertyNames())
         	{
         	   String englishString = props.getProperty(key);
+        	   
+        	   if (englishString.length() == 0)
+        	   {
+        		   String message = "Empty value for key "+key+" in file "+propFile;
+        		   switch (emptyStringPolicy) {
+        		     case SKIP:
+        		       log(message, Project.MSG_DEBUG);
+        			   continue PROPERTIES;
+        		     case WARNANDSKIP:
+          		       log(message, Project.MSG_WARN);
+          			   continue PROPERTIES;
+        		     case INCLUDE:
+          		       log(message, Project.MSG_DEBUG);
+        		       break;
+        		     case WARNANDINCLUDE:
+        		       log(message, Project.MSG_WARN);
+        		       break;
+        		       // if anyone ever implements this, don't forget to 
+        		       // handle @@EMPTY@@ in pot2en and po2prop.  And
+        		       // *please* come up with a better sentinel value,
+        		       // but remember, translators may need to enter it as msgstr.
+//        		     case REPLACE:
+//        		       englishString = "@@EMPTY@@";
+//        		       break;
+        		     case FAIL:
+        		    	 throw new BuildException(message);
+					 default:
+					   throw new RuntimeException("unhandled switch case "+emptyStringPolicy);
+        		   }
+        	   }
+        	   
         	   // NB java.util.Properties throws away comments...
 
                String comment;
