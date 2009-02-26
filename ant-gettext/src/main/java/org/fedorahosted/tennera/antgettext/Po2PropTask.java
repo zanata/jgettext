@@ -138,6 +138,8 @@ public class Po2PropTask extends MatchingTask
 					MessageProcessor processor = new MessageProcessor() 
 					{
 						public void processMessage(Message entry) {
+							if (entry.isFuzzy())
+								return;
 							String ctxt = entry.getMsgctxt();
 							// NB entries which don't have (a) ctxt or (b) reference will be ignored
 							Collection<String> poComments = entry.getExtractedComments();
