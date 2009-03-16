@@ -93,13 +93,9 @@ public class Prop2PoTask extends Prop2GettextTask
             
             List<File> propTransFiles = new ArrayList<File>(locales.length);
             List<File> poFiles = new ArrayList<File>(locales.length);
-            String baseFilename = propFilename.substring(
-            		propFilename.lastIndexOf(File.separatorChar) + 1);
-//            String baseBundleName = baseFilename.substring(0, baseFilename.lastIndexOf('.'));
             
             for (String locale : locales) 
             {
-//            	File propTransFile = new File(propDir, baseBundleName+"_"+locale+".properties"); //$NON-NLS-1$ //$NON-NLS-2$
             	File propTransFile = new File(propDir, outFile[0]+"_"+locale+".properties"); //$NON-NLS-1$ //$NON-NLS-2$
             	if (propTransFile.exists()) 
             	{

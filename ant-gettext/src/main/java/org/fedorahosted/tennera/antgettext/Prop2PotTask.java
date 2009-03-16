@@ -45,7 +45,6 @@ public class Prop2PotTask extends Prop2GettextTask
    @Override
    void processFile(String propFilename) throws IOException
    {
-        	int messageCount = 0;
             File propFile = new File(srcDir, propFilename);
             String[] outFile = mapper.mapFileName(propFilename);
             if (outFile == null || outFile.length == 0)
