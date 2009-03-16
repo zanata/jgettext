@@ -18,6 +18,11 @@
     <prop2pot srcDir="prop2pot" dstDir="prop2pot_pot"  />
   </target>
 
+  <target name="testProp2Po">
+    <delete dir="prop2po_po" />
+    <prop2po srcDir="prop2po" dstDir="prop2po_po" locales="es" />
+  </target>
+
   <target name="testPo2Prop">
     <delete dir="po2prop_prop" />
     <po2prop srcDir="po2prop" dstDir="po2prop_prop" locale="qps" />

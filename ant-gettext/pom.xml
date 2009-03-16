@@ -32,7 +32,22 @@
     </plugins>
   </build>
   -->
-  
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <configuration>
+                    <linkXref>false</linkXref>
+                    <sourceEncoding>UTF-8</sourceEncoding>
+                    <minimumTokens>30</minimumTokens>
+                    <targetJdk>1.5</targetJdk>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+
   <dependencies>
     <dependency>
       <groupId>org.apache.ant</groupId>
@@ -58,5 +73,13 @@
       <version>1.7.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+	    <groupId>org.infinitest</groupId>
+	    <artifactId>infinitest</artifactId>
+	    <version>4.0.1</version>
+	    <scope>test</scope>
+    </dependency>
+<!-- 
+ -->
   </dependencies>
 </project>

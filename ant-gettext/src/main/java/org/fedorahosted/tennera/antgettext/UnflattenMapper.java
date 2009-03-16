@@ -5,17 +5,14 @@ import java.util.regex.Pattern;
 
 import org.apache.tools.ant.util.FileNameMapper;
 
-public class UnBundleNameMapper implements FileNameMapper
+public class UnflattenMapper implements FileNameMapper
 {
-	// module/(locale)/(plugin)-(resource).po
-//	private String from = "^[^/\\\\]+[/\\\\]([^/\\\\]+)[/\\\\]([^-]+)-(.*)[.]po$"; //$NON-NLS-1$
 	// (module)/(plugin)-(resource)/(locale).po
 	private String from = "^([^/\\\\]+)[/\\\\]([^-]+)-([^/\\\\]+)[/\\\\](.*)[.]po$"; //$NON-NLS-1$
-	private String to;
 	
 	private Pattern pattern;
 	
-	public UnBundleNameMapper() 
+	public UnflattenMapper() 
 	{
 		recompile();
 	}
@@ -25,15 +22,20 @@ public class UnBundleNameMapper implements FileNameMapper
 		pattern = Pattern.compile(from);
 	}
 	
+	/**
+	 * Changing the from pattern isn't really supported...
+	 */
 	public void setFrom(String from) 
 	{
 		this.from = from;
 		recompile();
 	}
 
+	/**
+	 * Changing the to pattern is definitely not supported...
+	 */
 	public void setTo(String to) 
 	{
-		this.to = to;
 	}
 
 	
@@ -43,9 +45,6 @@ public class UnBundleNameMapper implements FileNameMapper
 		if (m.matches())
 		{
 			StringBuilder sb = new StringBuilder();
-//			String locale = m.group(1);
-//			String bundle = m.group(2);
-//			String resource = m.group(3);
 			String module = m.group(1);
 			String bundle = m.group(2);
 			String resource = m.group(3);
@@ -55,6 +54,8 @@ public class UnBundleNameMapper implements FileNameMapper
 			sb.append(resource.replace('.', '/'));
 			sb.append('_').append(locale);
 			sb.append(".properties"); //$NON-NLS-1$
+			// m.replaceAll("$1/$2/$3_$4.properties") would be similar, 
+			// but we want to replace "." in $3 with "/"
 			return new String[]{sb.toString()};
 		}
 		else

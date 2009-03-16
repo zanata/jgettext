@@ -16,14 +16,25 @@ import org.fedorahosted.tennera.jgettext.Message;
 import org.fedorahosted.tennera.jgettext.Catalog.MessageProcessor;
 import org.fedorahosted.tennera.jgettext.catalog.parse.ExtendedCatalogParser;
 
+@SuppressWarnings("nls")
 public class BuildTest extends BuildFileTest {
     private int numHeaders = 0;
+    /**
+     * This helps Infinitest, since it doesn't know about the taskdefs inside build.xml 
+     */
+    static Class[] testedClasses = {
+    		Prop2PoTask.class, 
+    		Prop2PotTask.class, 
+    		Pot2EnTask.class, 
+    		Po2PropTask.class, 
+    		XPath2PotTask.class
+    };
 
     public BuildTest(String name) {
 	super(name);
     }
     
-    @Override
+	@Override
     protected void setUp() throws Exception {
 	// work around maven bug: http://jira.codehaus.org/browse/SUREFIRE-184
 	System.getProperties().remove("basedir");
@@ -73,8 +84,9 @@ public class BuildTest extends BuildFileTest {
 	// test that msgstr==""
 	@Override
 	void checkEntry(Message entry) {
-	    assertTrue("msgstr(\""+entry.getMsgstr()+"\") should equal \"\"", 
-		entry.getMsgstr().equals(""));
+	    String msgstr = entry.getMsgstr();
+		assertTrue("msgstr(\""+msgstr+"\") should equal \"\"", 
+		msgstr.equals(""));
 	}
     }
 
@@ -86,8 +98,10 @@ public class BuildTest extends BuildFileTest {
 	    // test that msgstr==msgid
 	    @Override
 	    void checkEntry(Message entry) {
-		assertTrue("msgstr(\""+entry.getMsgstr()+"\") should equal msgid(\""+entry.getMsgid()+"\")", 
-			entry.getMsgstr().equals(entry.getMsgid()));
+		String msgstr = entry.getMsgstr();
+		String msgid = entry.getMsgid();
+		assertTrue("msgstr(\""+msgstr+"\") should equal msgid(\""+msgid+"\")", 
+			msgstr.equals(msgid));
 	    }
 	});
     }
@@ -100,8 +114,10 @@ public class BuildTest extends BuildFileTest {
 	    // test that msgstr==pseudolocalise(msgid)
 	    @Override
 	    void checkEntry(Message entry) {
-		assertTrue("msgstr(\""+entry.getMsgstr()+"\") should equal pseudo(msgid(\""+entry.getMsgid()+"\"))", 
-			entry.getMsgstr().equals(StringUtil.pseudolocalise(entry.getMsgid())));
+		String msgstr = entry.getMsgstr();
+		String msgid = entry.getMsgid();
+		assertTrue("msgstr(\""+msgstr+"\") should equal pseudo(msgid(\""+msgid+"\"))", 
+			msgstr.equals(StringUtil.pseudolocalise(msgid)));
 	    }
 	});
     }
@@ -110,6 +126,24 @@ public class BuildTest extends BuildFileTest {
 	runPOGeneratingTest("testProp2Pot", 
 		"src/test/data/taskdefs/prop2pot_pot/messages.pot", 
 		4, new EmptyMsgstrChecker());
+    }
+    
+    public void testProp2Po() throws Exception {
+	runPOGeneratingTest("testProp2Po", 
+		"src/test/data/taskdefs/prop2po_po/messages_es.po", 
+		5, new BaseProcessor()
+	{
+		@Override
+		void checkEntry(Message entry) {
+			String msgstr = entry.getMsgstr();
+			String msgid = entry.getMsgid();
+			assertTrue("msgstr(\""+msgstr+"\") should not equal msgid(\""+msgid+"\")", !msgstr.equals(msgid));
+			if (msgid.equals("another_key"))
+				assertEquals("", msgstr);
+		}
+	}
+	
+	);
     }
     
     private Properties runPropGeneratingTest(String taskName, String propTargetName) throws Exception

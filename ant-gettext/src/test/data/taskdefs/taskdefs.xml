@@ -11,6 +11,9 @@
   <taskdef name="prop2pot" classname="org.fedorahosted.tennera.antgettext.Prop2PotTask"
     classpath="${root}/target/classes;${jgettext}" />
 
+  <taskdef name="prop2po" classname="org.fedorahosted.tennera.antgettext.Prop2PoTask"
+    classpath="${root}/target/classes;${jgettext}" />
+
   <taskdef name="po2prop" classname="org.fedorahosted.tennera.antgettext.Po2PropTask"
     classpath="${root}/target/classes;${jgettext}" />
 
