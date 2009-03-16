@@ -67,15 +67,49 @@
 		<developerConnection>scm:svn:svn+ssh://svn.fedorahosted.org/svn/tennera/trunk</developerConnection>
 		<url>https://fedorahosted.org/tennera/browser/trunk</url>
 	</scm>
+	  <properties>
+	    <compileSource>1.5</compileSource>
+	  </properties>
 	<build>
+	    <pluginManagement>
+	      <plugins>
+	        <plugin>
+	          <groupId>org.codehaus.mojo</groupId>
+	          <artifactId>exec-maven-plugin</artifactId>
+	          <version>1.1.1</version>
+	          <configuration>
+	            <executable>java</executable>
+	            <classpathScope>test</classpathScope>
+                <commandlineArgs>-cp "%classpath" org.infinitest.Infinitest</commandlineArgs>
+	          </configuration>
+	        </plugin>
+		  <plugin>
+		    <groupId>org.apache.maven.plugins</groupId>
+		    <artifactId>maven-pmd-plugin</artifactId>
+		    <version>2.3</version>
+		    <executions>
+		      <execution>
+			    <inherited>false</inherited>
+			<goals>
+			  <goal>check</goal>
+			  <goal>cpd-check</goal>
+			</goals>
+			<configuration>
+			  <verbose>true</verbose>
+			</configuration>
+		      </execution>
+		    </executions>
+		  </plugin>
+	      </plugins>
+	    </pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.0.2</version>
 				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
+					<source>${compileSource}</source>
+					<target>${compileSource}</target>
 					<showDeprecation>true</showDeprecation>
 					<showWarnings>true</showWarnings>
 					<optimize>true</optimize>
@@ -182,7 +216,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
+			<version>4.5</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
