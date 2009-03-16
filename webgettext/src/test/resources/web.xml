@@ -1,0 +1,23 @@
+TODO: See web.xml and jmx-console-web.xml in jboss console patch
+
+Note that the taglib/tld stuff is obsolete.  All the work is now done by I18nFilter
+(which determines the ResourceBundle and Locale) and I18nServletContextListener
+(which registers the BundleResolver for handling ResourceBundle EL-expressions).
+
+   <filter>
+       <filter-name>I18nFilter</filter-name>
+       <filter-class>org.jboss.varia.i18n.I18nFilter</filter-class>
+       <init-param>
+               <param-name>bundle</param-name>
+               <param-value>org.example.messages</param-value>
+       </init-param>
+   </filter>
+   <filter-mapping>
+       <filter-name>I18nFilter</filter-name>
+       <url-pattern>/*</url-pattern>
+   </filter-mapping>
+
+
+   <listener>
+       <listener-class>org.fedorahosted.tennera.webgettext.I18nServletContextListener</listener-class>
+   </listener>

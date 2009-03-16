@@ -1,0 +1,68 @@
+<?xml version="1.0"?><project>
+  <parent>
+    <artifactId>tennera</artifactId>
+    <groupId>org.fedorahosted.tennera</groupId>
+    <version>0.5-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.fedorahosted.tennera</groupId>
+  <artifactId>webgettext-example</artifactId>
+  <packaging>war</packaging>
+  <name>Tennera WebGettext Example Webapp</name>
+  <version>0.1-SNAPSHOT</version>
+  <url>http://maven.apache.org</url>
+  <build>
+    <finalName>webgettext-example</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jboss-maven-plugin</artifactId>
+        <configuration>
+          <jbossHome>${jboss.home}</jbossHome>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.fedorahosted.tennera</groupId>
+      <artifactId>webgettext</artifactId>
+      <version>0.1-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+</project>
+
+
+
+<!--
+  <build>
+    <finalName>webgettext-example</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.cargo</groupId>
+        <artifactId>cargo-maven2-plugin</artifactId>
+		<configuration>
+		  < !-- Container configuration -- >
+		  <container>
+		    <containerId>jboss42x</containerId>
+            <home>/home/sflaniga/apps/jboss-4.2.2.GA</home>
+		  </container>
+< !--
+		  <container>
+		    <containerId>tomcat6x</containerId>
+            <home>/NotBackedUp/sflaniga/apps/apache-tomcat-6.0.16</home>
+		  </container>
+-- >
+		</configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+-->
