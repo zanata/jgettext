@@ -38,7 +38,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 
 	private final Iterator<antlr.Token> tokens;
 
-	public CatalogLexer(File file) throws FileNotFoundException {
+	public CatalogLexer(File file) throws FileNotFoundException, IOException {
 		tokens = Tokenizer.tokenize( file ).iterator();
 	}
 
@@ -80,18 +80,15 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 		public static final String MSGSTR_TXT = "msgstr";
 		public static final String MSGSTR_PLURAL_TXT = "msgstr[";
 
-		public static List<antlr.Token> tokenize(File file) throws FileNotFoundException {
+		public static List<antlr.Token> tokenize(File file) 
+			throws FileNotFoundException, IOException {
 			LineNumberReader ioReader = new LineNumberReader( new BufferedReader( new FileReader( file ) ) );
 			try {
 				Tokenizer me = new Tokenizer( file.getName(), ioReader );
 				return me.buildTokens();
 			}
 			finally {
-				try {
-					ioReader.close();
-				}
-				catch ( Throwable ignore ) {
-				}
+				ioReader.close();
 			}
 		}
 
