@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<antlib>
+	<taskdef name="prop2pot" 
+		classname="org.fedorahosted.tennera.antgettext.Prop2PotTask" />
+	<taskdef name="prop2po" 
+		classname="org.fedorahosted.tennera.antgettext.Prop2PoTask" />
+	<taskdef name="pot2en" 
+		classname="org.fedorahosted.tennera.antgettext.Pot2EnTask" />
+	<taskdef name="po2prop" 
+		classname="org.fedorahosted.tennera.antgettext.Po2PropTask" />
+	<taskdef name="xpath2pot" 
+		classname="org.fedorahosted.tennera.antgettext.XPath2PotTask" />
+	<taskdef name="verifyprop" 
+		classname="org.fedorahosted.tennera.antgettext.VerifyPropTask" />
+</antlib>

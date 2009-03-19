@@ -29,10 +29,16 @@ import org.fedorahosted.openprops.Properties;
 public class Prop2PoTask extends Prop2GettextTask
 {
 	private String[] locales;
+	File srcTransDir;
 
 	public void setLocales(String locales)
 	{
 		this.locales = locales.split(","); //$NON-NLS-1$
+	}
+
+	public void setSrcTransDir(File srcTransDir)
+	{
+		this.srcTransDir = srcTransDir;
 	}
 
 	@Override
@@ -40,7 +46,7 @@ public class Prop2PoTask extends Prop2GettextTask
 	{
 		GlobPatternMapper globMap = new GlobPatternMapper();
 		globMap.setFrom("*.properties"); //$NON-NLS-1$
-		globMap.setTo("*"); //$NON-NLS-1$
+		globMap.setTo("*.po"); //$NON-NLS-1$
 		return globMap;
 	}
 	
@@ -52,8 +58,10 @@ public class Prop2PoTask extends Prop2GettextTask
 		{
 			for (String loc : locales) 
 			{
-				if (filename.endsWith("_"+loc+".properties")) //$NON-NLS-1$ //$NON-NLS-2$
+				if (filename.endsWith("_"+loc+".properties")) { //$NON-NLS-1$ //$NON-NLS-2$
+//					log("skipping translated property file for now: "+filename);
 					return false;
+				}
 			}
 			return true;
 		}
@@ -70,37 +78,36 @@ public class Prop2PoTask extends Prop2GettextTask
 	{
 		super.checkArgs();
 		if (locales == null)
-		{
 			throw new BuildException("locales attribute must be set!");
-		}
+		if(srcTransDir == null)
+			srcTransDir = srcDir;
 	}
 
    @Override
    void processFile(String propFilename) throws IOException
    {
+//	   		log("processFile "+propFilename);
             File propFile = new File(srcDir, propFilename);
             
-            String[] outFile = mapper.mapFileName(propFilename);
-            if (outFile == null || outFile.length == 0)
-            {
-            	log("Skipping "+propFilename+": filename mapped to null", Project.MSG_VERBOSE);
-            	return;
-            }
-
-            File propDir = propFile.getParentFile();
-            if (propDir == null)
-            	propDir = srcDir;
+            String propBasename = StringUtil.removeFileExtension(
+            		propFilename, ".properties");
             
             List<File> propTransFiles = new ArrayList<File>(locales.length);
             List<File> poFiles = new ArrayList<File>(locales.length);
             
             for (String locale : locales) 
             {
-            	File propTransFile = new File(propDir, outFile[0]+"_"+locale+".properties"); //$NON-NLS-1$ //$NON-NLS-2$
+            	String propTransBasename = propBasename+"_"+locale+".properties"; //$NON-NLS-1$ //$NON-NLS-2$
+				File propTransFile = new File(srcTransDir, propTransBasename);
             	if (propTransFile.exists()) 
             	{
-		            String poFilename = outFile[0]+"_"+locale+".po"; // FIXME support multiple output mappings
-		            File poFile = new File(dstDir, poFilename);
+		            String[] outFile = mapper.mapFileName(propTransBasename);
+		            if (outFile == null || outFile.length == 0)
+		            {
+		            	log("Skipping "+propTransFile+": filename mapped to null", Project.MSG_VERBOSE);
+		            	return;
+		            }
+		            File poFile = new File(dstDir, outFile[0]); // FIXME support multiple output mappings
 		            if (poFile.lastModified() > propFile.lastModified() && 
 		            		poFile.lastModified() > propTransFile.lastModified())
 		            {
@@ -109,15 +116,22 @@ public class Prop2PoTask extends Prop2GettextTask
 		            }
 		            else
 		            {
+		            	log(propTransFile+" added to list");
 		            	propTransFiles.add(propTransFile);
 		            	poFiles.add(poFile);
 		            }
 				}
+            	else
+            	{
+            		log(propTransFile+" does not exist");
+            	}
 			}
-            if (propTransFiles.isEmpty())
+            if (propTransFiles.isEmpty()) 
+            {
+//            	log("no new translations for "+propFilename);
             	// there are no translations, or all the POs are up to date
             	return;
-            
+            }
             Properties englishProps = new Properties();
             BufferedInputStream in = new BufferedInputStream(new FileInputStream(propFile));
             try

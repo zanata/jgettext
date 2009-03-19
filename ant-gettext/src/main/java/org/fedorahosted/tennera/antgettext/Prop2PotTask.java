@@ -52,8 +52,7 @@ public class Prop2PotTask extends Prop2GettextTask
             	log("Skipping "+propFilename+": filename mapped to null", Project.MSG_VERBOSE);
             	return;
             }
-            String potFilename = outFile[0]; // FIXME support multiple output mappings
-            File potFile = new File(dstDir, potFilename);
+            File potFile = new File(dstDir, outFile[0]); // FIXME support multiple output mappings
             if(potFile.lastModified() > propFile.lastModified())
             {
             	log("Skipping " + propFilename + ": " + potFile.getPath()

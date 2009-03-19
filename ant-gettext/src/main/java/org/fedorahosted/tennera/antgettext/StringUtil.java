@@ -9,7 +9,7 @@ package org.fedorahosted.tennera.antgettext;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-public class StringUtil {
+class StringUtil {
 
     private static final String alphabetEnglish = "abcdefghijklmnopqrstuvwxyz";
     /* decoding thanks to http://rishida.net/scripts/uniview/uniview.php
@@ -99,7 +99,7 @@ public class StringUtil {
         017C:   ż  LATIN SMALL LETTER Z WITH DOT ABOVE
      */
     // BMP and supplementary characters (all left-to-right)
-    private static final String alphabetMunged = "åЬçđéϝցⱨîʝⱪŀოňøｐᕴяšŧմⱱ𝍕ẋŷż";
+    private static final String alphabetMunged = "åЬçđéϝցⱨîʝⱪŀოňøｐᕴяšŧմⱱ𝍕ẋŷż"; //$NON-NLS-1$
     // http://whatsmyip.org/upsidedowntext/
 //    private static final String alphabetFlipped = "zʎxʍʌnʇsɹbdouɯןʞɾıɥƃɟǝpɔqɐ";
     private static final int[] codepointsMunged;
@@ -118,7 +118,7 @@ public class StringUtil {
     public static String pseudolocalise(String text) 
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("[--- ");
+        sb.append("[--- "); //$NON-NLS-1$
         for (int i = 0; i < text.length(); i++) 
         {
  	   char ch = text.charAt(i);
@@ -132,7 +132,7 @@ public class StringUtil {
  	       sb.appendCodePoint(mungedCodePoint);
  	   }
         }
-        sb.append(" ---]");
+        sb.append(" ---]"); //$NON-NLS-1$
         return sb.toString();
     }
 
@@ -152,6 +152,16 @@ public class StringUtil {
         StringBuilder sb = new StringBuilder(input);
         chomp(sb);
         return sb.toString();
+    }
+    
+    static String removeFileExtension(String filename, String extension)
+    {
+        if (!filename.endsWith(extension))
+        	throw new IllegalArgumentException(
+        		"Filename '"+filename+"' should have extension '"+extension+"'");
+        String basename = filename.substring(0, 
+        			filename.length()-extension.length());
+        return basename;
     }
 
     public static void main(String[] args) throws Exception 
