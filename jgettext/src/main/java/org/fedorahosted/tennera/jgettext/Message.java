@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.fedorahosted.tennera.jgettext.catalog.util.StringUtil;
+
 /**
  * Message implementation
  *
@@ -191,12 +193,13 @@ public class Message {
 	 * Returns a string representation of the Message, in a format 
 	 * suitable for inclusion in debug messages.
 	 */
+	@SuppressWarnings("nls")
 	@Override
 	public String toString() {
 	    StringBuilder sb = new StringBuilder();
-	    sb.append("Message(msgctxt \"").append(msgctxt).
-	    	append("\", msgid \"").append(getMsgid()).
-	    	append("\", msgstr \"").append(getMsgstr());
+	    sb.append("Message(msgctxt ").append(StringUtil.quote(msgctxt)).
+	    	append(", msgid ").append(StringUtil.quote(getMsgid())).
+	    	append(", msgstr \"").append(getMsgstr());
 	    if(!getComments().isEmpty())
 	    	sb.append("\", transComments \"").append(getComments());
 	    if(!getExtractedComments().isEmpty())

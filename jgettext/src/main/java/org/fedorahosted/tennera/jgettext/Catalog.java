@@ -16,6 +16,8 @@
 package org.fedorahosted.tennera.jgettext;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Models a catalog
@@ -72,6 +74,31 @@ public class Catalog {
 
 	public boolean containsMessage(MessageHashKey key) {
 		return messageMap.containsKey( key );
+	}
+	
+	public boolean isEmpty() {
+		return messageMap.isEmpty();
+	}
+	
+	public int size() {
+		return messageMap.size();
+	}
+	
+	@SuppressWarnings("nls")
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Catalog(");
+		for (Entry<MessageHashKey, Message> entry: messageMap.entrySet()) {
+//			sb.append(entry.getKey());
+//			sb.append(" => ");
+			sb.append(entry.getValue());
+			sb.append('\n');
+		}
+		sb.append(",template=");
+		sb.append(template);
+		sb.append(")");
+		return sb.toString();
 	}
 
 	public void processMessages(MessageProcessor processor) {

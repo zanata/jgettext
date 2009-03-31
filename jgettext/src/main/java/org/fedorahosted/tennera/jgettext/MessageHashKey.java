@@ -60,4 +60,28 @@ public class MessageHashKey {
 		result = 31 * result + msgid.hashCode();
 		return result;
 	}
+	
+	@SuppressWarnings("nls")
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("MessageHashKey(msgctxt ");
+		if(msgctxt == null) {
+			sb.append("null");
+		} else {
+			sb.append('\"');
+			sb.append(msgctxt);
+			sb.append('\"');
+		}
+		sb.append(", msgid ");
+		if(msgid == null) {
+			sb.append("null");
+		} else {
+			sb.append('\"');
+			sb.append(msgid);
+			sb.append('\"');
+		}
+		sb.append(")");
+		return sb.toString();
+	}
 }

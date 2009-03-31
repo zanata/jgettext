@@ -6,6 +6,7 @@
  */
 package org.fedorahosted.tennera.jgettext.catalog.util;
 
+@SuppressWarnings("nls")
 public class StringUtil {
     private StringUtil() {
     }
@@ -20,5 +21,12 @@ public class StringUtil {
 	s = s.replace("\\r", "\r");
 	s = s.replace("\\n", "\n");
 	return s = s.replace("\\\"", "\"");
+    }
+    
+	public static String quote(String s) {
+    	if (s == null)
+    		return "null";
+    	else
+    		return '\"'+s+'\"';
     }
 }
