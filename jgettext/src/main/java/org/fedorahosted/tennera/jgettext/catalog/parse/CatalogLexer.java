@@ -143,15 +143,15 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 				return;
 			}
 
-			if ( '\"' == line.charAt( 0 ) ) {
+			if ( '\"' == line.charAt( 0 ) ){
 				processContinuation( line );
 				return;
 			}
 
-			if ( entryCollector != null ) {
-				entryCollector.wrapUp();
-				entryCollector = null;
-			}
+//			if ( entryCollector != null ) {
+//				entryCollector.wrapUp();
+//				entryCollector = null;
+//			}
 
 			if ( '#' == line.charAt( 0 ) ) {
 				processComment( line );
@@ -189,10 +189,18 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 		}
 
 		private void processFlag(String flag) {
+			if ( entryCollector != null ) {
+				entryCollector.wrapUp();
+				entryCollector = null;
+			}
 			tokens.add( new Token( FLAG, flag ) );
 		}
 
 		private void processOccurence(String occurence) {
+			if ( entryCollector != null ) {
+				entryCollector.wrapUp();
+				entryCollector = null;
+			}
 			tokens.add( new Token( OCCURENCE, occurence ) );
 		}
 
@@ -202,15 +210,41 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 		}
 
 		private void processObsolete(String entry) {
+			//tokens.add( new Token( OBSOLETE, "<obsolete>" ) );
+			//processLine( entry );
+			entry = entry.trim();
+
+			if ( entry.length() == 0 ) {
+				return;
+			}
+			
+			if ( '\"' == entry.charAt( 0 ) ){
+				processContinuation( entry );
+				return;
+			}
+			
+			if ( entryCollector != null ) {
+				entryCollector.wrapUp();
+				entryCollector = null;
+			}
+			
 			tokens.add( new Token( OBSOLETE, "<obsolete>" ) );
-			processLine( entry );
+			processEntry( entry );
 		}
 
 		private void processExtractedComment(String comment) {
+			if ( entryCollector != null ) {
+				entryCollector.wrapUp();
+				entryCollector = null;
+			}
 			tokens.add( new Token( EXTRACTION, comment ) );
 		}
 
 		private void processCatalogComment(String comment) {
+			if ( entryCollector != null ) {
+				entryCollector.wrapUp();
+				entryCollector = null;
+			}
 			tokens.add( new Token( COMMENT, comment ) );
 		}
 
@@ -223,6 +257,10 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 		}
 
 		private void processEntry(String line) {
+			if ( entryCollector != null ) {
+				entryCollector.wrapUp();
+				entryCollector = null;
+			}
 			if ( line.startsWith( DOMAIN_TXT ) ) {
 				processDomain( interpretString( line.substring( DOMAIN_TXT.length() ) ) );
 			}

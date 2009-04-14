@@ -54,8 +54,8 @@ public class TestExtendedCatalogParser extends TestCase {
 		catalog.processMessages( processor );
 
 		assertNotNull( catalog.locateHeader() );
-		assertEquals( 4, processor.entryCount );
-		assertEquals( 3, processor.obsoleteCount ); // - header...
+		assertEquals( 5, processor.entryCount );
+		assertEquals( 4, processor.obsoleteCount ); // - header...
 	}
 
 	public void testPartialObsoleteEntries() throws Throwable {
