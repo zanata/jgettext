@@ -15,15 +15,15 @@
  */
 package org.fedorahosted.tennera.jgettext.catalog.parse;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
+import java.util.Queue;
 
 import org.fedorahosted.tennera.jgettext.catalog.util.StringUtil;
 
@@ -34,12 +34,13 @@ import antlr.TokenStream;
  *
  * @author Steve Ebersole
  */
+@SuppressWarnings("nls")
 public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 
 	private final Iterator<antlr.Token> tokens;
 
 	public CatalogLexer(File file) throws FileNotFoundException, IOException {
-		tokens = Tokenizer.tokenize( file ).iterator();
+		tokens = Tokenizer.tokenize( file );
 	}
 
 	/**
@@ -62,7 +63,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 	 * <p/>
 	 * Its main purpose for existence is to provided isolated lexer state.
 	 */
-	private static class Tokenizer {
+	private static class Tokenizer implements Iterator<antlr.Token> {
 
 		private class Token extends antlr.CommonToken {
 			private Token(int i, String s) {
@@ -80,19 +81,14 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 		public static final String MSGSTR_TXT = "msgstr";
 		public static final String MSGSTR_PLURAL_TXT = "msgstr[";
 
-		public static List<antlr.Token> tokenize(File file) 
+		public static Iterator<antlr.Token> tokenize(File file) 
 			throws FileNotFoundException, IOException {
-			LineNumberReader ioReader = new LineNumberReader( new BufferedReader( new FileReader( file ) ) );
-			try {
-				Tokenizer me = new Tokenizer( file.getName(), ioReader );
-				return me.buildTokens();
-			}
-			finally {
-				ioReader.close();
-			}
+			LineNumberReader ioReader = new LineNumberReader( new FileReader( file ) );
+			return new Tokenizer( file.getName(), ioReader );
 		}
 
-		private final ArrayList<antlr.Token> tokens = new ArrayList<antlr.Token>();
+		private boolean eof = false;
+		private final Queue<antlr.Token> tokenQueue = new LinkedList<antlr.Token>();
 
 		private final LineNumberReader ioReader;
 		private final String filename;
@@ -105,18 +101,58 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 			this.ioReader = ioReader;
 		}
 
-		private List<antlr.Token> buildTokens() {
-			String line = readLine();
-			while ( line != null ) {
-				resetColumn();
-				processLine( line );
-				line = readLine();
+		public boolean hasNext() {
+			if ( !eof && tokenQueue.isEmpty() ) {
+				readToken();
 			}
-			if ( entryCollector != null ) {
-				entryCollector.wrapUp();
-				entryCollector = null;
+			return !tokenQueue.isEmpty();
+		}		
+
+		/**
+		 * Reads in one or more lines until at least one token is 
+		 * encountered.
+		 * Precondition: tokenQueue.isEmpty()
+		 */
+		private void readToken() {
+			try {
+				while ( tokenQueue.isEmpty() ) {
+					String line = readLine();
+					if ( line != null ) {
+						resetColumn();
+						processLine( line );
+					} else {
+						eof = true;
+						// wrap up the final multi-line token, if any
+						if ( entryCollector != null ) {
+							entryCollector.wrapUp();
+							entryCollector = null;
+						}
+						ioReader.close();
+					}
+				}
+			} catch (IOException e) {
+				try {
+					ioReader.close();
+				} catch (IOException e2) {
+					throw new ParseException(e2.getMessage(), e2, lineNumber());
+				}
+				throw new ParseException(e.getMessage(), e, lineNumber());
 			}
-			return tokens;
+		}
+
+		public antlr.Token next() {
+			if ( hasNext() )
+				return tokenQueue.remove();
+			else
+				throw new NoSuchElementException();
+		}
+
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+		
+		private void addToken(Token token) {
+			tokenQueue.add(token);
 		}
 
 		private void resetColumn() {
@@ -125,7 +161,8 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 
 		private String readLine() {
 			try {
-				return ioReader.readLine();
+				String line = ioReader.readLine();
+				return line;
 			}
 			catch ( IOException e ) {
 				throw new ParseException( "unable to read line", lineNumber() );
@@ -143,7 +180,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 				return;
 			}
 
-			if ( '\"' == line.charAt( 0 ) ){
+			if ( '\"' == line.charAt( 0 ) ) {
 				processContinuation( line );
 				return;
 			}
@@ -193,7 +230,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 				entryCollector.wrapUp();
 				entryCollector = null;
 			}
-			tokens.add( new Token( FLAG, flag ) );
+			addToken( new Token( FLAG, flag ) );
 		}
 
 		private void processOccurence(String occurence) {
@@ -201,7 +238,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 				entryCollector.wrapUp();
 				entryCollector = null;
 			}
-			tokens.add( new Token( OCCURENCE, occurence ) );
+			addToken( new Token( OCCURENCE, occurence ) );
 		}
 
 		private void processPreviousEntry(String entry) {
@@ -210,7 +247,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 		}
 
 		private void processObsolete(String entry) {
-			//tokens.add( new Token( OBSOLETE, "<obsolete>" ) );
+			//addToken( new Token( OBSOLETE, "<obsolete>" ) );
 			//processLine( entry );
 			entry = entry.trim();
 
@@ -228,7 +265,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 				entryCollector = null;
 			}
 			
-			tokens.add( new Token( OBSOLETE, "<obsolete>" ) );
+			addToken( new Token( OBSOLETE, "<obsolete>" ) );
 			processEntry( entry );
 		}
 
@@ -237,7 +274,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 				entryCollector.wrapUp();
 				entryCollector = null;
 			}
-			tokens.add( new Token( EXTRACTION, comment ) );
+			addToken( new Token( EXTRACTION, comment ) );
 		}
 
 		private void processCatalogComment(String comment) {
@@ -245,7 +282,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 				entryCollector.wrapUp();
 				entryCollector = null;
 			}
-			tokens.add( new Token( COMMENT, comment ) );
+			addToken( new Token( COMMENT, comment ) );
 		}
 
 		private void processContinuation(String line) {
@@ -287,7 +324,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 		}
 
 		private void processDomain(String domain) {
-			tokens.add( new Token( DOMAIN, domain ) );
+			addToken( new Token( DOMAIN, domain ) );
 		}
 
 		private void processMessageContext(String msgctxt) {
@@ -332,10 +369,10 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 
 			protected void wrapUp(String entry, boolean isPrevious) {
 				if ( isPrevious ) {
-					tokens.add( new Token( PREV_MSGCTXT, entry ) );
+					addToken( new Token( PREV_MSGCTXT, entry ) );
 				}
 				else {
-					tokens.add( new Token( MSGCTXT, entry ) );
+					addToken( new Token( MSGCTXT, entry ) );
 				}
 			}
 		}
@@ -348,10 +385,10 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 
 			protected void wrapUp(String entry, boolean isPrevious) {
 				if ( isPrevious ) {
-					tokens.add( new Token( PREV_MSGID, entry ) );
+					addToken( new Token( PREV_MSGID, entry ) );
 				}
 				else {
-					tokens.add( new Token( MSGID, entry ) );
+					addToken( new Token( MSGID, entry ) );
 				}
 			}
 		}
@@ -364,10 +401,10 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 
 			protected void wrapUp(String entry, boolean isPrevious) {
 				if ( isPrevious ) {
-					tokens.add( new Token( PREV_MSGID_PLURAL, entry ) );
+					addToken( new Token( PREV_MSGID_PLURAL, entry ) );
 				}
 				else {
-					tokens.add( new Token( MSGID_PLURAL, entry ) );
+					addToken( new Token( MSGID_PLURAL, entry ) );
 				}
 			}
 		}
@@ -383,7 +420,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 					throw new ParseException( "translation does not allow previous entry according to PO schematic", lineNumber() );
 				}
 				else {
-					tokens.add( new Token( MSGSTR, entry ) );
+					addToken( new Token( MSGSTR, entry ) );
 				}
 			}
 		}
@@ -402,8 +439,8 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 					throw new ParseException( "translation does not allow previous entry according to PO schematic", lineNumber() );
 				}
 				else {
-					tokens.add( new Token( MSGSTR_PLURAL, entry ) );
-					tokens.add( new Token( PLURALITY, Integer.toString( n ) ) );
+					addToken( new Token( MSGSTR_PLURAL, entry ) );
+					addToken( new Token( PLURALITY, Integer.toString( n ) ) );
 				}
 			}
 		}
