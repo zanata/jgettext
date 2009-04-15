@@ -14,10 +14,10 @@
  */
 package org.jboss.jgettext.catalog.parse;
 
+import static org.junit.Assert.*;
+
 import java.io.File;
 import java.io.IOException;
-
-import junit.framework.TestCase;
 
 import org.fedorahosted.tennera.jgettext.Catalog;
 import org.fedorahosted.tennera.jgettext.Message;
@@ -26,12 +26,16 @@ import org.fedorahosted.tennera.jgettext.catalog.parse.ParseException;
 import org.fedorahosted.tennera.jgettext.catalog.write.MessageProcessor;
 import org.fedorahosted.tennera.jgettext.util.NoOpWriter;
 
+import org.junit.Test;
+
 /**
  * TestExtendedCatalogParser implementation
  *
  * @author Steve Ebersole
  */
-public class TestExtendedCatalogParser extends TestCase {
+public class TestExtendedCatalogParser{
+	
+	@Test
 	public void testBasic() throws Throwable {
 		File poFile = new File( getClass().getResource( "/valid/sample.po" ).getFile() );
 		ExtendedCatalogParser parser = new ExtendedCatalogParser( poFile );
@@ -45,6 +49,7 @@ public class TestExtendedCatalogParser extends TestCase {
 		assertEquals( 3, processor.obsoleteCount );
 	}
 
+	@Test
 	public void testObsoleteEntries() throws Throwable {
 		File poFile = new File( getClass().getResource( "/valid/obsolete.po" ).getFile() );
 		ExtendedCatalogParser parser = new ExtendedCatalogParser( poFile );
@@ -58,6 +63,7 @@ public class TestExtendedCatalogParser extends TestCase {
 		assertEquals( 4, processor.obsoleteCount ); // - header...
 	}
 
+	@Test
 	public void testPartialObsoleteEntries() throws Throwable {
 		File poFile = new File( getClass().getResource( "/invalid/mixed_up_obsolete.po" ).getFile() );
 		ExtendedCatalogParser parser = new ExtendedCatalogParser( poFile );
