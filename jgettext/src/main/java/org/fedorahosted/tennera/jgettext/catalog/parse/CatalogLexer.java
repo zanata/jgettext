@@ -115,7 +115,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 		 */
 		private void readToken() {
 			try {
-				while ( tokenQueue.isEmpty() ) {
+				while ( !eof && tokenQueue.isEmpty() ) {
 					String line = readLine();
 					if ( line != null ) {
 						resetColumn();
