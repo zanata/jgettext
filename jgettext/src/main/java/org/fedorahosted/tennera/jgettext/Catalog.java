@@ -15,6 +15,7 @@
  */
 package org.fedorahosted.tennera.jgettext;
 
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -24,7 +25,7 @@ import java.util.Map.Entry;
  *
  * @author Steve Ebersole
  */
-public class Catalog {
+public class Catalog implements Iterable<Message>{
 	// todo : segment by domain?
     	
         /**
@@ -106,7 +107,11 @@ public class Catalog {
 			processor.processMessage( message );
 		}
 	}
-
+	
+	public Iterator<Message> iterator() {
+		return messageMap.values().iterator();
+	}
+	
 	public static interface MessageProcessor {
 		public void processMessage(Message message);
 	}
