@@ -22,6 +22,13 @@ public class RoundTripTests {
 		testRoundTrip(original);
 	}
 
+	@Test
+	public void testWordWrappingInMsgId() throws Throwable{
+		File original = getResource("/roundtrip/msgid_wordwrap.po");
+		testRoundTrip(original);
+	}
+	
+	
 	private void testRoundTrip(String message, File f) throws Throwable{
 		String output = roundtrip(f);
 		String originalString = readToString(f); 
