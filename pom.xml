@@ -68,7 +68,7 @@
 		<url>https://fedorahosted.org/tennera/browser/trunk</url>
 	</scm>
 	  <properties>
-	    <compileSource>1.5</compileSource>
+	    <compileSource>1.6</compileSource>
 	  </properties>
 	<build>
 	    <pluginManagement>
