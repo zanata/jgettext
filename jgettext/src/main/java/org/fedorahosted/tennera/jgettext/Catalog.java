@@ -111,8 +111,4 @@ public class Catalog implements Iterable<Message>{
 	public Iterator<Message> iterator() {
 		return messageMap.values().iterator();
 	}
-	
-	public static interface MessageProcessor {
-		public void processMessage(Message message);
-	}
 }

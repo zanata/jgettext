@@ -23,7 +23,7 @@ import org.fedorahosted.tennera.jgettext.Catalog;
 import org.fedorahosted.tennera.jgettext.Message;
 import org.fedorahosted.tennera.jgettext.catalog.parse.ExtendedCatalogParser;
 import org.fedorahosted.tennera.jgettext.catalog.parse.ParseException;
-import org.fedorahosted.tennera.jgettext.catalog.write.MessageProcessor;
+import org.fedorahosted.tennera.jgettext.catalog.write.MessageWritingProcessor;
 import org.fedorahosted.tennera.jgettext.util.NoOpWriter;
 
 import org.junit.Test;
@@ -75,7 +75,7 @@ public class TestExtendedCatalogParser{
 		}
 	}
 
-	public static class LocalProcessor extends MessageProcessor {
+	public static class LocalProcessor extends MessageWritingProcessor {
 		private int entryCount;
 		private int obsoleteCount;
 

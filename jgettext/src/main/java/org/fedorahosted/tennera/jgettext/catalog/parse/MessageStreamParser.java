@@ -3,10 +3,9 @@ package org.fedorahosted.tennera.jgettext.catalog.parse;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Iterator;
 
-import org.fedorahosted.tennera.jgettext.Catalog;
 import org.fedorahosted.tennera.jgettext.Message;
+import org.fedorahosted.tennera.jgettext.MessageProcessor;
 import org.fedorahosted.tennera.jgettext.Occurence;
 
 import antlr.ASTPair;
@@ -203,5 +202,12 @@ public class MessageStreamParser{
 
 	public Message next() throws RecognitionException, TokenStreamException {
 		return internalParser.next();
+	}
+
+	public void processMessages(MessageProcessor processor) 
+		throws RecognitionException, TokenStreamException {
+		while (hasNext()) {
+			processor.processMessage(next());
+		}
 	}
 }

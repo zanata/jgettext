@@ -43,15 +43,15 @@ public class CatalogWriter {
 	}
 
 	public void writeTo(Writer writer) {
-		writeTo(new MessageProcessor(catalog.locateHeader(), writer),
+		writeTo(new MessageWritingProcessor(catalog.locateHeader(), writer),
 				new Date());
 	}
 
 	public void writeTo(Writer writer, Date potDate) {
-		writeTo(new MessageProcessor(catalog.locateHeader(), writer), potDate);
+		writeTo(new MessageWritingProcessor(catalog.locateHeader(), writer), potDate);
 	}
 	
-	void writeTo(MessageProcessor processor, Date potDate) {
+	void writeTo(MessageWritingProcessor processor, Date potDate) {
 		final Message existingHeader = catalog.locateHeader();
 		if ( existingHeader == null ) {
 			processor.writeMessage(generateHeader(potDate));

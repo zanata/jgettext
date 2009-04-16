@@ -20,8 +20,8 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.List;
 
-import org.fedorahosted.tennera.jgettext.Catalog;
 import org.fedorahosted.tennera.jgettext.Message;
+import org.fedorahosted.tennera.jgettext.MessageProcessor;
 import org.fedorahosted.tennera.jgettext.Occurence;
 import org.fedorahosted.tennera.jgettext.catalog.util.StringUtil;
 
@@ -30,20 +30,20 @@ import org.fedorahosted.tennera.jgettext.catalog.util.StringUtil;
  *
  * @author Steve Ebersole
  */
-public class MessageProcessor implements Catalog.MessageProcessor {
+public class MessageWritingProcessor implements MessageProcessor {
 	protected final Writer writer;
 	protected final Message header; // header handled specially...
 
-	public MessageProcessor(Message header, Writer writer) {
+	public MessageWritingProcessor(Message header, Writer writer) {
 		this.writer = writer;
 		this.header = header;
 	}
 
-	public MessageProcessor(Writer writer) {
+	public MessageWritingProcessor(Writer writer) {
 		this( null, writer );
 	}
 
-	public MessageProcessor() {
+	public MessageWritingProcessor() {
 		this( new OutputStreamWriter( System.out ) );
 	}
 
