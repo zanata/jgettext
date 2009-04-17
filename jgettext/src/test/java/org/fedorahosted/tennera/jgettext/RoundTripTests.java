@@ -30,25 +30,31 @@ public class RoundTripTests {
 	
 	@Test
 	public void testEmptyLineNote() throws Throwable{
-		File original = getResource("/roundtrip/emptylines_notes.po");
+		File original = getResource("/roundtrip/translate-toolkit/emptylines_notes.po");
 		testRoundTrip(original);
 	}
 	
 	@Test
 	public void testMalformedObsoleteUnits() throws Throwable{
-		File original = getResource("/roundtrip/malformed_obsoleteunits.po");
+		File original = getResource("/roundtrip/translate-toolkit/malformed_obsoleteunits.po");
+		testRoundTrip(original);
+	}
+	
+	@Test
+	public void testMalformedUnits() throws Throwable{
+		File original = getResource("/roundtrip/translate-toolkit/malformed_units.po");
 		testRoundTrip(original);
 	}
 	
 	@Test
 	public void testNonAsciiHeader() throws Throwable{
-		File original = getResource("/roundtrip/nonascii_header.po");
+		File original = getResource("/roundtrip/translate-toolkit/nonascii_header.po");
 		testRoundTrip(original);
 	}
 	
 	@Test
 	public void testMultilineContext() throws Throwable{
-		File original = getResource("/roundtrip/multiline_context.po");
+		File original = getResource("/roundtrip/translate-toolkit/multiline_context.po");
 		testRoundTrip(original);
 	}
 	
