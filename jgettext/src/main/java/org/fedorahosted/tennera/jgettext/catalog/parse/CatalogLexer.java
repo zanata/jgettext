@@ -15,15 +15,22 @@
  */
 package org.fedorahosted.tennera.jgettext.catalog.parse;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.io.Reader;
+import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Queue;
+
+import javax.naming.LimitExceededException;
 
 import org.fedorahosted.tennera.jgettext.catalog.util.StringUtil;
 
@@ -43,6 +50,18 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 		tokenizer = new Tokenizer( file );
 	}
 
+	public CatalogLexer(Reader reader) {
+		tokenizer = new Tokenizer( reader );
+	}
+	
+	public CatalogLexer(InputStream inputStream){
+		tokenizer = new Tokenizer( inputStream );
+	}
+	
+	public CatalogLexer(InputStream inputStream, Charset charset){
+		tokenizer = new Tokenizer( inputStream, charset );
+	}
+	
 	/**
 	 * This is the main Antlr lexer contract.
 	 * <p/>
@@ -100,6 +119,21 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 			this.ioReader = ioReader;
 		}
 
+		public Tokenizer(Reader reader){
+			if(reader instanceof LineNumberReader)
+				this.ioReader = (LineNumberReader) reader;
+			else
+				this.ioReader = new LineNumberReader(reader);
+			filename = null;
+		}
+		public Tokenizer(InputStream inputStream){
+			this(new LineNumberReader(new BufferedReader(new InputStreamReader(inputStream,Charset.forName("UTF-8")))));
+		}
+		
+		public Tokenizer(InputStream inputStream, Charset charset){
+			this(new LineNumberReader(new BufferedReader(new InputStreamReader(inputStream, charset))));
+		}
+		
 		public boolean hasNext() {
 			if ( !eof && tokenQueue.isEmpty() ) {
 				readToken();

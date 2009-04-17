@@ -3,6 +3,9 @@ package org.fedorahosted.tennera.jgettext.catalog.parse;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.nio.charset.Charset;
 
 import org.fedorahosted.tennera.jgettext.Message;
 import org.fedorahosted.tennera.jgettext.MessageProcessor;
@@ -21,6 +24,18 @@ public class MessageStreamParser{
 		internalParser = new InternalMessageStreamParser(file);
 	}
 	
+	public MessageStreamParser(Reader reader){
+		internalParser = new InternalMessageStreamParser(reader);
+	}
+	
+	public MessageStreamParser(InputStream inputStream){
+		internalParser = new InternalMessageStreamParser(inputStream);
+	}
+	
+	public MessageStreamParser(InputStream inputStream, Charset charset){
+		internalParser = new InternalMessageStreamParser(inputStream, charset);
+	}
+
 	private class InternalMessageStreamParser extends CatalogParser{
 		
 		private Message currentMessage = new Message();
@@ -29,6 +44,19 @@ public class MessageStreamParser{
 		public InternalMessageStreamParser(File file) throws FileNotFoundException, IOException {
 			super( new CatalogLexer( file ) );
 		}
+
+		public InternalMessageStreamParser(Reader reader){
+			super( new CatalogLexer( reader ) );
+		}
+		
+		public InternalMessageStreamParser(InputStream inputStream){
+			super( new CatalogLexer(inputStream) );
+		}
+		
+		public InternalMessageStreamParser(InputStream inputStream, Charset charset){
+			super( new CatalogLexer(inputStream, charset) );
+		}
+		
 
 		public void reportError(RecognitionException e) {
 			UnexpectedTokenException utEx = new UnexpectedTokenException( e.getMessage(), e.getLine() );

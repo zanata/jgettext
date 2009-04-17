@@ -2,7 +2,11 @@ package org.fedorahosted.tennera.jgettext.parse;
 
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.nio.charset.Charset;
 
 import org.fedorahosted.tennera.jgettext.Message;
 import org.fedorahosted.tennera.jgettext.catalog.parse.MessageStreamParser;
@@ -45,4 +49,42 @@ public class TestMessageStreamParser {
 		assertFalse(parser.hasNext());
 	}
 	
+	String msgString =  "msgid \"hello world!\"\n" +
+					"msgstr \"hei verden!\"\n";
+
+	@Test
+	public void testParseFromReader() throws Throwable{
+		
+		MessageStreamParser parser = new MessageStreamParser(
+				new StringReader(msgString));
+		
+		Message message = parser.next();
+		
+		assertEquals(message.getMsgid(), "hello world!");
+		assertEquals(message.getMsgstr(), "hei verden!");
+		
+	}
+
+	@Test
+	public void testParseFromInputStream() throws Throwable{
+		MessageStreamParser parser = new MessageStreamParser(
+				new ByteArrayInputStream(msgString.getBytes("UTF-8")));
+
+		Message message = parser.next();
+		
+		assertEquals(message.getMsgid(), "hello world!");
+		assertEquals(message.getMsgstr(), "hei verden!");
+	}
+	
+	@Test
+	public void testParseFromInputStreamWithUtf16Charset() throws Throwable{
+		MessageStreamParser parser = new MessageStreamParser(
+				new ByteArrayInputStream(msgString.getBytes("UTF-16")),Charset.forName("UTF-16"));
+
+		Message message = parser.next();
+		
+		assertEquals(message.getMsgid(), "hello world!");
+		assertEquals(message.getMsgstr(), "hei verden!");
+	}
+
 }
