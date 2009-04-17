@@ -228,8 +228,14 @@ public class MessageStreamParser{
 		return internalParser.hasNext();
 	}
 
-	public Message next() throws RecognitionException, TokenStreamException {
-		return internalParser.next();
+	public Message next() throws ParseException {
+		try {
+			return internalParser.next();
+		} catch (RecognitionException e) {
+			throw new ParseException(e.getMessage(), e, e.getLine());
+		} catch (TokenStreamException e) {
+			throw new ParseException(e.getMessage(), e, -1);
+		}
 	}
 
 	public void processMessages(MessageProcessor processor) 
