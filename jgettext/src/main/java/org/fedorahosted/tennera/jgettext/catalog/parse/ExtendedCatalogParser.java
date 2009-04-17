@@ -18,6 +18,9 @@ package org.fedorahosted.tennera.jgettext.catalog.parse;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.nio.charset.Charset;
 
 import org.fedorahosted.tennera.jgettext.Catalog;
 import org.fedorahosted.tennera.jgettext.Message;
@@ -39,6 +42,20 @@ public class ExtendedCatalogParser extends CatalogParser {
 	public ExtendedCatalogParser(File file) throws FileNotFoundException, IOException {
 		super( new CatalogLexer( file ) );
 		catalog = new Catalog(isPot(file));
+	}
+	public ExtendedCatalogParser(Reader reader, boolean isPot){
+		super( new CatalogLexer( reader ) );	
+		catalog = new Catalog(isPot);
+	}
+	
+	public ExtendedCatalogParser(InputStream inputStream, boolean isPot){
+		super( new CatalogLexer( inputStream ) );	
+		catalog = new Catalog(isPot);
+	}
+	
+	public ExtendedCatalogParser(InputStream inputStream, Charset charset, boolean isPot){
+		super( new CatalogLexer( inputStream, charset ) );	
+		catalog = new Catalog(isPot);
 	}
 	
 	private static boolean isPot(File file) {
