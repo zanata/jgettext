@@ -1,0 +1,7 @@
+# License name
+#
+# license line 1
+# license line 2
+# license line 3
+msgid ""
+msgstr "POT-Creation-Date: 2006-03-08 17:30+0200\n"

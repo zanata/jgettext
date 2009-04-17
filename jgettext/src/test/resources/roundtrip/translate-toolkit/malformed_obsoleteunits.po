@@ -1,0 +1,7 @@
+msgid "thing
+msgstr "ding"
+
+#~ msgid "Second thing"
+#~ msgstr "Tweede ding"
+#~ msgid "Third thing"
+#~ msgstr "Derde ding"

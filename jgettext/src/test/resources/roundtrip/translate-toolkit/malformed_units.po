@@ -1,0 +1,4 @@
+msgid "thing\n
+msgstr "ding"\n
+msgid "Second thing"\n
+msgstr "Tweede ding"\n
