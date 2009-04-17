@@ -122,10 +122,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 					} else {
 						eof = true;
 						// wrap up the final multi-line token, if any
-						if ( entryCollector != null ) {
-							entryCollector.wrapUp();
-							entryCollector = null;
-						}
+						wrapUpandResetEntryCollector();
 						ioReader.close();
 					}
 				}
@@ -139,6 +136,12 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 			}
 		}
 
+		private void wrapUpandResetEntryCollector(){
+			if ( entryCollector != null ) {
+				entryCollector.wrapUp();
+				entryCollector = null;
+			}			
+		}
 		public antlr.Token next() {
 			if ( hasNext() )
 				return tokenQueue.remove();
@@ -184,10 +187,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 				return;
 			}
 
-//			if ( entryCollector != null ) {
-//				entryCollector.wrapUp();
-//				entryCollector = null;
-//			}
+//			wrapUpandResetEntryCollector();
 
 			if ( '#' == line.charAt( 0 ) ) {
 				processComment( line );
@@ -225,18 +225,12 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 		}
 
 		private void processFlag(String flag) {
-			if ( entryCollector != null ) {
-				entryCollector.wrapUp();
-				entryCollector = null;
-			}
+			wrapUpandResetEntryCollector();
 			addToken( new Token( FLAG, flag ) );
 		}
 
 		private void processOccurence(String occurence) {
-			if ( entryCollector != null ) {
-				entryCollector.wrapUp();
-				entryCollector = null;
-			}
+			wrapUpandResetEntryCollector();
 			addToken( new Token( OCCURENCE, occurence ) );
 		}
 
@@ -259,28 +253,19 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 				return;
 			}
 			
-			if ( entryCollector != null ) {
-				entryCollector.wrapUp();
-				entryCollector = null;
-			}
+			wrapUpandResetEntryCollector();
 			
 			addToken( new Token( OBSOLETE, "<obsolete>" ) );
 			processEntry( entry );
 		}
 
 		private void processExtractedComment(String comment) {
-			if ( entryCollector != null ) {
-				entryCollector.wrapUp();
-				entryCollector = null;
-			}
+			wrapUpandResetEntryCollector();
 			addToken( new Token( EXTRACTION, comment ) );
 		}
 
 		private void processCatalogComment(String comment) {
-			if ( entryCollector != null ) {
-				entryCollector.wrapUp();
-				entryCollector = null;
-			}
+			wrapUpandResetEntryCollector();
 			addToken( new Token( COMMENT, comment ) );
 		}
 
@@ -293,10 +278,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 		}
 
 		private void processEntry(String line) {
-			if ( entryCollector != null ) {
-				entryCollector.wrapUp();
-				entryCollector = null;
-			}
+			wrapUpandResetEntryCollector();
 			if ( line.startsWith( DOMAIN_TXT ) ) {
 				processDomain( interpretString( line.substring( DOMAIN_TXT.length() ) ) );
 			}
