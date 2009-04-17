@@ -28,6 +28,29 @@ public class RoundTripTests {
 		testRoundTrip(original);
 	}
 	
+	@Test
+	public void testEmptyLineNote() throws Throwable{
+		File original = getResource("/roundtrip/emptylines_notes.po");
+		testRoundTrip(original);
+	}
+	
+	@Test
+	public void testMalformedObsoleteUnits() throws Throwable{
+		File original = getResource("/roundtrip/malformed_obsoleteunits.po");
+		testRoundTrip(original);
+	}
+	
+	@Test
+	public void testNonAsciiHeader() throws Throwable{
+		File original = getResource("/roundtrip/nonascii_header.po");
+		testRoundTrip(original);
+	}
+	
+	@Test
+	public void testMultilineContext() throws Throwable{
+		File original = getResource("/roundtrip/multiline_context.po");
+		testRoundTrip(original);
+	}
 	
 	private void testRoundTrip(String message, File f) throws Throwable{
 		String output = roundtrip(f);
