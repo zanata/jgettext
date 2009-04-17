@@ -37,10 +37,10 @@ import antlr.TokenStream;
 @SuppressWarnings("nls")
 public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 
-	private final Iterator<antlr.Token> tokens;
+	private final Tokenizer tokenizer;
 
 	public CatalogLexer(File file) throws FileNotFoundException, IOException {
-		tokens = Tokenizer.tokenize( file );
+		tokenizer = new Tokenizer( file );
 	}
 
 	/**
@@ -51,10 +51,10 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 	 * @return The next token.
 	 */
 	public antlr.Token nextToken() {
-		if ( !tokens.hasNext() ) {
+		if ( !tokenizer.hasNext() ) {
 			return new antlr.CommonToken( EOF, "<eof>" );
 		}
-		return tokens.next();
+		return tokenizer.next();
 	}
 
 
@@ -81,12 +81,6 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 		public static final String MSGSTR_TXT = "msgstr";
 		public static final String MSGSTR_PLURAL_TXT = "msgstr[";
 
-		public static Iterator<antlr.Token> tokenize(File file) 
-			throws FileNotFoundException, IOException {
-			LineNumberReader ioReader = new LineNumberReader( new FileReader( file ) );
-			return new Tokenizer( file.getName(), ioReader );
-		}
-
 		private boolean eof = false;
 		private final Queue<antlr.Token> tokenQueue = new LinkedList<antlr.Token>();
 
@@ -96,6 +90,11 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 
 		private EntryCollector entryCollector;
 
+		public Tokenizer(File file)
+				throws FileNotFoundException, IOException {
+			this(file.getName(), new LineNumberReader( new FileReader( file ) ));
+		}
+		
 		public Tokenizer(String filename, LineNumberReader ioReader) {
 			this.filename = filename;
 			this.ioReader = ioReader;
