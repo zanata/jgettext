@@ -11,10 +11,19 @@ import java.io.StringWriter;
 
 import org.fedorahosted.tennera.jgettext.catalog.parse.ExtendedCatalogParser;
 import org.fedorahosted.tennera.jgettext.catalog.write.CatalogWriter;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 
 public class RoundTripTests {
+	
+	PoParser poParser;
+	PoWriter poWriter;
+	
+	public RoundTripTests(){
+		poParser = new PoParser();
+		poWriter = new PoWriter();
+	}
 	
 	@Test
 	public void testRoundtrip1() throws Throwable{
@@ -69,11 +78,9 @@ public class RoundTripTests {
 	}
 	
 	private String roundtrip(File original) throws Throwable{
-		ExtendedCatalogParser parser = new ExtendedCatalogParser(original);
-		parser.catalog();
-		CatalogWriter writer = new CatalogWriter(parser.getCatalog());
+		Catalog originalCatalog = poParser.parseCatalog(original);
 		StringWriter outputWriter = new StringWriter();
-		writer.writeTo(outputWriter);
+		poWriter.write(originalCatalog, outputWriter);
 		outputWriter.flush();
 		return outputWriter.toString();
 	}
