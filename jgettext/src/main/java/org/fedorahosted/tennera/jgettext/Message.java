@@ -127,12 +127,20 @@ public class Message {
 		return fuzzy;
 	}
 
+	public void setFuzzy(boolean fuzzy) {
+		this.fuzzy = fuzzy;
+	}
+	
 	public void markObsolete() {
 		this.obsolete = true;
 	}
 
 	public boolean isObsolete() {
 		return obsolete;
+	}
+	
+	public void setObsolete(boolean obsolete) {
+		this.obsolete = obsolete;
 	}
 
 	public Boolean getAllowWrap() {
