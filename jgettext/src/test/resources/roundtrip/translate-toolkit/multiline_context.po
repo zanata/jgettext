@@ -1,7 +1,6 @@
 # Test multiline context
 #: source1
-msgctxt "Noun."
-" A person that changes his or her ways."
+msgctxt "Noun. A person that changes his or her ways."
 msgid "convert"
 msgstr "bekeerling"
 
@@ -13,7 +12,8 @@ msgstr "omskakel"
 
 # Test quotes, newlines and multiline.
 #: source3
-msgctxt "Verb.\nConverting from \"something\""
-" to \"something else\"."
+msgctxt ""
+"Verb.\n"
+"Converting from \"something\" to \"something else\"."
 msgid "convert"
 msgstr "omskakel"
