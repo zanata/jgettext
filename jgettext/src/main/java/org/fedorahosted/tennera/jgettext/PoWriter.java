@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2007, Red Hat Middleware, LLC. All rights reserved.
+ *
+ * This copyrighted material is made available to anyone wishing to use, modify,
+ * copy, or redistribute it subject to the terms and conditions of the GNU
+ * Lesser General Public License, v. 2.1. This program is distributed in the
+ * hope that it will be useful, but WITHOUT A WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details. You should have received a
+ * copy of the GNU Lesser General Public License, v.2.1 along with this
+ * distribution; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * Red Hat Author(s): Steve Ebersole
+ *                    Asgeir Frimannsson
+ */
 package org.fedorahosted.tennera.jgettext;
 
 import java.io.BufferedOutputStream;
@@ -70,7 +86,7 @@ public class PoWriter {
 	}
 
 	
-	private Message generateHeader(){
+	protected Message generateHeader(){
 		Message header = new Message();
 		header.setMsgid( "" ); 
 
@@ -169,7 +185,7 @@ public class PoWriter {
 	}
 
 	
-	private void writeComment(String prefix, String comment, Writer writer) throws IOException {
+	protected void writeComment(String prefix, String comment, Writer writer) throws IOException {
 	    String[] lines = comment.split("\n");
 	    for (String line : lines) {
 		writer.write(prefix);
@@ -178,7 +194,7 @@ public class PoWriter {
 	    }
 	}
 
-	private void writeString(String s, Writer writer) throws IOException {
+	protected void writeString(String s, Writer writer) throws IOException {
 		writer.write('\"');
 		
 		// check if we should output a empty first line
@@ -236,22 +252,22 @@ public class PoWriter {
 		writer.write('\n');
 	}
 
-	private void writeMsgctxt(String prefix, String ctxt, Writer writer) throws IOException {
+	protected void writeMsgctxt(String prefix, String ctxt, Writer writer) throws IOException {
 		writer.write( prefix + "msgctxt ");
 		writeString(ctxt, writer);
 	}
 
-	private void writeMsgid(String prefix, String msgid, Writer writer) throws IOException {
+	protected void writeMsgid(String prefix, String msgid, Writer writer) throws IOException {
 		writer.write( prefix + "msgid ");
 		writeString(msgid, writer);
 	}
 
-	private void writeMsgidPlural(String prefix, String msgidPlural, Writer writer) throws IOException {
+	protected void writeMsgidPlural(String prefix, String msgidPlural, Writer writer) throws IOException {
 		writer.write( prefix + "msgid_plural ");
 		writeString(msgidPlural, writer);
 	}
 
-	private void writeMsgstr(String prefix, String msgstr, Writer writer) throws IOException {
+	protected void writeMsgstr(String prefix, String msgstr, Writer writer) throws IOException {
 		if ( msgstr == null ) {
 			msgstr = "";
 		}
@@ -259,7 +275,7 @@ public class PoWriter {
 		writeString(msgstr, writer);
 	}
 
-	private void writeMsgstrPlurals(String prefix, List<String> msgstrPlurals, Writer writer) throws IOException {
+	protected void writeMsgstrPlurals(String prefix, List<String> msgstrPlurals, Writer writer) throws IOException {
 		int i = 0;
 		for ( String msgstr : msgstrPlurals ) {
 			writer.write( prefix + "msgstr[" + i + "] ");
