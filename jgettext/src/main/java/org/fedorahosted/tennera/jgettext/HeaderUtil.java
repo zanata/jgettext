@@ -118,6 +118,9 @@ public class HeaderUtil {
 	}
 	
 	public static Message generateDefaultHeader(){
+
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mmZ");
+		
 		HeaderUtil header = new HeaderUtil();
 
 		header.setValue(KEY_ProjectIdVersion, "PACKAGE VERSION");
