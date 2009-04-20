@@ -1,6 +1,6 @@
 package org.fedorahosted.tennera.jgettext;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,9 +10,11 @@ import java.io.InputStreamReader;
 import java.io.StringWriter;
 
 import org.fedorahosted.tennera.jgettext.catalog.parse.ExtendedCatalogParser;
+import org.fedorahosted.tennera.jgettext.catalog.parse.UnexpectedTokenException;
 import org.fedorahosted.tennera.jgettext.catalog.write.CatalogWriter;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.internal.runners.statements.Fail;
 
 
 public class RoundTripTests {
@@ -46,13 +48,23 @@ public class RoundTripTests {
 	@Test
 	public void testMalformedObsoleteUnits() throws Throwable{
 		File original = getResource("/roundtrip/translate-toolkit/malformed_obsoleteunits.po");
-		testRoundTrip(original);
+		try{
+			testRoundTrip(original);
+			fail("expected UnexpectedTokenException");
+		}
+		catch(UnexpectedTokenException e){
+		}
 	}
 	
 	@Test
 	public void testMalformedUnits() throws Throwable{
 		File original = getResource("/roundtrip/translate-toolkit/malformed_units.po");
-		testRoundTrip(original);
+		try{
+			testRoundTrip(original);
+			fail("expected UnexpectedTokenException");
+		}
+		catch(UnexpectedTokenException e){
+		}
 	}
 	
 	@Test
