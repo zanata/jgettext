@@ -13,14 +13,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import org.fedorahosted.tennera.jgettext.catalog.util.StringUtil;
-
 public class PoWriter {
 
 	private boolean generateHeader = false;
 	private boolean updatePOTCreationDate = false;
 	private boolean updatePORevisionData = false;
-	
+	private boolean wrap = true;
 	
 	public void write(Catalog catalog, File file) throws IOException{
 		Writer writer = new BufferedWriter(new FileWriter(file));
@@ -29,15 +27,33 @@ public class PoWriter {
 
 	public void write(Catalog catalog, Writer writer) throws IOException{
 		Message header = catalog.locateHeader();
+		boolean wroteHeader = false;
 		if(header != null){
 			write(header, writer);
+			wroteHeader = true;
 		}
 		else if(generateHeader){
-			
 			write(generateHeader(), writer);
+			wroteHeader = true;
 		}
+		boolean isFirst = true;
 		for(Message message: catalog){
 			if(!message.isHeader()){
+				if(isFirst){
+					isFirst = false;
+
+					if(wroteHeader){
+						// we wrote the header, so need a blank line before
+						// the first unit
+						writer.write('\n');
+					}
+				}
+				else{
+					// we have already written a unit and are about to write another
+					// so we need to add a line inbetween
+					writer.write('\n');
+				}
+				
 				write(message, writer);
 			}
 		}
@@ -90,7 +106,6 @@ public class PoWriter {
 	}
 
 	public void write(Message message, Writer writer) throws IOException{
-    	messageStart( message, writer );
 
     	for ( String comment : message.getComments() ) {
     	    writeComment("#", comment, writer); // no space on purpose!!!
@@ -141,8 +156,6 @@ public class PoWriter {
 
     	writeMsgstrPlurals( prefix, message.getMsgstrPlural(), writer );
 
-    	messageEnd( message, writer );
-
     	writer.flush();
 	}
 
@@ -165,20 +178,62 @@ public class PoWriter {
 	    }
 	}
 
-	protected void messageStart(Message message, Writer writer) throws IOException {
-	}
-
-	protected void messageEnd(Message message, Writer writer) throws IOException {
-		writer.write( '\n' );
-	}
-	
 	private void writeString(String s, Writer writer) throws IOException {
-	    s = StringUtil.addEscapes(s);
-	    String split = s.replace("\\n", "\\n\"\n\"");
-	    // multiline strings are preceded by a blank line for neatness:
-	    if (split.contains("\n"))
-		writer.write("\"\"\n");
-	    writer.write("\""+split+"\"\n");
+		writer.write('\"');
+		
+		// check if we should output a empty first line
+		int firstLineEnd = s.indexOf('\n'); 
+		if(wrap && 
+				((firstLineEnd != -1 && firstLineEnd > 70 ) || s.length()> 70)){ 
+			// TODO this depends on context
+			writer.write('\"');
+			writer.write('\n');
+			writer.write('\"');
+		}
+		
+		StringBuilder currentLine = new StringBuilder(100);
+		
+		int lastSpacePos = 0;
+
+		for(int i=0;i<s.length();i++){
+			char currentChar = s.charAt(i);
+		
+			switch(currentChar){
+			case '\n':
+				currentLine.append('\\');
+				currentLine.append('n');
+				if(wrap && i != s.length()-1){
+					writer.write(currentLine.toString());
+					writer.write('\"');
+					writer.write('\n');
+					writer.write('\"');
+					lastSpacePos = 0;
+					currentLine.delete(0, currentLine.length());
+				}
+				break;
+			case '\\':
+			//case '=':
+			case '"':
+				currentLine.append('\\');
+			case ' ':
+				lastSpacePos = currentLine.length();
+			default:
+				currentLine.append(currentChar);
+			}
+
+			if(wrap && currentLine.length() > 76 && lastSpacePos != 0){
+				writer.write(currentLine.substring(0, lastSpacePos+1));
+				writer.write('\"');
+				writer.write('\n');
+				writer.write('\"');
+				currentLine.delete(0, lastSpacePos+1);
+				lastSpacePos = 0;
+			}
+		}
+		writer.write(currentLine.toString());
+
+		writer.write('\"');
+		writer.write('\n');
 	}
 
 	private void writeMsgctxt(String prefix, String ctxt, Writer writer) throws IOException {

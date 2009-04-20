@@ -67,6 +67,12 @@ public class RoundTripTests {
 		testRoundTrip(original);
 	}
 	
+	@Test
+	public void testContentEndsWithEOL() throws Throwable{
+		File original = getResource("/roundtrip/content_end_with_eol.po");
+		testRoundTrip(original);
+	}
+	
 	private void testRoundTrip(String message, File f) throws Throwable{
 		String output = roundtrip(f);
 		String originalString = readToString(f); 
