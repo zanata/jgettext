@@ -49,7 +49,7 @@ public class PoWriter {
 			wroteHeader = true;
 		}
 		else if(generateHeader){
-			write(generateHeader(), writer);
+			write(HeaderUtil.generateDefaultHeader(), writer);
 			wroteHeader = true;
 		}
 		boolean isFirst = true;
@@ -85,36 +85,6 @@ public class PoWriter {
 		write(catalog, writer);
 	}
 
-	
-	protected Message generateHeader(){
-		Message header = new Message();
-		header.setMsgid( "" ); 
-
-		header.addComment("SOME DESCRIPTIVE TITLE."); 
-		header.addComment("Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER"); 
-		header.addComment("This file is distributed under the same license as the PACKAGE package."); 
-		header.addComment("FIRST AUTHOR <EMAIL@ADDRESS>, YEAR."); 
-		header.addComment(""); 
-
-		StringBuilder sb = new StringBuilder();
-		sb.append("Project-Id-Version: PACKAGE VERSION\n"); 
-		sb.append("Report-Msgid-Bugs-To: \n"); 
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mmZ"); 
-		sb.append("POT-Creation-Date: " + dateFormat.format(new Date()) + "\n");
-		sb.append("PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"); 
-		sb.append("Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"); 
-		sb.append("Language-Team: LANGUAGE <LL@li.org>\n"); 
-		sb.append("MIME-Version: 1.0\n"); 
-		sb.append("Content-Type: text/plain; charset=UTF-8\n"); 
-		sb.append("Content-Transfer-Encoding: 8bit\n");  
-
-		header.setMsgstr(sb.toString());
-		
-		header.markFuzzy();
-
-		return header;
-		
-	}
 	
 	public void write(Message message, File file) throws IOException{
 		Writer writer = new BufferedWriter(new FileWriter(file));
