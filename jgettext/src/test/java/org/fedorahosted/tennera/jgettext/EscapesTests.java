@@ -29,7 +29,7 @@ public class EscapesTests {
 	
 	@Test
 	public void testCRInMsgidAndMsgStr() throws Throwable{
-		File original = getResource("/valid/escapes_msg.po");
+		File original = getResource("/valid/escapes_cr_in_msgid_and_msgstr.po");
 		testEscapes(original);
 	}
 	
