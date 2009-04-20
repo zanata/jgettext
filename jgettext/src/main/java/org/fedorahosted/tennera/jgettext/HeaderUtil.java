@@ -43,7 +43,7 @@ public class HeaderUtil {
 		defaultKeys = Collections.unmodifiableSet(keys);
 	}
 	
-	private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mmZ"); 
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mmZ"); 
 
 	private static final Pattern pluralPattern = Pattern.compile(
 			"nplurals(\\s*?)=(\\s*?)(\\d*?)([\\\\|;|\\n])",
@@ -109,16 +109,12 @@ public class HeaderUtil {
 		return header;
 	}
 
-	public static void updatePORevisionDate(Message message){
-		HeaderUtil header = HeaderUtil.wrap(message);
-		header.setValue(KEY_PoRevisionDate, dateFormat.format(new Date()));
-		header.unwrap(message);
+	public void updatePORevisionDate(){
+		setValue(KEY_PoRevisionDate, dateFormat.format(new Date()));
 	}
 
-	public static void updatePOTCreationDate(Message message){
-		HeaderUtil header = HeaderUtil.wrap(message);
-		header.setValue(KEY_PotCreationDate, dateFormat.format(new Date()));
-		header.unwrap(message);
+	public void updatePOTCreationDate(Message message){
+		setValue(KEY_PotCreationDate, dateFormat.format(new Date()));
 	}
 	
 	public static Message generateDefaultHeader(){
