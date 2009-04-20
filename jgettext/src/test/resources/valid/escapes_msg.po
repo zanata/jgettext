@@ -1,9 +1,2 @@
-## SOME DESCRIPTIVE TITLE.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
-msgid ""
-"Report-Msgid-Bugs-To: http://bugs.kde.org\resources\n"
-
-msgstr ""
-"Report-Msgid-Bugs-To: http://bugs.kde.org\resources\n"
-
+msgid "msgid with _\r_ escape\n"
+msgstr "msgstr with _\r_ escape\n"

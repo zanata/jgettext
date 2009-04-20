@@ -28,7 +28,7 @@ public class EscapesTests {
 	}
 	
 	@Test
-	public void testEscapesMsg() throws Throwable{
+	public void testCRInMsgidAndMsgStr() throws Throwable{
 		File original = getResource("/valid/escapes_msg.po");
 		testEscapes(original);
 	}
