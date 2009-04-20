@@ -1,16 +1,19 @@
 package org.fedorahosted.tennera.jgettext;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.fedorahosted.tennera.jgettext.catalog.parse.ParseException;
 
+@SuppressWarnings("nls")
 public class HeaderFields {
 
 	private Map<String, String> entries = new LinkedHashMap<String, String>();
@@ -96,10 +99,12 @@ public class HeaderFields {
 	public void unwrap(Message message) {
 		StringBuilder msgstr = new StringBuilder();
 		for (String key : getKeys()) {
-			msgstr.append(key);
-			msgstr.append(": ");
-			msgstr.append(getValue(key));
-			msgstr.append("\n");
+			if(getValue(key) != null) {
+				msgstr.append(key);
+				msgstr.append(": ");
+				msgstr.append(getValue(key));
+				msgstr.append("\n");
+			}
 		}
 		message.setMsgstr(msgstr.toString());
 	}
@@ -116,35 +121,98 @@ public class HeaderFields {
 		setValue(KEY_PoRevisionDate, dateFormat.format(new Date()));
 	}
 
-	public void updatePOTCreationDate(Message message) {
+	public void updatePOTCreationDate() {
 		setValue(KEY_PotCreationDate, dateFormat.format(new Date()));
 	}
 
-	public static Message generateDefaultHeader() {
-
+	private void setValues(HeaderValues param) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mmZ");
+		setValue(KEY_ProjectIdVersion, param.projectIdVersion);
+		setValue(KEY_ReportMsgidBugsTo, param.reportMsgidBugsTo);
+		setValue(KEY_PotCreationDate, dateFormat.format(param.potCreationDate));
+		setValue(KEY_PoRevisionDate, param.poRevisionDate);
+		setValue(KEY_LastTranslator, param.lastTranslator);
+		setValue(KEY_LanguageTeam, param.languageTeam);
+		setValue(KEY_MimeVersion, "1.0");
+		setValue(KEY_ContentType, "text/plain; charset=" + param.charset);
+		setValue(KEY_ContentTransferEncoding, "8bit");
+	}
+
+	public static Message generateDefaultHeader() {
+		HeaderValues param = new HeaderValues();
+		param.projectIdVersion = "PACKAGE VERSION";
+		param.reportMsgidBugsTo = "";
+		param.potCreationDate = new Date();
+		param.poRevisionDate = "YEAR-MO-DA HO:MI+ZONE";
+		param.lastTranslator = "FULL NAME <EMAIL@ADDRESS>";
+		param.languageTeam = "LANGUAGE <LL@li.org>";
+		param.charset = "UTF-8";
+		param.comments.add("SOME DESCRIPTIVE TITLE.");
+		param.comments.add("Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER");
+		param.comments.add("This file is distributed under the same license as the PACKAGE package.");
+		param.comments.add("FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.");
+		param.comments.add("");
+
+		return generateHeader(param);
+	}
+	
+	/**
+	 * This "Parameter object" might eventually morph into our proper Header class.
+	 * <p>
+	 * To do that it, we will need HeaderFields.getValues(), and support for arbitrary
+	 * field names (eg Set<String> otherFields).
+	 * @author sflaniga
+	 *
+	 */
+	private static class HeaderValues {
+		public String projectIdVersion;
+		public String reportMsgidBugsTo;
+		public Date potCreationDate;
+		/**
+		 * Perhaps poRevisionDate should be a Date too, but null values will
+		 * be converted to the string "YEAR-MO-DA HO:MI+ZONE" ?
+		 */
+		public String poRevisionDate;
+		public String lastTranslator;
+		public String languageTeam;
+		public String charset;
+		public List<String> comments = new ArrayList<String>();
+
+		public HeaderValues() {
+		}
+
+		public HeaderValues(String projectIdVersion, String reportMsgidBugsTo,
+				Date potCreationDate, String poRevisionDate,
+				String lastTranslator, String languageTeam, String charset,
+				List<String> comments) {
+			this.projectIdVersion = projectIdVersion;
+			this.reportMsgidBugsTo = reportMsgidBugsTo;
+			this.potCreationDate = potCreationDate;
+			this.poRevisionDate = poRevisionDate;
+			this.lastTranslator = lastTranslator;
+			this.languageTeam = languageTeam;
+			this.charset = charset;
+			this.comments = comments;
+		}
+	}
+
+	
+	/**
+	 * This, more general, generate method is private, along with the 
+	 * HeaderValues object, until we decide what the public API should be.
+	 * @param param
+	 * @return
+	 */
+	private static Message generateHeader(HeaderValues param){
 
 		HeaderFields header = new HeaderFields();
-
-		header.setValue(KEY_ProjectIdVersion, "PACKAGE VERSION");
-		header.setValue(KEY_ReportMsgidBugsTo, "");
-		header.setValue(KEY_PotCreationDate, dateFormat.format(new Date()));
-		header.setValue(KEY_PoRevisionDate, "YEAR-MO-DA HO:MI+ZONE");
-		header.setValue(KEY_LastTranslator, "FULL NAME <EMAIL@ADDRESS>");
-		header.setValue(KEY_LanguageTeam, "LANGUAGE <LL@li.org>");
-		header.setValue(KEY_MimeVersion, "1.0");
-		header.setValue(KEY_ContentType, "text/plain; charset=UTF-8");
-		header.setValue(KEY_ContentTransferEncoding, "8bit");
-
+		header.setValues(param);
+		
 		Message headerMsg = header.unwrap();
-
-		headerMsg.addComment("SOME DESCRIPTIVE TITLE.");
-		headerMsg
-				.addComment("Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER");
-		headerMsg
-				.addComment("This file is distributed under the same license as the PACKAGE package.");
-		headerMsg.addComment("FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.");
-		headerMsg.addComment("");
+		
+		for (String comment : param.comments) {
+			headerMsg.addComment(comment);
+		}
 
 		return headerMsg;
 	}
