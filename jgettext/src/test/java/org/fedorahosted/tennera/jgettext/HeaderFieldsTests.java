@@ -6,11 +6,11 @@ import static org.junit.Assert.*;
 
 
 
-public class HeaderUtilTests {
+public class HeaderFieldsTests {
 
 	PoParser parser;
 	
-	public HeaderUtilTests() {
+	public HeaderFieldsTests() {
 		parser = new PoParser();
 	}
 	
@@ -22,9 +22,9 @@ public class HeaderUtilTests {
 		
 		String headerStr = headerMsg.getMsgstr();
 		
-		HeaderUtil header = HeaderUtil.wrap(headerMsg);
+		HeaderFields header = HeaderFields.wrap(headerMsg);
 		assertEquals(header.getKeys().size(), 9);
-		assertEquals(header.getValue(HeaderUtil.KEY_MimeVersion), "1.0");
+		assertEquals(header.getValue(HeaderFields.KEY_MimeVersion), "1.0");
 		
 		header.setValue("MyKey", "abcd");
 		assertEquals(header.getKeys().size(), 10);

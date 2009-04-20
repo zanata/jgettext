@@ -49,7 +49,7 @@ public class PoWriter {
 			wroteHeader = true;
 		}
 		else if(generateHeader){
-			write(HeaderUtil.generateDefaultHeader(), writer);
+			write(HeaderFields.generateDefaultHeader(), writer);
 			wroteHeader = true;
 		}
 		boolean isFirst = true;

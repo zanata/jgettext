@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 import org.fedorahosted.tennera.jgettext.catalog.parse.ParseException;
 
-public class HeaderUtil {
+public class HeaderFields {
 
 	private Map<String, String> entries = new LinkedHashMap<String, String>();
 
@@ -75,12 +75,12 @@ public class HeaderUtil {
 		return Collections.unmodifiableSet(entries.keySet());
 	}
 
-	public static HeaderUtil wrap(Message message) throws ParseException {
+	public static HeaderFields wrap(Message message) throws ParseException {
 		return wrap(message.getMsgstr());
 	}
 
-	public static HeaderUtil wrap(String msgstr) throws ParseException {
-		HeaderUtil header = new HeaderUtil();
+	public static HeaderFields wrap(String msgstr) throws ParseException {
+		HeaderFields header = new HeaderFields();
 		String[] entries = msgstr.split("\n");
 		for (String entry : entries) {
 			String[] keyval = entry.split("\\:", 2);
@@ -124,7 +124,7 @@ public class HeaderUtil {
 
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mmZ");
 
-		HeaderUtil header = new HeaderUtil();
+		HeaderFields header = new HeaderFields();
 
 		header.setValue(KEY_ProjectIdVersion, "PACKAGE VERSION");
 		header.setValue(KEY_ReportMsgidBugsTo, "");
