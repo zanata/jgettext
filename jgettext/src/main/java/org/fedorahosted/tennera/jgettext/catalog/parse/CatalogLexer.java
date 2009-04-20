@@ -34,6 +34,7 @@ import javax.naming.LimitExceededException;
 
 import org.fedorahosted.tennera.jgettext.catalog.util.StringUtil;
 
+import antlr.RecognitionException;
 import antlr.TokenStream;
 
 /**
@@ -372,7 +373,15 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 		private String interpretString(String quotedString) {
 		    	quotedString = StringUtil.removeEscapes(quotedString);
 			quotedString = quotedString.trim();
-			// remove quotes:
+
+			if(quotedString.charAt(0) != '"'){
+				throw new UnexpectedTokenException("missing start-quote", lineNumber());
+			}
+			else if(quotedString.charAt(quotedString.length()-1) != '"'){
+				throw new UnexpectedTokenException("missing end-quote", lineNumber());
+			}
+
+			// remove quotes
 			return quotedString.substring( 1, quotedString.length() - 1 );
 		}
 
