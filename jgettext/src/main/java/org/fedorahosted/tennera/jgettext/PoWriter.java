@@ -201,7 +201,7 @@ public class PoWriter {
 		int firstLineEnd = s.indexOf('\n'); 
 		if(wrap && 
 				((firstLineEnd != -1 && firstLineEnd > 70 ) || s.length()> 70)){ 
-			// TODO this depends on context
+			// TODO this depends on context, 70 ^^ is just a guess
 			writer.write('\"');
 			writer.write('\n');
 			writer.write('\"');
