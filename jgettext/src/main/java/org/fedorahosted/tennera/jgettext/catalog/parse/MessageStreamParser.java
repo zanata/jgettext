@@ -8,7 +8,6 @@ import java.io.Reader;
 import java.nio.charset.Charset;
 
 import org.fedorahosted.tennera.jgettext.Message;
-import org.fedorahosted.tennera.jgettext.MessageProcessor;
 import org.fedorahosted.tennera.jgettext.Occurence;
 
 import antlr.ASTPair;
@@ -238,10 +237,4 @@ public class MessageStreamParser{
 		}
 	}
 
-	public void processMessages(MessageProcessor processor) 
-		throws RecognitionException, TokenStreamException {
-		while (hasNext()) {
-			processor.processMessage(next());
-		}
-	}
 }
