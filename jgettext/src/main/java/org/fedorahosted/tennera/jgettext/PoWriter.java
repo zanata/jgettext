@@ -228,11 +228,21 @@ public class PoWriter {
 				}
 				break;
 			case '\\':
+				currentLine.append(currentChar);
+				break;
+			case '\r':
+				currentLine.append('\\');
+				currentLine.append('r');
+				break;
 			//case '=':
 			case '"':
 				currentLine.append('\\');
+				currentLine.append(currentChar);
+				break;
 			case ' ':
 				lastSpacePos = currentLine.length();
+				currentLine.append(currentChar);
+				break;
 			default:
 				currentLine.append(currentChar);
 			}
