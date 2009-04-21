@@ -64,7 +64,7 @@ public class DynamicRoundtripTests extends TestSuite{
                 TestCase testCase = new TestCase(f.getAbsolutePath().substring(rootDir.getAbsolutePath().length())){
                     @Override
                     public void runTest() throws Throwable{
-                    	testRoundTrip(null, f);
+                    	TestUtils.testRoundTrip(null, f);
                     }
                 };
                 ts.addTest(testCase);
@@ -72,47 +72,6 @@ public class DynamicRoundtripTests extends TestSuite{
     	}
     }
     
-    
-	private static void testRoundTrip(String message, File f) throws FileNotFoundException, ParseException, IOException{
-		String output = roundtrip(f);
-		String originalString = readToString(f); 
-		assertEquals(message, originalString, output);
-	}
-
-	
-	private static String roundtrip(File original) throws FileNotFoundException, ParseException, IOException{
-		PoParser poParser = new PoParser();
-		PoWriter poWriter = new PoWriter();
-		Catalog originalCatalog = poParser.parseCatalog(original);
-		StringWriter outputWriter = new StringWriter();
-		poWriter.write(originalCatalog, outputWriter);
-		outputWriter.flush();
-		return outputWriter.toString();
-	}
-	
-    private static String readToString(File file) {
-
-    	BufferedReader reader = null;
-        StringBuilder sb = new StringBuilder();
-        try {
-	    	reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-	 
-	        String line = null;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-            	reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
- 
-        return sb.toString();
-    }
     
     public static TestSuite suite() throws Throwable{
             TestSuite ts=new TestSuite();

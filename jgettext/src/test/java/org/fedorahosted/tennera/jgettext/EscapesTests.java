@@ -35,7 +35,7 @@ public class EscapesTests {
 	
 	private void testEscapes(String message, File f) throws Throwable{
 		String output = escapesProcess(f);
-		String originalString = readToString(f); 
+		String originalString = TestUtils.readToString(f); 
 		assertEquals(message, originalString, output);
 	}
 	
@@ -54,30 +54,6 @@ public class EscapesTests {
 	private File getResource(String file){
 		return new File( getClass().getResource(file).getFile() );
 	}
-	
-    private static String readToString(File file) {
-
-    	BufferedReader reader = null;
-        StringBuilder sb = new StringBuilder();
-        try {
-	    	reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-	 
-	        String line = null;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-            	reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
- 
-        return sb.toString();
-    }
 
 
 }
