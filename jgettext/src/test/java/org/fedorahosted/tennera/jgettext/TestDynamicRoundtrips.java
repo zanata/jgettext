@@ -1,31 +1,21 @@
 package org.fedorahosted.tennera.jgettext;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
-import org.fedorahosted.tennera.jgettext.catalog.parse.ParseException;
-import org.junit.Test;
-
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-public class DynamicRoundtripTests extends TestSuite{
+public class TestDynamicRoundtrips extends TestSuite{
     
     public final static void generateTests(TestSuite ts) throws Throwable{
     	final Properties properties = new Properties();
@@ -34,7 +24,7 @@ public class DynamicRoundtripTests extends TestSuite{
     				new BufferedInputStream(
     						new FileInputStream(
     								new File(
-    										DynamicRoundtripTests.class.getResource("/roundtripfiles.properties").getFile()))));
+    										TestDynamicRoundtrips.class.getResource("/roundtripfiles.properties").getFile()))));
     	}
     	catch(IOException e){
     		fail("unable to load properties file");
@@ -43,7 +33,8 @@ public class DynamicRoundtripTests extends TestSuite{
     	while(keys.hasMoreElements()){
     		final String key = (String) keys.nextElement();
     		final File rootDir = new File(properties.getProperty(key));
-    		
+    		TestSuite suite = new TestSuite(key);
+    		ts.addTest(suite);
             TestCase test = new TestCase(key + " exists"){
                 @Override
                 public void runTest() {
@@ -51,7 +42,8 @@ public class DynamicRoundtripTests extends TestSuite{
             		assertTrue("File not a directory", rootDir.isDirectory());
                 }
             };
-            ts.addTest(test);
+            suite.addTest(test);
+            
             
             if(!rootDir.exists() || !rootDir.isDirectory())
             	return;
@@ -64,10 +56,10 @@ public class DynamicRoundtripTests extends TestSuite{
                 TestCase testCase = new TestCase(f.getAbsolutePath().substring(rootDir.getAbsolutePath().length())){
                     @Override
                     public void runTest() throws Throwable{
-                    	TestUtils.testRoundTrip(null, f);
+                    	JGettextTestUtils.testRoundTrip(null, f);
                     }
                 };
-                ts.addTest(testCase);
+                suite.addTest(testCase);
     		}
     	}
     }
@@ -86,7 +78,7 @@ public class DynamicRoundtripTests extends TestSuite{
 				return true;
 			}
 			else{
-				if(pathname.getName().endsWith(".po")){
+				if(pathname.getName().endsWith(".po") || pathname.getName().endsWith(".pot")){
 					return true;
 				}
 			}

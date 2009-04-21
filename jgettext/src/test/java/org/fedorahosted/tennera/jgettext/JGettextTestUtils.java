@@ -12,7 +12,7 @@ import java.io.StringWriter;
 
 import org.fedorahosted.tennera.jgettext.catalog.parse.ParseException;
 
-public class TestUtils {
+public class JGettextTestUtils {
 
 	public static void testRoundTrip(String message, File f) throws FileNotFoundException, ParseException, IOException{
 		String output = roundtrip(f);

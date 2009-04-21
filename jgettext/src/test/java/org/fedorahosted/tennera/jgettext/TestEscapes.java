@@ -11,12 +11,12 @@ import java.io.StringWriter;
 
 import org.junit.Test;
 
-public class EscapesTests {
+public class TestEscapes {
 	
 	PoParser poParser;
 	PoWriter poWriter;
 	
-	public EscapesTests(){
+	public TestEscapes(){
 		poParser = new PoParser();
 		poWriter = new PoWriter();
 	}
@@ -35,7 +35,7 @@ public class EscapesTests {
 	
 	private void testEscapes(String message, File f) throws Throwable{
 		String output = escapesProcess(f);
-		String originalString = TestUtils.readToString(f); 
+		String originalString = JGettextTestUtils.readToString(f); 
 		assertEquals(message, originalString, output);
 	}
 	

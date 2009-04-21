@@ -6,11 +6,11 @@ import static org.junit.Assert.*;
 
 
 
-public class HeaderFieldsTests {
+public class TestHeaderFields {
 
 	PoParser parser;
 	
-	public HeaderFieldsTests() {
+	public TestHeaderFields() {
 		parser = new PoParser();
 	}
 	
