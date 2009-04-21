@@ -25,7 +25,7 @@ import org.junit.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-public class DynamicRoundtripTests {
+public class DynamicRoundtripTests extends TestSuite{
     
     public final static void generateTests(TestSuite ts) throws Throwable{
     	final Properties properties = new Properties();
@@ -44,7 +44,7 @@ public class DynamicRoundtripTests {
     		final String key = (String) keys.nextElement();
     		final File rootDir = new File(properties.getProperty(key));
     		
-            TestCase test = new TestCase(key){
+            TestCase test = new TestCase(key + " exists"){
                 @Override
                 public void runTest() {
             		assertTrue("No such file.", rootDir.exists());
@@ -150,7 +150,5 @@ public class DynamicRoundtripTests {
     		}
     	}
     }
-    
-    @Test
-    public void test(){}
+   
 }
