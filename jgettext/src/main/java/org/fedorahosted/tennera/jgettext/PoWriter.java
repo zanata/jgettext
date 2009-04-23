@@ -94,10 +94,10 @@ public class PoWriter {
 	public void write(Message message, Writer writer) throws IOException{
 
     	for ( String comment : message.getComments() ) {
-    		if(comment.length()!=0 && comment.charAt(0)=='#')
-    			writeComment("# ", comment, writer); 
+    		if( !comment.isEmpty()) 
+    			writeComment("# ", comment, writer); // no space on purpose!!!
     		else
-    			writeComment("#", comment, writer); // no space on purpose!!!
+    			writer.write("#\n"); 
     	}
 
     	for ( String comment : message.getExtractedComments() ) {
@@ -173,7 +173,7 @@ public class PoWriter {
 		// check if we should output a empty first line
 		int firstLineEnd = s.indexOf('\n'); 
 		if(wrap && 
-				((firstLineEnd != -1 && firstLineEnd > 70 ) || s.length()> 70)){ 
+				((firstLineEnd != -1 && firstLineEnd > 70 ) || s.length()> 70 )){ 
 			// TODO this depends on context, 70 ^^ is just a guess
 			writer.write('\"');
 			writer.write('\n');

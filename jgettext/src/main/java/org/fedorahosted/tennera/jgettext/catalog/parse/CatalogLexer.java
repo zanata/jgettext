@@ -255,7 +255,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 					processObsolete( line.substring( 2 ).trim() );
 					break;
 				default:
-					processCatalogComment( line.substring( 1 ) );
+					processCatalogComment( line.substring( 1 ) .trim());
 			}
 		}
 
