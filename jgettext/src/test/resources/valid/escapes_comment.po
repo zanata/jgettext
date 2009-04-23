@@ -1,6 +1,5 @@
-## SOME DESCRIPTIVE TITLE.
+# # SOME DESCRIPTIVE TITLE.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # src\resources\valid\escapse_comment.po
-#, fuzzy
 msgid "test"
 msgstr ""
