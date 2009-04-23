@@ -95,9 +95,9 @@ public class PoWriter {
 
     	for ( String comment : message.getComments() ) {
     		if( !comment.isEmpty()) 
-    			writeComment("# ", comment, writer); // no space on purpose!!!
+    			writeComment("# ", comment, writer); 
     		else
-    			writer.write("#\n"); 
+    			writeComment("#", comment, writer); // no space on purpose!!! 
     	}
 
     	for ( String comment : message.getExtractedComments() ) {
