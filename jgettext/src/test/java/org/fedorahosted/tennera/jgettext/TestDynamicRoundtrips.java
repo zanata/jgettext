@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,11 +21,13 @@ public class TestDynamicRoundtrips extends TestSuite{
     public final static void generateTests(TestSuite ts) throws Throwable{
     	final Properties properties = new Properties();
     	try{
+    		URL url = TestDynamicRoundtrips.class.getResource("/roundtripfiles.properties");
+    		if(url == null) // skip tests if configuration file not found
+    			return;
     		properties.load(
     				new BufferedInputStream(
     						new FileInputStream(
-    								new File(
-    										TestDynamicRoundtrips.class.getResource("/roundtripfiles.properties").getFile()))));
+    								new File(url.getFile()))));
     	}
     	catch(IOException e){
     		fail("unable to load properties file");
