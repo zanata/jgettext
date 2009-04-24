@@ -159,9 +159,6 @@ public class MessageStreamParser{
 
 		protected void handleMsgstr(AST msgstr) {
 			currentMessage.setMsgstr( extractText( msgstr ) );
-			if(currentMessage.isFuzzy() && extractText( msgstr ).isEmpty()) {
-				currentMessage.removeFuzzy();
-			}
 		}
 
 		protected void handleMsgstrPlural(AST msgstr, AST plurality) {
