@@ -22,6 +22,8 @@ public class TestMessage {
 		msg.setMsgstr("hei verden");
 		msg.markFuzzy();
 		assertTrue(msg.isFuzzy());
+		msg.setFuzzy(false);
+		assertFalse(msg.isFuzzy());
 	}
 
 }
