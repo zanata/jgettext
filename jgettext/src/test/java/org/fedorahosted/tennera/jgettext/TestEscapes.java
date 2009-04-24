@@ -28,6 +28,12 @@ public class TestEscapes {
 	}
 	
 	@Test
+	public void testEscapesFuzzyComment() throws Throwable{
+		File original = getResource("/valid/escapes_comment_fuzzy.po");
+		testEscapes(original);
+	}
+	
+	@Test
 	public void testCRInMsgidAndMsgStr() throws Throwable{
 		File original = getResource("/valid/escapes_cr_in_msgid_and_msgstr.po");
 		testEscapes(original);
@@ -35,7 +41,7 @@ public class TestEscapes {
 	
 	private void testEscapes(String message, File f) throws Throwable{
 		String output = escapesProcess(f);
-		String originalString = JGettextTestUtils.readToString(f); 
+		String originalString = JGettextTestUtils.readToStringFromMsgcat(f); 
 		assertEquals(message, originalString, output);
 	}
 	

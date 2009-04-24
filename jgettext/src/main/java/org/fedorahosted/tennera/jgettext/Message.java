@@ -122,6 +122,10 @@ public class Message {
 	public void markFuzzy() {
 		this.fuzzy = true;
 	}
+	
+	public void removeFuzzy() {
+		this.fuzzy = false;
+	}
 
 	public boolean isFuzzy() {
 		return fuzzy;
