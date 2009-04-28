@@ -220,6 +220,8 @@ public class PoWriter {
 				currentLine.append('\\');
 				currentLine.append(currentChar);
 				break;
+			case ':':
+			case '.':
 			case '/':
 			case '-':
 			case '=':
