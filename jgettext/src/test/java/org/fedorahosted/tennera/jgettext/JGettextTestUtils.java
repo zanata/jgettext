@@ -1,7 +1,7 @@
 package org.fedorahosted.tennera.jgettext;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -50,6 +50,14 @@ public class JGettextTestUtils {
             while ((line = reader.readLine()) != null) {
                 sb.append(line + "\n");
             }
+            BufferedReader errorReader = new BufferedReader(new InputStreamReader(prcess.getErrorStream()));
+            StringBuilder errorStr = new StringBuilder();
+            line = null;
+            while((line = errorReader.readLine()) != null) {
+            	errorStr.append(line);
+            	errorStr.append("\n");
+            }
+        	assertTrue("Error parsing input file:\n"+errorStr.toString(), errorStr.toString().isEmpty());
 		} catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -86,9 +94,7 @@ public class JGettextTestUtils {
             	errorStr.append(line);
             	errorStr.append("\n");
             }
-            if(!errorStr.toString().isEmpty()){
-            	fail(errorStr.toString());
-            }
+        	assertTrue("Error parsing output file:\n"+errorStr.toString(), errorStr.toString().isEmpty());
             
             
             
