@@ -9,6 +9,7 @@ public class TestMessage {
 	public void testIsFuzzyWhenEmptyMsgstr(){
 		Message msg = new Message();
 		msg.setMsgid("hello world!");
+		assertFalse(msg.isFuzzy());
 		msg.setMsgstr("");
 		assertFalse(msg.isFuzzy());
 		
@@ -16,6 +17,7 @@ public class TestMessage {
 		assertFalse("Empty msgstr should not produce fuzzy", msg.isFuzzy());
 	}
 
+	@Test
 	public void testIsFuzzyWhenMarkedAsFuzzy(){
 		Message msg = new Message();
 		msg.setMsgid("hello world!");
