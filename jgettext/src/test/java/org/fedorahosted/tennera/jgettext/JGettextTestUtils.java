@@ -1,6 +1,7 @@
 package org.fedorahosted.tennera.jgettext;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,8 +18,9 @@ public class JGettextTestUtils {
 
 	public static void testRoundTrip(String message, File f) throws FileNotFoundException, ParseException, IOException{
 		String output = roundtrip(f);
+		String msgCatOutput = readToStringFromMsgcat(output);
 		String originalString = readToStringFromMsgcat(f); 
-		assertEquals(message, originalString, output);
+		assertEquals(message, originalString, msgCatOutput);
 	}
 
 	public static void testRoundTrip(File f) throws FileNotFoundException, ParseException, IOException{
@@ -48,6 +50,48 @@ public class JGettextTestUtils {
             while ((line = reader.readLine()) != null) {
                 sb.append(line + "\n");
             }
+		} catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+            	reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return sb.toString();
+	}
+	
+	public static String readToStringFromMsgcat(String input) {
+		BufferedReader reader = null;
+		StringBuilder sb = new StringBuilder();
+    	String[] cmd_elements = {"/usr/bin/msgcat", "-"};
+		try {
+			Process prcess = Runtime.getRuntime().exec(cmd_elements);
+			prcess.getOutputStream().write(input.getBytes());
+			prcess.getOutputStream().close();
+			
+			InputStream cmd_output = prcess.getInputStream();
+			reader = new BufferedReader( new InputStreamReader(cmd_output)) ;
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+            
+            BufferedReader errorReader = new BufferedReader(new InputStreamReader(prcess.getErrorStream()));
+            StringBuilder errorStr = new StringBuilder();
+            line = null;
+            while((line = errorReader.readLine()) != null) {
+            	errorStr.append(line);
+            	errorStr.append("\n");
+            }
+            if(!errorStr.toString().isEmpty()){
+            	fail(errorStr.toString());
+            }
+            
+            
+            
 		} catch (IOException e) {
             e.printStackTrace();
         } finally {
