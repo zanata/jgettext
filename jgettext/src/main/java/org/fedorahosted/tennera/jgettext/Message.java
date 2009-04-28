@@ -124,10 +124,12 @@ public class Message {
 	}
 
 	public boolean isFuzzy() {
-		if(this.getMsgstr().isEmpty())
-			return false;
-		else
-			return fuzzy;
+		if(this.getMsgstr()!=null) {
+			if(this.getMsgstr().isEmpty())
+				return false;
+		}
+		
+		return fuzzy;
 	}
 
 	public void setFuzzy(boolean fuzzy) {
