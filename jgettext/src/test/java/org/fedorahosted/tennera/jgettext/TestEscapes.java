@@ -41,7 +41,7 @@ public class TestEscapes {
 	
 	private void testEscapes(String message, File f) throws Throwable{
 		String output = escapesProcess(f);
-		String originalString = JGettextTestUtils.readToStringFromMsgcat(f); 
+		String originalString = JGettextTestUtils.readToStringFromMsgcat(f, true); 
 		assertEquals(message, originalString, output);
 	}
 	

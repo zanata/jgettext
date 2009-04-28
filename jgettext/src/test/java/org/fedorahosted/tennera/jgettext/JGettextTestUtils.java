@@ -18,8 +18,8 @@ public class JGettextTestUtils {
 
 	public static void testRoundTrip(String message, File f) throws FileNotFoundException, ParseException, IOException{
 		String output = roundtrip(f);
-		String msgCatOutput = readToStringFromMsgcat(output);
-		String originalString = readToStringFromMsgcat(f); 
+		String msgCatOutput = readToStringFromMsgcat(output, false);
+		String originalString = readToStringFromMsgcat(f, false); 
 		assertEquals(message, originalString, msgCatOutput);
 	}
 
@@ -38,7 +38,7 @@ public class JGettextTestUtils {
 		return outputWriter.toString();
 	}
 	
-	public static String readToStringFromMsgcat(File file) {
+	public static String readToStringFromMsgcat(File file, boolean ignoreErrors) {
 		BufferedReader reader = null;
 		StringBuilder sb = new StringBuilder();
     	String[] cmd_elements = {"/usr/bin/msgcat", file.getAbsolutePath()};
@@ -50,14 +50,16 @@ public class JGettextTestUtils {
             while ((line = reader.readLine()) != null) {
                 sb.append(line + "\n");
             }
-            BufferedReader errorReader = new BufferedReader(new InputStreamReader(prcess.getErrorStream()));
-            StringBuilder errorStr = new StringBuilder();
-            line = null;
-            while((line = errorReader.readLine()) != null) {
-            	errorStr.append(line);
-            	errorStr.append("\n");
+            if(!ignoreErrors) {
+                BufferedReader errorReader = new BufferedReader(new InputStreamReader(prcess.getErrorStream()));
+                StringBuilder errorStr = new StringBuilder();
+                line = null;
+                while((line = errorReader.readLine()) != null) {
+                	errorStr.append(line);
+                	errorStr.append("\n");
+                }
+            	assertTrue("Error parsing input file:\n"+errorStr.toString(), errorStr.toString().isEmpty());
             }
-        	assertTrue("Error parsing input file:\n"+errorStr.toString(), errorStr.toString().isEmpty());
 		} catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -71,7 +73,7 @@ public class JGettextTestUtils {
         return sb.toString();
 	}
 	
-	public static String readToStringFromMsgcat(String input) {
+	public static String readToStringFromMsgcat(String input, boolean ignoreErrors) {
 		BufferedReader reader = null;
 		StringBuilder sb = new StringBuilder();
     	String[] cmd_elements = {"/usr/bin/msgcat", "-"};
@@ -86,15 +88,17 @@ public class JGettextTestUtils {
             while ((line = reader.readLine()) != null) {
                 sb.append(line + "\n");
             }
-            
-            BufferedReader errorReader = new BufferedReader(new InputStreamReader(prcess.getErrorStream()));
-            StringBuilder errorStr = new StringBuilder();
-            line = null;
-            while((line = errorReader.readLine()) != null) {
-            	errorStr.append(line);
-            	errorStr.append("\n");
+
+            if( !ignoreErrors ) {
+	            BufferedReader errorReader = new BufferedReader(new InputStreamReader(prcess.getErrorStream()));
+	            StringBuilder errorStr = new StringBuilder();
+	            line = null;
+	            while((line = errorReader.readLine()) != null) {
+	            	errorStr.append(line);
+	            	errorStr.append("\n");
+	            }
+	        	assertTrue("Error parsing output file:\n"+errorStr.toString(), errorStr.toString().isEmpty());
             }
-        	assertTrue("Error parsing output file:\n"+errorStr.toString(), errorStr.toString().isEmpty());
             
             
             
