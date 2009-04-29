@@ -168,7 +168,7 @@ public class PoWriter {
 	}
 
 	/**
-	 * 
+	 * @param prefix for obsolete entry
 	 * @param s not null string to output
 	 * @param writer
 	 * @param firstLineContextWidth number of characters 'context' (e.g. 'msgid ' or 'msgstr ')
@@ -177,16 +177,22 @@ public class PoWriter {
 	 * @throws IOException
 	 */
 	
-	protected void writeString(String s, Writer writer, int firstLineContextWidth, int colWidth, int indent) throws IOException {
+	protected void writeString(String prefix, String s, Writer writer, int firstLineContextWidth, int colWidth, int indent) throws IOException {
+		//If the first line is empty. This is for obsolete entry processing. When the first line
+		//is not empty, it doesn't need to output "#~".
+		boolean emptyfirst = false;
+		
 		writer.write('\"');
 		
 		// check if we should output a empty first line
 		int firstLineEnd = s.indexOf('\n'); 
 		if(wrap && 
 				((firstLineEnd != -1 && firstLineEnd > (colWidth - firstLineContextWidth-4) ) || s.length()> (colWidth - firstLineContextWidth-4) )){ 
+			emptyfirst=true;
 			writer.write('\"');
 			writer.write('\n');
-			writer.write('\"');
+			if(prefix.isEmpty())
+				writer.write('\"');
 		}
 		
 		StringBuilder currentLine = new StringBuilder(100);
@@ -201,10 +207,20 @@ public class PoWriter {
 				currentLine.append('\\');
 				currentLine.append('n');
 				if(wrap && i != s.length()-1){
-					writer.write(currentLine.toString());
-					writer.write('\"');
-					writer.write('\n');
-					writer.write('\"');
+					if(!prefix.isEmpty() && emptyfirst) {
+						writer.write(prefix);
+						writer.write('\"');
+						writer.write(currentLine.toString());
+						writer.write('\"');
+						writer.write('\n');
+					}
+					else {
+						writer.write(currentLine.toString());
+						writer.write('\"');
+						writer.write('\n');
+						writer.write('\"');
+					}
+					
 					lastSpacePos = 0;
 					currentLine.delete(0, currentLine.length());
 				}
@@ -232,15 +248,28 @@ public class PoWriter {
 			default:
 				currentLine.append(currentChar);
 			}
-
+						
 			if(wrap && currentLine.length() > colWidth-4 && lastSpacePos != 0){
-				writer.write(currentLine.substring(0, lastSpacePos+1));
-				writer.write('\"');
-				writer.write('\n');
-				writer.write('\"');
+				if(!prefix.isEmpty() && emptyfirst) {
+					writer.write(prefix);
+					writer.write('\"');
+					writer.write(currentLine.substring(0, lastSpacePos+1));
+					writer.write('\"');
+					writer.write('\n');
+				}
+				else {
+					writer.write(currentLine.substring(0, lastSpacePos+1));
+					writer.write('\"');
+					writer.write('\n');
+					writer.write('\"');
+				}
 				currentLine.delete(0, lastSpacePos+1);
 				lastSpacePos = 0;
 			}
+		}
+		if(!prefix.isEmpty() && emptyfirst) {
+			writer.write(prefix);
+		    writer.write('\"');
 		}
 		writer.write(currentLine.toString());
 
@@ -248,23 +277,23 @@ public class PoWriter {
 		writer.write('\n');
 	}
 	
-	protected void writeString(String s, Writer writer, int firstLineContextWidth) throws IOException {
-		writeString(s, writer, firstLineContextWidth, 80, 0);
+	protected void writeString(String prefix, String s, Writer writer, int firstLineContextWidth) throws IOException {
+		writeString(prefix, s, writer, firstLineContextWidth, 80, 0);
 	}
 
 	protected void writeMsgctxt(String prefix, String ctxt, Writer writer) throws IOException {
 		writer.write( prefix + "msgctxt ");
-		writeString(ctxt, writer, 8);
+		writeString( prefix, ctxt, writer, 8);
 	}
 
 	protected void writeMsgid(String prefix, String msgid, Writer writer) throws IOException {
 		writer.write( prefix + "msgid ");
-		writeString(msgid, writer, 6);
+		writeString( prefix, msgid, writer, 6);
 	}
 
 	protected void writeMsgidPlural(String prefix, String msgidPlural, Writer writer) throws IOException {
 		writer.write( prefix + "msgid_plural ");
-		writeString(msgidPlural, writer, 13);
+		writeString(prefix, msgidPlural, writer, 13);
 	}
 
 	protected void writeMsgstr(String prefix, String msgstr, Writer writer) throws IOException {
@@ -272,14 +301,14 @@ public class PoWriter {
 			msgstr = "";
 		}
 		writer.write( prefix + "msgstr ");
-		writeString(msgstr, writer, 7);
+		writeString(prefix, msgstr, writer, 7);
 	}
 
 	protected void writeMsgstrPlurals(String prefix, List<String> msgstrPlurals, Writer writer) throws IOException {
 		int i = 0;
 		for ( String msgstr : msgstrPlurals ) {
 			writer.write( prefix + "msgstr[" + i + "] ");
-			writeString(msgstr, writer, 9 + 1); // TODO will fail when i>9
+			writeString(prefix, msgstr, writer, 9 + 1); // TODO will fail when i>9
 			i++;
 		}
 	}
