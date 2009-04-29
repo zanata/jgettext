@@ -36,6 +36,10 @@ public class PoWriter {
 	private boolean updatePORevisionData = false;
 	private boolean wrap = true;
 	
+	public void setGenerateHeader(boolean generateHeader) {
+		this.generateHeader = generateHeader;
+	}
+	
 	public void write(Catalog catalog, File file) throws IOException{
 		Writer writer = new BufferedWriter(new FileWriter(file));
 		write(catalog, writer);

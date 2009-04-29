@@ -8,12 +8,15 @@ import java.util.List;
 
 public class HeaderUtil {
 	
-	
 	public static Message generateDefaultHeader() {
+		return generateDefaultHeader(new Date());
+	}
+	
+	public static Message generateDefaultHeader(Date potCreationDate) {
 		HeaderValues param = new HeaderValues();
 		param.projectIdVersion = "PACKAGE VERSION";
 		param.reportMsgidBugsTo = "";
-		param.potCreationDate = new Date();
+		param.potCreationDate = potCreationDate;
 		param.poRevisionDate = "YEAR-MO-DA HO:MI+ZONE";
 		param.lastTranslator = "FULL NAME <EMAIL@ADDRESS>";
 		param.languageTeam = "LANGUAGE <LL@li.org>";

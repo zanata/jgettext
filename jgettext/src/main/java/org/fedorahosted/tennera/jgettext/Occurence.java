@@ -16,8 +16,9 @@
 package org.fedorahosted.tennera.jgettext;
 
 /**
- * Occurence implementation
- *
+ * The gettext manual calls this "location" in the command-line tools 
+ * reference, but "reference", "source reference" or "file reference" in 
+ * most other places.
  * @author Steve Ebersole
  */
 public class Occurence {
