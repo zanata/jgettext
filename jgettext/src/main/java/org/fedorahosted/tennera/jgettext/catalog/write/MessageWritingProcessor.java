@@ -28,6 +28,7 @@ import org.fedorahosted.tennera.jgettext.PoWriter;
  *
  * @author Steve Ebersole
  */
+@Deprecated
 public class MessageWritingProcessor implements MessageProcessor {
 	protected final Writer writer;
 	protected final Message header; // header handled specially...

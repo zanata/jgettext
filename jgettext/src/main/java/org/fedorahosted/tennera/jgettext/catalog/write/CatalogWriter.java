@@ -31,6 +31,7 @@ import org.fedorahosted.tennera.jgettext.Message;
  *
  * @author Steve Ebersole
  */
+@Deprecated
 public class CatalogWriter {
 	protected final Catalog catalog;
 
