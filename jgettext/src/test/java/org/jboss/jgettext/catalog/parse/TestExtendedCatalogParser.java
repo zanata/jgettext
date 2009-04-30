@@ -14,18 +14,16 @@
  */
 package org.jboss.jgettext.catalog.parse;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.fedorahosted.tennera.jgettext.Catalog;
 import org.fedorahosted.tennera.jgettext.Message;
 import org.fedorahosted.tennera.jgettext.catalog.parse.ExtendedCatalogParser;
 import org.fedorahosted.tennera.jgettext.catalog.parse.ParseException;
-import org.fedorahosted.tennera.jgettext.catalog.write.MessageWritingProcessor;
-import org.fedorahosted.tennera.jgettext.util.NoOpWriter;
-
 import org.junit.Test;
 
 /**

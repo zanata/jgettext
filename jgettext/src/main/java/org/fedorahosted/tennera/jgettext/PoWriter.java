@@ -25,15 +25,11 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class PoWriter {
 
 	private boolean generateHeader = false;
-	private boolean updatePOTCreationDate = false;
-	private boolean updatePORevisionData = false;
 	private boolean wrap = true;
 	
 	public void setGenerateHeader(boolean generateHeader) {
@@ -286,33 +282,38 @@ public class PoWriter {
 	}
 
 	protected void writeMsgctxt(String prefix, String ctxt, Writer writer) throws IOException {
-		writer.write( prefix + "msgctxt ");
-		writeString( prefix, ctxt, writer, 8);
+		String msgSpace = "msgctxt ";
+		writer.write( prefix + msgSpace);
+		writeString( prefix, ctxt, writer, msgSpace.length());
 	}
 
 	protected void writeMsgid(String prefix, String msgid, Writer writer) throws IOException {
-		writer.write( prefix + "msgid ");
-		writeString( prefix, msgid, writer, 6);
+		String msgSpace = "msgid ";
+		writer.write( prefix + msgSpace);
+		writeString( prefix, msgid, writer, msgSpace.length());
 	}
 
 	protected void writeMsgidPlural(String prefix, String msgidPlural, Writer writer) throws IOException {
-		writer.write( prefix + "msgid_plural ");
-		writeString(prefix, msgidPlural, writer, 13);
+		String msgSpace = "msgid_plural ";
+		writer.write( prefix + msgSpace);
+		writeString(prefix, msgidPlural, writer, msgSpace.length());
 	}
 
 	protected void writeMsgstr(String prefix, String msgstr, Writer writer) throws IOException {
 		if ( msgstr == null ) {
 			msgstr = "";
 		}
-		writer.write( prefix + "msgstr ");
-		writeString(prefix, msgstr, writer, 7);
+		String msgSpace = "msgstr ";
+		writer.write( prefix + msgSpace);
+		writeString(prefix, msgstr, writer, msgSpace.length());
 	}
 
 	protected void writeMsgstrPlurals(String prefix, List<String> msgstrPlurals, Writer writer) throws IOException {
 		int i = 0;
 		for ( String msgstr : msgstrPlurals ) {
-			writer.write( prefix + "msgstr[" + i + "] ");
-			writeString(prefix, msgstr, writer, 9 + 1); // TODO will fail when i>9
+			String msgSpace = "msgstr[" + i + "] ";
+			writer.write( prefix + msgSpace);
+			writeString(prefix, msgstr, writer, msgSpace.length());
 			i++;
 		}
 	}
