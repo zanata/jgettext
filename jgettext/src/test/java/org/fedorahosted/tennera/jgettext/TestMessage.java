@@ -1,6 +1,8 @@
 package org.fedorahosted.tennera.jgettext;
 
 import java.io.File;
+import java.io.StringReader;
+import java.io.StringWriter;
 
 import org.fedorahosted.tennera.jgettext.catalog.parse.MessageStreamParser;
 import org.junit.Test;
@@ -35,10 +37,25 @@ public class TestMessage {
 	@Test
 	public void testFlagsAreWorkingAsExpected() throws Throwable{
 		File poFile = getResource("/flags.po");
-		PoParser parser = new PoParser();
-		Message msg = parser.parseMessage(poFile);
+		
+		MessageStreamParser parser = new MessageStreamParser(poFile);
+
+		Message msg = parser.next();
 		assertTrue(msg.isFuzzy());
 		assertTrue(msg.getFormats().contains("no-c-format"));
+
+		msg = parser.next();
+		assertTrue(msg.isFuzzy());
+		assertTrue(msg.getFormats().contains("no-c-format"));
+		
+		msg = parser.next();
+		assertTrue(msg.isFuzzy());
+		assertTrue(msg.getFormats().contains("no-c-format"));
+		
+		msg = parser.next();
+		assertTrue(msg.isFuzzy());
+		assertTrue(msg.getFormats().contains("no-c-format"));
+		
 	}
 	
 	private File getResource(String file){
