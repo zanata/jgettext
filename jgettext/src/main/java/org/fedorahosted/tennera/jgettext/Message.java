@@ -108,10 +108,21 @@ public class Message {
 	}
 
 	public void setMsgstr(String msgstr) {
+		if(msgstr == null)
+			throw new NullPointerException("msgstr cannot be null");
 		this.msgstr = msgstr;
+		clearPlurals();
 	}
 
+	private void clearPlurals() {
+		if(this.msgstrPlural == null)
+			return;
+		this.msgstrPlural.clear();
+		
+	}
 	public void addMsgstrPlural(String msgstr, int position) {
+		if(msgstr == null)
+			throw new NullPointerException("msgstr cannot be null");
 		if ( msgstrPlural == null ) {
 			msgstrPlural = new ArrayList<String>();
 		}
@@ -190,7 +201,14 @@ public class Message {
 	}
 
 	public List<String> getMsgstrPlural() {
+		if(msgstrPlural == null){
+			msgstrPlural = new ArrayList<String>();
+		}
 		return msgstrPlural;
+	}
+	
+	public boolean isPlural(){
+		return msgidPlural != null;
 	}
 
 	public List<String> getSourceReferences() {

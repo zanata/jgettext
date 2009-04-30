@@ -138,15 +138,16 @@ public class PoWriter {
     		writeMsgctxt( prefix, message.getMsgctxt(), writer );
     	}
 
-    	writeMsgid( prefix, message.getMsgid(), writer );
 
-    	if ( message.getMsgidPlural() != null ) {
+    	if ( message.isPlural()) {
+        	writeMsgid( prefix, message.getMsgid(), writer );
     		writeMsgidPlural( prefix, message.getMsgidPlural(), writer );
+    		writeMsgstrPlurals( prefix, message.getMsgstrPlural(), writer );
     	}
-
-    	writeMsgstr( prefix, message.getMsgstr(), writer );
-
-    	writeMsgstrPlurals( prefix, message.getMsgstrPlural(), writer );
+    	else {
+        	writeMsgid( prefix, message.getMsgid(), writer );
+    		writeMsgstr( prefix, message.getMsgstr(), writer );
+    	}
 
     	writer.flush();
 	}
