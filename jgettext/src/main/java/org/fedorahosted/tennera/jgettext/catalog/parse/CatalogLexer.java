@@ -32,6 +32,7 @@ import java.util.Queue;
 
 import org.fedorahosted.tennera.jgettext.catalog.util.StringUtil;
 
+import antlr.StringUtils;
 import antlr.TokenStream;
 
 /**
@@ -213,7 +214,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 		}
 
 		private void processLine(String line) {
-			line = line.trim();
+			line = StringUtils.stripFront(line, ' ');
 
 			if ( line.length() == 0 ) {
 				return;
@@ -257,7 +258,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 					processObsolete( line.substring( 2 ).trim() );
 					break;
 				default:
-					processCatalogComment( line.substring( 1 ) .trim());
+					processCatalogComment( StringUtils.stripFront(line.substring( 1 ), ' ') );
 			}
 		}
 
