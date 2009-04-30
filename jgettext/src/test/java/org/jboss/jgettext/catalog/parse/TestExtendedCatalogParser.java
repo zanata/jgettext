@@ -41,12 +41,16 @@ public class TestExtendedCatalogParser{
 		ExtendedCatalogParser parser = new ExtendedCatalogParser( poFile );
 		parser.catalog();
 		Catalog catalog = parser.getCatalog();
-		LocalProcessor processor = new LocalProcessor();
-		catalog.processMessages( processor );
-
+		
+		int entryCount = 0;
+		int obsoleteCount = 0;
+		for(Message m : catalog){
+			entryCount++;
+			if(m.isObsolete()) obsoleteCount++;
+		}
 		assertNotNull( catalog.locateHeader() );
-		assertEquals( 7, processor.entryCount );
-		assertEquals( 3, processor.obsoleteCount );
+		assertEquals( 7, entryCount );
+		assertEquals( 3, obsoleteCount );
 	}
 
 	@Test
@@ -55,12 +59,17 @@ public class TestExtendedCatalogParser{
 		ExtendedCatalogParser parser = new ExtendedCatalogParser( poFile );
 		parser.catalog();
 		Catalog catalog = parser.getCatalog();
-		LocalProcessor processor = new LocalProcessor();
-		catalog.processMessages( processor );
+
+		int entryCount = 0;
+		int obsoleteCount = 0;
+		for(Message m : catalog){
+			entryCount++;
+			if(m.isObsolete()) obsoleteCount++;
+		}
 
 		assertNotNull( catalog.locateHeader() );
-		assertEquals( 5, processor.entryCount );
-		assertEquals( 4, processor.obsoleteCount ); // - header...
+		assertEquals( 5, entryCount );
+		assertEquals( 4, obsoleteCount ); // - header...
 	}
 
 	@Test
@@ -72,27 +81,6 @@ public class TestExtendedCatalogParser{
 			fail( "was expecting exception" );
 		}
 		catch ( ParseException expected ) {
-		}
-	}
-
-	public static class LocalProcessor extends MessageWritingProcessor {
-		private int entryCount;
-		private int obsoleteCount;
-
-		public LocalProcessor() {
-			super( new NoOpWriter() );
-		}
-
-		protected void messageStart(Message message) throws IOException {
-			entryCount++;
-			if ( message.isObsolete() ) {
-				obsoleteCount++;
-			}
-			writer.write( "-----------------------------------------------------------------------------------\n" );
-		}
-
-		protected void messageEnd(Message message) throws IOException {
-			writer.write( "-----------------------------------------------------------------------------------\n" );
 		}
 	}
 }
