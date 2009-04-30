@@ -1,4 +1,5 @@
-<?xml version="1.0"?><project>
+<?xml version="1.0"?>
+<project>
   <parent>
     <artifactId>tennera</artifactId>
     <groupId>org.fedorahosted.tennera</groupId>
@@ -21,6 +22,22 @@
           <jbossHome>${jboss.home}</jbossHome>
         </configuration>
       </plugin>
+<!--
+      <plugin>
+        <groupId>org.codehaus.cargo</groupId>
+        <artifactId>cargo-maven2-plugin</artifactId>
+        <configuration>
+          <container>
+            <containerId>jboss42x</containerId>
+            <home>${jboss42x.home}</home>
+          </container>
+          <container>
+            <containerId>tomcat6x</containerId>
+            <home>${tomcat6x.home}</home>
+          </container>
+        </configuration>
+      </plugin>
+-->
     </plugins>
   </build>
   <dependencies>
@@ -38,31 +55,3 @@
     </dependency>
   </dependencies>
 </project>
-
-
-
-<!--
-  <build>
-    <finalName>webgettext-example</finalName>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.cargo</groupId>
-        <artifactId>cargo-maven2-plugin</artifactId>
-		<configuration>
-		  < !- - Container configuration - - >
-		  <container>
-		    <containerId>jboss42x</containerId>
-            <home>/home/sflaniga/apps/jboss-4.2.2.GA</home>
-		  </container>
-< !- -
-		  <container>
-		    <containerId>tomcat6x</containerId>
-            <home>/NotBackedUp/sflaniga/apps/apache-tomcat-6.0.16</home>
-		  </container>
-- - >
-		</configuration>
-      </plugin>
-    </plugins>
-  </build>
-
--->
