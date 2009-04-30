@@ -76,12 +76,6 @@ public class TestRoundTrips {
 		JGettextTestUtils.testRoundTrip(original);
 	}
 	
-	@Test
-	public void testFlagsArePreserved() throws Throwable{
-		File original = getResource("/flags.po");
-		JGettextTestUtils.testRoundTrip(original);
-	}
-	
 	private File getResource(String file){
 		return new File( getClass().getResource(file).getFile() );
 	}
