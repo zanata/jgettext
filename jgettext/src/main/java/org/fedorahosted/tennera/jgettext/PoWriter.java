@@ -239,10 +239,15 @@ public class PoWriter {
 				break;
 			case '\\':
 				currentLine.append(currentChar);
+				currentLine.append(currentChar);
 				break;
 			case '\r':
 				currentLine.append('\\');
 				currentLine.append('r');
+				break;
+			case '\t':
+				currentLine.append('\\');
+				currentLine.append('t');
 				break;
 			case '"':
 				currentLine.append('\\');

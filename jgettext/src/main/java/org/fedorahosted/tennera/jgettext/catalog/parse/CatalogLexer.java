@@ -235,6 +235,12 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 			}
 		}
 
+		private String stripFirstSpace(String str){
+			if(str.length() == 0) return str;
+			if(str.charAt(0) == ' ') return str.substring(1);
+			return str;
+		}
+		
 		private void processComment(String line) {
 			if ( line.length() == 1 ) {
 				processCatalogComment( "" );
@@ -243,22 +249,23 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 
 			switch ( line.charAt( 1 ) ) {
 				case ',' :
-					processFlag( line.substring( 2 ).trim() );
+					processFlag( line.substring(2) );
 					break;
 				case ':' :
 					processReference( line.substring( 2 ).trim() );
 					break;
 				case '.' :
-					processExtractedComment( line.substring( 2 ).trim() );
+					processExtractedComment( stripFirstSpace( line.substring(2) ) );
 					break;
 				case '|' :
-					processPreviousEntry( line.substring( 2 ).trim() );
+					processPreviousEntry( stripFirstSpace( line.substring(2) ) );
 					break;
 				case '~' :
-					processObsolete( line.substring( 2 ).trim() );
+					processObsolete( stripFirstSpace( line.substring(2) ) );
 					break;
 				default:
-					processCatalogComment( StringUtils.stripFront(line.substring( 1 ), ' ') );
+					processCatalogComment( stripFirstSpace( line.substring(1) ) );
+				
 			}
 		}
 
@@ -374,7 +381,6 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 		}
 
 		private String interpretString(String quotedString) {
-		    	quotedString = StringUtil.removeEscapes(quotedString);
 			quotedString = quotedString.trim();
 
 			if(quotedString.charAt(0) != '"'){
@@ -384,8 +390,14 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 				throw new UnexpectedTokenException("missing end-quote", lineNumber());
 			}
 
-			// remove quotes
-			return quotedString.substring( 1, quotedString.length() - 1 );
+			quotedString = quotedString.substring( 1, quotedString.length() - 1 );
+
+			try{
+				return StringUtil.removeEscapes(quotedString);
+			}
+			catch(UnexpectedTokenException e){
+				throw new UnexpectedTokenException(e.getMessage(), lineNumber());
+			}
 		}
 
 		private class MsgctxtCollector extends EntryCollector {
