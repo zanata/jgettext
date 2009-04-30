@@ -104,8 +104,8 @@ public class PoWriter {
     	    writeComment("#. ", comment, writer);
     	}
 
-    	for ( Occurence occurence : message.getOccurences() ) {
-    	    writeComment("#: ", occurence.toString(), writer);
+    	for ( String sourceRef : message.getSourceReferences() ) {
+    	    writeComment("#: ", sourceRef, writer);
     	}
 
     	if ( message.isFuzzy() ) {

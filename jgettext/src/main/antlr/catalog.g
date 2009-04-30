@@ -35,7 +35,7 @@ options {
 tokens {
 	COMMENT;
 	EXTRACTION;
-	OCCURENCE;
+	REFERENCE;
 	FLAG;
 
 	DOMAIN;
@@ -96,7 +96,7 @@ tokens {
     protected void handleExtractedComment(AST comment) {
     }
 
-    protected void handleOccurence(AST occurence) {
+    protected void handleReference(AST sourceRef) {
     }
 
     protected void handleFlag(AST flag) {
@@ -147,7 +147,7 @@ messageBlocks:
  * A message block defines all the lines related to a single translatable message entry.
  */
 messageBlock:
-    ( catalogComment | extractedComment | occurence | flag )*
+    ( catalogComment | extractedComment | reference | flag )*
     ( previousMsgctxt )?
     ( previousMsgid )?
     ( previousMsgidPlural )?
@@ -184,8 +184,8 @@ extractedComment: c:EXTRACTION {
     }
     ;
 
-occurence: o:OCCURENCE {
-        handleOccurence( #o );
+reference: r:REFERENCE {
+        handleReference( #r );
     }
     ;
 

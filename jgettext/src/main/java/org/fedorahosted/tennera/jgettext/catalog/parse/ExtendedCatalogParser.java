@@ -24,7 +24,6 @@ import java.nio.charset.Charset;
 
 import org.fedorahosted.tennera.jgettext.Catalog;
 import org.fedorahosted.tennera.jgettext.Message;
-import org.fedorahosted.tennera.jgettext.Occurence;
 
 import antlr.RecognitionException;
 import antlr.collections.AST;
@@ -66,41 +65,50 @@ public class ExtendedCatalogParser extends CatalogParser {
 		return catalog;
 	}
 
+	@Override
 	public void reportError(RecognitionException e) {
 		UnexpectedTokenException utEx = new UnexpectedTokenException( e.getMessage(), e.getLine() );
 		utEx.initCause(e);
 		throw utEx;
 	}
 
+	@Override
 	public void reportError(String s) {
 		throw new ParseException( "error parsing catalog : " + s, -1 );
 	}
 
+	@Override
 	public void reportWarning(String s) {
 	}
 
+	@Override
 	protected void handleMessageBlock(AST messageBlock) {
 		catalog.addMessage( currentMessage );
 		currentMessage = new Message();
 	}
 
+	@Override
 	protected void handleObsoleteMessageBlock(AST messageBlock) {
 		currentMessage.markObsolete();
 		handleMessageBlock( messageBlock );
 	}
 
+	@Override
 	protected void handleCatalogComment(AST comment) {
 		currentMessage.addComment( extractText( comment ) );
 	}
 
+	@Override
 	protected void handleExtractedComment(AST comment) {
 		currentMessage.addExtractedComment( extractText( comment ) );
 	}
 
-	protected void handleOccurence(AST occurence) {
-		currentMessage.addOccurence( parseOccurence( occurence ) );
+	@Override
+	protected void handleReference(AST sourceRef) {
+		currentMessage.addSourceReference( parseSourceReference( sourceRef ) );
 	}
 
+	@Override
 	protected void handleFlag(AST flag) {
 		if ( "fuzzy".equals( flag.getText() ) ) {
 			currentMessage.markFuzzy();
@@ -110,38 +118,47 @@ public class ExtendedCatalogParser extends CatalogParser {
 		}
 	}
 
+	@Override
 	protected void handlePreviousMsgctxt(AST previousMsgctxt) {
 		currentMessage.setPrevMsgctx( extractText( previousMsgctxt ) );
 	}
 
+	@Override
 	protected void handlePreviousMsgid(AST previousMsgid) {
 		currentMessage.setPrevMsgid( extractText( previousMsgid ) );
 	}
 
+	@Override
 	protected void handlePreviousMsgidPlural(AST previousMsgidPlural) {
 		currentMessage.setPrevMsgidPlural( extractText( previousMsgidPlural ) );
 	}
 
+	@Override
 	protected void handleDomain(AST domain) {
 		currentMessage.setDomain( extractText( domain ) );
 	}
 
+	@Override
 	protected void handleMsgctxt(AST msgctxt) {
 		currentMessage.setMsgctxt( extractText( msgctxt ) );
 	}
 
+	@Override
 	protected void handleMsgid(AST msgid) {
 		currentMessage.setMsgid( extractText( msgid ) );
 	}
 
+	@Override
 	protected void handleMsgidPlural(AST msgidPlural) {
 		currentMessage.setMsgidPlural( extractText( msgidPlural ) );
 	}
 
+	@Override
 	protected void handleMsgstr(AST msgstr) {
 		currentMessage.setMsgstr( extractText( msgstr ) );
 	}
 
+	@Override
 	protected void handleMsgstrPlural(AST msgstr, AST plurality) {
 		currentMessage.addMsgstrPlural( extractText( msgstr ), Integer.parseInt( plurality.getText() ) );
 	}
@@ -150,8 +167,7 @@ public class ExtendedCatalogParser extends CatalogParser {
 		return ast == null ? "" : ast.getText();
 	}
 
-	private Occurence parseOccurence(AST ast) {
-		String text = ast.getText();
-		return new Occurence(text);
+	private String parseSourceReference(AST ast) {
+		return ast.getText();
 	}
 }

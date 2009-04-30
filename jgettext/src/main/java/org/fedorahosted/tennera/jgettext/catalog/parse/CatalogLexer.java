@@ -30,11 +30,8 @@ import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 
-import javax.naming.LimitExceededException;
-
 import org.fedorahosted.tennera.jgettext.catalog.util.StringUtil;
 
-import antlr.RecognitionException;
 import antlr.TokenStream;
 
 /**
@@ -70,6 +67,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 	 *
 	 * @return The next token.
 	 */
+	@Override
 	public antlr.Token nextToken() {
 		if ( !tokenizer.hasNext() ) {
 			return new antlr.CommonToken( EOF, "<eof>" );
@@ -135,6 +133,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 			this(new LineNumberReader(new BufferedReader(new InputStreamReader(inputStream, charset))));
 		}
 		
+		@Override
 		public boolean hasNext() {
 			if ( !eof && tokenQueue.isEmpty() ) {
 				readToken();
@@ -177,6 +176,8 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 				entryCollector = null;
 			}			
 		}
+		
+		@Override
 		public antlr.Token next() {
 			if ( hasNext() )
 				return tokenQueue.remove();
@@ -184,6 +185,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 				throw new NoSuchElementException();
 		}
 
+		@Override
 		public void remove() {
 			throw new UnsupportedOperationException();
 		}
@@ -243,7 +245,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 					processFlag( line.substring( 2 ).trim() );
 					break;
 				case ':' :
-					processOccurence( line.substring( 2 ).trim() );
+					processReference( line.substring( 2 ).trim() );
 					break;
 				case '.' :
 					processExtractedComment( line.substring( 2 ).trim() );
@@ -264,9 +266,9 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 			addToken( new Token( FLAG, flag ) );
 		}
 
-		private void processOccurence(String occurence) {
+		private void processReference(String sourceRef) {
 			wrapUpandResetEntryCollector();
-			addToken( new Token( OCCURENCE, occurence ) );
+			addToken( new Token( REFERENCE, sourceRef ) );
 		}
 
 		private void processPreviousEntry(String entry) {
@@ -407,6 +409,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 				collect( initial );
 			}
 
+			@Override
 			protected void wrapUp(String entry, boolean isPrevious) {
 				if ( isPrevious ) {
 					addToken( new Token( PREV_MSGID, entry ) );
@@ -423,6 +426,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 				collect( initial );
 			}
 
+			@Override
 			protected void wrapUp(String entry, boolean isPrevious) {
 				if ( isPrevious ) {
 					addToken( new Token( PREV_MSGID_PLURAL, entry ) );
@@ -439,6 +443,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 				collect( initial );
 			}
 
+			@Override
 			protected void wrapUp(String entry, boolean isPrevious) {
 				if ( isPrevious ) {
 					throw new ParseException( "translation does not allow previous entry according to PO schematic", lineNumber() );
@@ -458,6 +463,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 				collect( initial );
 			}
 
+			@Override
 			protected void wrapUp(String entry, boolean isPrevious) {
 				if ( isPrevious ) {
 					throw new ParseException( "translation does not allow previous entry according to PO schematic", lineNumber() );

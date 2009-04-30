@@ -8,7 +8,6 @@ import java.io.Reader;
 import java.nio.charset.Charset;
 
 import org.fedorahosted.tennera.jgettext.Message;
-import org.fedorahosted.tennera.jgettext.Occurence;
 
 import antlr.ASTPair;
 import antlr.RecognitionException;
@@ -116,8 +115,8 @@ public class MessageStreamParser{
 			currentMessage.addExtractedComment( extractText( comment ) );
 		}
 
-		protected void handleOccurence(AST occurence) {
-			currentMessage.addOccurence( parseOccurence( occurence ) );
+		protected void handleSourceReference(AST sourceRef) {
+			currentMessage.addSourceReference( parseSourceReference( sourceRef ) );
 		}
 
 		protected void handleFlag(AST flag) {
@@ -169,9 +168,8 @@ public class MessageStreamParser{
 			return ast == null ? "" : ast.getText();
 		}
 
-		private Occurence parseOccurence(AST ast) {
-			String text = ast.getText();
-			return new Occurence(text);
+		private String parseSourceReference(AST ast) {
+			return ast.getText();
 		}
 
 		public boolean hasNext() {

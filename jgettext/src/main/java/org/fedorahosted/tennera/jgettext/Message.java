@@ -40,7 +40,7 @@ public class Message {
 
 	private Collection<String> comments = new ArrayList<String>();
 	private Collection<String> extractedComments = new ArrayList<String>();
-	private List<Occurence> occurences = new ArrayList<Occurence>();
+	private List<String> sourceRefs = new ArrayList<String>();
 	private Collection<String> formats = new ArrayList<String>();
 
 	private boolean fuzzy;
@@ -163,15 +163,13 @@ public class Message {
 	public void addExtractedComment(String comment) {
 		extractedComments.add( comment );
 	}
-
-	public Occurence addOccurence(String file, int line) {
-		Occurence o = new Occurence( file+':'+line );
-		addOccurence( o );
-		return o;
+	
+	public void addSourceReference(String ref) {
+		sourceRefs.add(ref);
 	}
 
-	public void addOccurence(Occurence occurence) {
-		occurences.add( occurence );
+	public void addSourceReference(String file, int line) {
+		addSourceReference(file+':'+line);
 	}
 
 	public void addFormat(String format) {
@@ -186,8 +184,8 @@ public class Message {
 		return msgstrPlural;
 	}
 
-	public List<Occurence> getOccurences() {
-		return occurences;
+	public List<String> getSourceReferences() {
+		return sourceRefs;
 	}
 
 	public Collection<String> getComments() {
@@ -219,8 +217,8 @@ public class Message {
 	    	sb.append("\", extComments \"").append(getExtractedComments());
 	    if(!getFormats().isEmpty())
 	    	sb.append("\", flags \"").append(getFormats());
-	    if(!getOccurences().isEmpty())
-	    	sb.append("\", references \"").append(getOccurences());
+	    if(!getSourceReferences().isEmpty())
+	    	sb.append("\", references \"").append(getSourceReferences());
 	    	// TODO should include fuzzy, obsolete, plurals, domain, prevMsg
 	    	sb.append("\")");
 	    return sb.toString();
