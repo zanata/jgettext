@@ -13,9 +13,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
-import sun.security.util.Password;
-
-import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
