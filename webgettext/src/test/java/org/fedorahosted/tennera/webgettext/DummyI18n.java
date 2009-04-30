@@ -15,7 +15,7 @@ import org.fedorahosted.tennera.webgettext.I18nUtil;
  * @author <a href="mailto:sflaniga@redhat.com">Sean Flanigan</a>
  * @version $$Revision: $$
  */
-public class TestI18n
+public class DummyI18n
 {
    public static final String BUNDLE = "org.fedorahosted.tennera.webgettext.testmessages"; //$NON-NLS-1$
    public static String gettext(String englishKey)

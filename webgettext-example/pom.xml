@@ -49,17 +49,17 @@
         <groupId>org.codehaus.cargo</groupId>
         <artifactId>cargo-maven2-plugin</artifactId>
 		<configuration>
-		  < !-- Container configuration -- >
+		  < !- - Container configuration - - >
 		  <container>
 		    <containerId>jboss42x</containerId>
             <home>/home/sflaniga/apps/jboss-4.2.2.GA</home>
 		  </container>
-< !--
+< !- -
 		  <container>
 		    <containerId>tomcat6x</containerId>
             <home>/NotBackedUp/sflaniga/apps/apache-tomcat-6.0.16</home>
 		  </container>
--- >
+- - >
 		</configuration>
       </plugin>
     </plugins>
