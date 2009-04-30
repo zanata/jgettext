@@ -120,11 +120,11 @@ public class MessageStreamParser{
 		}
 
 		protected void handleFlag(AST flag) {
-			if ( "fuzzy".equals( flag.getText() ) ) {
-				currentMessage.markFuzzy();
-			}
-			else {
-				currentMessage.addFormat( flag.getText() );
+			String [] flags = flag.getText().split(",");
+			for(String flagStr : flags){
+				flagStr = flagStr.trim();
+				if(!flagStr.isEmpty())
+					currentMessage.addFormat(flagStr);
 			}
 		}
 

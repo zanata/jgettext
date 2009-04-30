@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
+import java.util.StringTokenizer;
 
 import org.fedorahosted.tennera.jgettext.Catalog;
 import org.fedorahosted.tennera.jgettext.Message;
@@ -110,11 +111,11 @@ public class ExtendedCatalogParser extends CatalogParser {
 
 	@Override
 	protected void handleFlag(AST flag) {
-		if ( "fuzzy".equals( flag.getText() ) ) {
-			currentMessage.markFuzzy();
-		}
-		else {
-			currentMessage.addFormat( flag.getText() );
+		String [] flags = flag.getText().split(",");
+		for(String flagStr : flags){
+			flagStr = flagStr.trim();
+			if(!flagStr.isEmpty())
+				currentMessage.addFormat(flagStr);
 		}
 	}
 

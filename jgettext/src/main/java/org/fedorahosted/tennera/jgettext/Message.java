@@ -43,7 +43,6 @@ public class Message {
 	private List<String> sourceRefs = new ArrayList<String>();
 	private Collection<String> formats = new ArrayList<String>();
 
-	private boolean fuzzy;
 	private boolean obsolete;
 
 	private Boolean allowWrap;
@@ -120,7 +119,9 @@ public class Message {
 	}
 
 	public void markFuzzy() {
-		this.fuzzy = true;
+		if(!formats.contains("fuzzy")){
+			formats.add("fuzzy");
+		}
 	}
 
 	public boolean isFuzzy() {
@@ -129,11 +130,19 @@ public class Message {
 				return false;
 		}
 		
-		return fuzzy;
+		return formats.contains("fuzzy");
 	}
 
 	public void setFuzzy(boolean fuzzy) {
-		this.fuzzy = fuzzy;
+		boolean containsFuzzy = formats.contains("fuzzy");
+		if(fuzzy){
+			if(!containsFuzzy)
+				formats.add("fuzzy");
+		}
+		else{
+			if(containsFuzzy)
+				formats.remove("fuzzy");
+		}
 	}
 	
 	public void markObsolete() {
