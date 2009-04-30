@@ -97,7 +97,7 @@ public class JGettextTestUtils {
 	            	errorStr.append(line);
 	            	errorStr.append("\n");
 	            }
-	        	assertTrue("Error parsing output file:\n"+errorStr.toString(), errorStr.toString().isEmpty());
+	        	assertTrue("Error parsing output file:\n"+errorStr.toString() + "\n\nOutput was:\n" + input, errorStr.toString().isEmpty());
             }
             
             
