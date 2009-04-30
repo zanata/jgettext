@@ -22,31 +22,45 @@ public class TestEscapes {
 	}
 	
 	@Test
-	public void testEscapesComment() throws Throwable{
+	public void testEscapesCommentRoundtrip() throws Throwable{
 		File original = getResource("/valid/escapes_comment.po");
-		testEscapes(original);
+		testEscapesRoundtrip(original);
 	}
 	
 	@Test
-	public void testEscapesFuzzyComment() throws Throwable{
+	public void testEscapesFuzzyCommentRoundtrip() throws Throwable{
 		File original = getResource("/valid/escapes_comment_fuzzy.po");
-		testEscapes(original);
+		testEscapesRoundtrip(original);
 	}
 	
 	@Test
-	public void testCRInMsgidAndMsgStr() throws Throwable{
+	public void testCRInMsgidAndMsgStrRoundtrip() throws Throwable{
 		File original = getResource("/valid/escapes_cr_in_msgid_and_msgstr.po");
-		testEscapes(original);
+		testEscapesRoundtrip(original);
 	}
 	
-	private void testEscapes(String message, File f) throws Throwable{
+	@Test
+	public void testBackslashRoundtrip() throws Throwable{
+		File original = getResource("/valid/escapes_backslash.po");
+		testEscapesRoundtrip(original);
+	}
+
+	@Test
+	public void testBackslash() throws Throwable{
+		File original = getResource("/valid/escapes_backslash.po");
+		Message msg = poParser.parseMessage(original);
+		assertEquals("\\\\", msg.getMsgid());
+		assertEquals("\\\\", msg.getMsgstr());
+	}
+
+	private void testEscapesRoundtrip(String message, File f) throws Throwable{
 		String output = escapesProcess(f);
 		String originalString = JGettextTestUtils.readToStringFromMsgcat(f, true); 
 		assertEquals(message, originalString, output);
 	}
 	
-	private void testEscapes(File f) throws Throwable{
-		testEscapes(null, f);
+	private void testEscapesRoundtrip(File f) throws Throwable{
+		testEscapesRoundtrip(null, f);
 	}
 	
 	private String escapesProcess(File original) throws Throwable{
