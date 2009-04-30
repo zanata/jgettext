@@ -178,9 +178,9 @@ public class PoWriter {
 	 */
 	
 	protected void writeString(String prefix, String s, Writer writer, int firstLineContextWidth, int colWidth, int indent) throws IOException {
-		//If the first line is empty. This is for obsolete entry processing. When the first line
+		//This is for obsolete entry processing. When the first line
 		//is not empty, it doesn't need to output "#~".
-		boolean emptyfirst = false;
+		boolean firstline = true;
 		
 		writer.write('\"');
 		
@@ -188,7 +188,7 @@ public class PoWriter {
 		int firstLineEnd = s.indexOf('\n'); 
 		if(wrap && 
 				((firstLineEnd != -1 && firstLineEnd > (colWidth - firstLineContextWidth-4) ) || s.length()> (colWidth - firstLineContextWidth-4) )){ 
-			emptyfirst=true;
+			firstline=false;
 			writer.write('\"');
 			writer.write('\n');
 			if(prefix.isEmpty())
@@ -207,14 +207,23 @@ public class PoWriter {
 				currentLine.append('\\');
 				currentLine.append('n');
 				if(wrap && i != s.length()-1){
-					if(!prefix.isEmpty() && emptyfirst) {
+					
+					if(!prefix.isEmpty() && !firstline) {
 						writer.write(prefix);
 						writer.write('\"');
 						writer.write(currentLine.toString());
 						writer.write('\"');
 						writer.write('\n');
 					}
-					else {
+					
+					if(!prefix.isEmpty() && firstline) {
+						writer.write(currentLine.toString());
+						writer.write('\"');
+						writer.write('\n');
+						firstline = false;
+					}
+					
+					if(prefix.isEmpty()) {
 						writer.write(currentLine.toString());
 						writer.write('\"');
 						writer.write('\n');
@@ -250,14 +259,23 @@ public class PoWriter {
 			}
 						
 			if(wrap && currentLine.length() > colWidth-4 && lastSpacePos != 0){
-				if(!prefix.isEmpty() && emptyfirst) {
+				if(!prefix.isEmpty() && !firstline) {
 					writer.write(prefix);
 					writer.write('\"');
 					writer.write(currentLine.substring(0, lastSpacePos+1));
 					writer.write('\"');
 					writer.write('\n');
 				}
-				else {
+				
+				if(!prefix.isEmpty() && firstline) {
+					writer.write(currentLine.substring(0, lastSpacePos+1));
+					writer.write('\"');
+					writer.write('\n');
+					firstline = false;
+				}
+	
+				if(prefix.isEmpty())
+				{
 					writer.write(currentLine.substring(0, lastSpacePos+1));
 					writer.write('\"');
 					writer.write('\n');
@@ -267,14 +285,29 @@ public class PoWriter {
 				lastSpacePos = 0;
 			}
 		}
-		if(!prefix.isEmpty() && emptyfirst) {
-			writer.write(prefix);
-		    writer.write('\"');
-		}
-		writer.write(currentLine.toString());
 
-		writer.write('\"');
-		writer.write('\n');
+		if(!prefix.isEmpty() && !firstline) {
+			writer.write(prefix);
+			writer.write('\"');
+			writer.write(currentLine.toString());
+
+			writer.write('\"');
+			writer.write('\n');
+		}
+		
+		if(!prefix.isEmpty() && firstline) {
+			writer.write(currentLine.toString());
+			writer.write('\"');
+			writer.write('\n');
+			firstline = false;
+		}
+		
+		if(prefix.isEmpty())
+		{
+			writer.write(currentLine.toString());
+			writer.write('\"');
+			writer.write('\n');
+		}
 	}
 	
 	protected void writeString(String prefix, String s, Writer writer, int firstLineContextWidth) throws IOException {
