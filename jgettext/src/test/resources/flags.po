@@ -1,0 +1,6 @@
+#. Tag: para
+#: Email.xml:1240
+#, no-c-format
+#, fuzzy
+msgid "test"
+msgstr "test"
