@@ -25,7 +25,10 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.util.Collection;
 import java.util.List;
+
+import antlr.StringUtils;
 
 public class PoWriter {
 
@@ -108,13 +111,13 @@ public class PoWriter {
     	    writeComment("#: ", sourceRef, writer);
     	}
 
-    	if ( message.isFuzzy() ) {
-    		writer.write( "#, fuzzy" );
-    		writer.write( '\n' );
-    	}
-
-    	for ( String format : message.getFormats() ) {
-    		writer.write( "#, " + format );
+    	Collection<String> formats = message.getFormats();
+    	if(!formats.isEmpty()){
+    		writer.write( "#");
+    		for(String format : formats){
+        		writer.write( ", ");
+        		writer.write(format);
+    		}
     		writer.write( '\n' );
     	}
 
