@@ -13,6 +13,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
+import sun.security.util.Password;
+
+import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
@@ -71,6 +74,13 @@ public class TestDynamicRoundtrips extends TestSuite{
     public static TestSuite suite() throws Throwable{
             TestSuite ts=new TestSuite();
             generateTests(ts);
+            if(ts.countTestCases() == 0){
+            	ts.addTest(new TestCase("bogus"){
+            		@Override
+            		protected void runTest() throws Throwable {
+            		}
+            	});
+            }
             return ts;
     }    
 
