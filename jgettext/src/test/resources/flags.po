@@ -1,6 +1,21 @@
-#. Tag: para
-#: Email.xml:1240
+# fuzzy then no-c-format on separate lines
+#, fuzzy
+#, no-c-format
+msgid "test1"
+msgstr "test1"
+
+# no-c-format then fuzzy on separate lines
 #, no-c-format
 #, fuzzy
-msgid "test"
-msgstr "test"
+msgid "test2"
+msgstr "test2"
+
+# fuzzy then no-c-format on same line
+#, fuzzy, no-c-format
+msgid "test3"
+msgstr "test3"
+
+# no-c-format then fuzzy on same line
+#, no-c-format, fuzzy
+msgid "test4"
+msgstr "test4"
