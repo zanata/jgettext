@@ -97,10 +97,7 @@ public class PoWriter {
 	public void write(Message message, Writer writer) throws IOException{
 
     	for ( String comment : message.getComments() ) {
-    		if( !comment.isEmpty()) 
-    			writeComment("# ", comment, writer); 
-    		else
-    			writeComment("#", comment, writer); // no space on purpose!!! 
+			writeComment("# ", comment, writer); 
     	}
 
     	for ( String comment : message.getExtractedComments() ) {
