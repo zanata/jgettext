@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 
+import org.fedorahosted.tennera.jgettext.catalog.parse.MessageStreamParser;
 import org.fedorahosted.tennera.jgettext.catalog.parse.ParseException;
 
 public class JGettextTestUtils {
@@ -29,11 +30,12 @@ public class JGettextTestUtils {
 
 	
 	public static String roundtrip(File original) throws FileNotFoundException, ParseException, IOException{
-		PoParser poParser = new PoParser();
 		PoWriter poWriter = new PoWriter();
-		Catalog originalCatalog = poParser.parseCatalog(original);
+		MessageStreamParser parser = new MessageStreamParser(original);
 		StringWriter outputWriter = new StringWriter();
-		poWriter.write(originalCatalog, outputWriter);
+		while(parser.hasNext()){
+			poWriter.write(parser.next(), outputWriter);
+		}
 		outputWriter.flush();
 		return outputWriter.toString();
 	}

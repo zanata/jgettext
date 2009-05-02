@@ -96,29 +96,34 @@ public class MessageStreamParser{
 			return ret;
 		}
 		
-		
+		@Override
 		protected void handleMessageBlock(AST messageBlock) {
 			nextMessage = currentMessage;
 			currentMessage = new Message();
 		}
 
+		@Override
 		protected void handleObsoleteMessageBlock(AST messageBlock) {
 			currentMessage.markObsolete();
 			handleMessageBlock( messageBlock );
 		}
 
+		@Override
 		protected void handleCatalogComment(AST comment) {
 			currentMessage.addComment( extractText( comment ) );
 		}
 
+		@Override
 		protected void handleExtractedComment(AST comment) {
 			currentMessage.addExtractedComment( extractText( comment ) );
 		}
 
-		protected void handleSourceReference(AST sourceRef) {
+		@Override
+		protected void handleReference(AST sourceRef) {
 			currentMessage.addSourceReference( parseSourceReference( sourceRef ) );
 		}
 
+		@Override
 		protected void handleFlag(AST flag) {
 			String [] flags = flag.getText().split(",");
 			for(String flagStr : flags){
@@ -128,38 +133,47 @@ public class MessageStreamParser{
 			}
 		}
 
+		@Override
 		protected void handlePreviousMsgctxt(AST previousMsgctxt) {
 			currentMessage.setPrevMsgctx( extractText( previousMsgctxt ) );
 		}
 
+		@Override
 		protected void handlePreviousMsgid(AST previousMsgid) {
 			currentMessage.setPrevMsgid( extractText( previousMsgid ) );
 		}
 
+		@Override
 		protected void handlePreviousMsgidPlural(AST previousMsgidPlural) {
 			currentMessage.setPrevMsgidPlural( extractText( previousMsgidPlural ) );
 		}
 
+		@Override
 		protected void handleDomain(AST domain) {
 			currentMessage.setDomain( extractText( domain ) );
 		}
 
+		@Override
 		protected void handleMsgctxt(AST msgctxt) {
 			currentMessage.setMsgctxt( extractText( msgctxt ) );
 		}
 
+		@Override
 		protected void handleMsgid(AST msgid) {
 			currentMessage.setMsgid( extractText( msgid ) );
 		}
 
+		@Override
 		protected void handleMsgidPlural(AST msgidPlural) {
 			currentMessage.setMsgidPlural( extractText( msgidPlural ) );
 		}
 
+		@Override
 		protected void handleMsgstr(AST msgstr) {
 			currentMessage.setMsgstr( extractText( msgstr ) );
 		}
 
+		@Override
 		protected void handleMsgstrPlural(AST msgstr, AST plurality) {
 			currentMessage.addMsgstrPlural( extractText( msgstr ), Integer.parseInt( plurality.getText() ) );
 		}
