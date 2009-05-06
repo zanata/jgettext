@@ -4,13 +4,14 @@
  */
 package org.fedorahosted.tennera.antgettext;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
-import org.junit.Assert;
 
 class TextFiles 
 {
@@ -47,9 +48,10 @@ class TextFiles
 	    File actualFile = new File(actualDir, expectedFile.getName());
 	    if (shouldSkip(expectedFile))
 		continue;
+	    assertTrue("expected file matching "+expectedFile+": "+actualFile+" does not exist", actualFile.exists());
 	    if (expectedFile.isDirectory())
 	    {
-		Assert.assertTrue(actualFile.isDirectory());
+		assertTrue("expected directory matching "+expectedFile+": "+actualFile+" is not a directory", actualFile.isDirectory());
 		assertEqualDirectories(expectedFile, actualFile);
 	    }
 	    else
@@ -63,8 +65,8 @@ class TextFiles
     {
 	String expected = readLines(expectedFile);
 	String actual = readLines(actualFile);
-	Assert.assertEquals(
-		"actual file "+actualFile+" doesn't match expected file "+expectedFile, 
+	assertEquals(
+		"expected file matching "+expectedFile+": "+actualFile+" does not match", 
 		expected, 
 		actual);
     }
@@ -95,7 +97,8 @@ class TextFiles
     
     private static boolean shouldSkip(File f)
     {
-	return (f.getName().endsWith("~"));
+	String name = f.getName();
+	return (name.endsWith("~") || name.equals(".svn"));
     }
 
 }
