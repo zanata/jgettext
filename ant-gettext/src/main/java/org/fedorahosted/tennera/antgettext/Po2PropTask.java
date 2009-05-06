@@ -19,11 +19,9 @@ import org.apache.tools.ant.types.Mapper;
 import org.apache.tools.ant.util.FileNameMapper;
 import org.apache.tools.ant.util.GlobPatternMapper;
 import org.fedorahosted.openprops.Properties;
-import org.fedorahosted.tennera.jgettext.Catalog;
 import org.fedorahosted.tennera.jgettext.Message;
-import org.fedorahosted.tennera.jgettext.Occurence;
-import org.fedorahosted.tennera.jgettext.Catalog.MessageProcessor;
-import org.fedorahosted.tennera.jgettext.catalog.parse.ExtendedCatalogParser;
+import org.fedorahosted.tennera.jgettext.MessageProcessor;
+import org.fedorahosted.tennera.jgettext.catalog.parse.MessageStreamParser;
 
 /**
  * 
@@ -71,8 +69,8 @@ public class Po2PropTask extends MatchingTask
 		this.locale = locale;
 	}
 
-	public void setFailOnNull(boolean failOnSkip) {
-		this.failOnNull = failOnSkip;
+	public void setFailOnNull(boolean failOnNull) {
+		this.failOnNull = failOnNull;
 	}
 
 	@Override
@@ -132,11 +130,10 @@ public class Po2PropTask extends MatchingTask
 				BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(propFile));
 				try
 				{
-					ExtendedCatalogParser parser = new ExtendedCatalogParser( poFile );
-					parser.catalog();
-					Catalog catalog = parser.getCatalog();
+					MessageStreamParser parser = new MessageStreamParser(poFile);
 					MessageProcessor processor = new MessageProcessor() 
 					{
+						@Override
 						public void processMessage(Message entry) {
 							if (entry.isFuzzy())
 								return;
@@ -156,9 +153,8 @@ public class Po2PropTask extends MatchingTask
 								// so we should use the original en properties as a template
 								if(entry.getMsgid().length() != 0)
 								{
-									for (Occurence occ : entry.getOccurences())
+									for (String ref : entry.getSourceReferences())
 									{
-										String ref = occ.toString();
 										props.setProperty(ref, entry.getMsgstr());
 										if (poComment.length() != 0 && INCLUDE_MESSAGE_COMMENTS)
 											props.setComment(ref, poComment);
@@ -173,7 +169,9 @@ public class Po2PropTask extends MatchingTask
 							}
 						}
 					};
-					catalog.processMessages( processor);
+					while (parser.hasNext()) {
+						processor.processMessage(parser.next());
+					}
 
 					String comment = null;
 					if (INCLUDE_PROCESSING_COMMENT) {

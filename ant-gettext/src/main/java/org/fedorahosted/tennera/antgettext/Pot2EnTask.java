@@ -16,9 +16,9 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.MatchingTask;
 import org.fedorahosted.tennera.jgettext.Catalog;
 import org.fedorahosted.tennera.jgettext.Message;
-import org.fedorahosted.tennera.jgettext.Catalog.MessageProcessor;
+import org.fedorahosted.tennera.jgettext.MessageProcessor;
+import org.fedorahosted.tennera.jgettext.PoWriter;
 import org.fedorahosted.tennera.jgettext.catalog.parse.ExtendedCatalogParser;
-import org.fedorahosted.tennera.jgettext.catalog.write.CatalogWriter;
 
 /**
  * 
@@ -108,6 +108,7 @@ public class Pot2EnTask extends MatchingTask
 //		System.out.println(header);
         	MessageProcessor processor = new MessageProcessor() 
         	{
+        		@Override
         	    public void processMessage(Message entry) 
         	    {
         		if (!entry.isHeader()) 
@@ -121,8 +122,7 @@ public class Pot2EnTask extends MatchingTask
         	    }
         	};
         	catalog.processMessages(processor);
-		CatalogWriter writer = new CatalogWriter(catalog);
-		writer.writeTo(poFile);
+        	new PoWriter().write(catalog, poFile);
             }
             finally
             {

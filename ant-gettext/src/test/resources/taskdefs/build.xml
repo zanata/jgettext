@@ -1,11 +1,36 @@
 <?xml version="1.0"?>
 
-<project basedir="." default="testRegex2Pot">
+<project basedir=".">
   <import file="taskdefs.xml" />
 
   <target name="testBasic">
     <delete dir="pot2en_basic" />
     <pot2en srcDir="pot2en" dstDir="pot2en_basic" />
+  </target>
+
+  <target name="testGettext2Prop">
+    <delete dir="gettext2prop_prop" />
+    <gettext2prop 
+    	srcDir="gettext2prop" 
+    	propSrcDir="gettext2prop-prop" 
+        dstDir="gettext2prop_prop" 
+  		locales="dummy"/>
+  </target>
+
+  <target name="testProp2Gettext">
+    <delete dir="prop2gettext_po" />
+    <prop2gettext 
+  	    srcDir="prop2gettext" 
+  	    dstDir="prop2gettext_po" 
+    	locales="dummy" />
+  </target>
+
+  <target name="testVerifyProp1">
+    <verifyprop dir1="verifyprop1" dir2="verifyprop1" />
+  </target>
+
+  <target name="testVerifyProp2">
+    <verifyprop dir1="verifyprop1" dir2="verifyprop2" />
   </target>
 
   <target name="testPseudo">
@@ -28,14 +53,25 @@
     <po2prop srcDir="po2prop" dstDir="po2prop_prop" locale="qps" />
   </target>
 
-  <target name="testRegex2Pot">
-    <delete dir="regex2pot_pot" />
-    <mkdir dir="regex2pot_pot"/>
-    <regex2pot srcDir="regex" 
+  <target name="testRegex2Pot1">
+    <delete dir="regex2pot1_pot" />
+    <mkdir dir="regex2pot1_pot"/>
+    <regex2pot srcDir="regex2pot1" 
         includes="**" 
         regex="gettext\(&quot;(.*)&quot;\)|_\(&quot;(.*)&quot;\)" 
-        target="regex2pot_pot/regex.pot"
-        pathprefix="../regex/" />
+        target="regex2pot1_pot/regex.pot"
+        pathprefix="../regex2pot1/" />
+  </target>
+
+  <target name="testRegex2Pot2">
+    <delete dir="regex2pot2_pot" />
+    <mkdir dir="regex2pot2_pot"/>
+  	<!-- eg ${messages["ABC {0}{1}{2}"]["1"][2]['3']} -->
+    <regex2pot srcDir="regex2pot2" 
+        includes="**" 
+        regex="\$$\{messages\[\&quot;([^&quot;]*)\&quot;.*\]" 
+        target="regex2pot2_pot/regex.pot"
+        pathprefix="../regex2pot2/" />
   </target>
 
   <target name="testXpath2Pot">

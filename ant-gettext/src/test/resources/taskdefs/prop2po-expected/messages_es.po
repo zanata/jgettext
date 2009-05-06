@@ -1,0 +1,55 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+": PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-05-01 16:06+1000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: escaped_newline
+#, java-format
+msgctxt "escaped_newline"
+msgid "First linesecond line"
+msgstr "1st line2nd line"
+
+#. 
+#: Error_WS_Chose_runtime
+#, java-format
+msgctxt "Error_WS_Chose_runtime"
+msgid ""
+"First line (terminated by CR+LF)\r\n"
+" Second line (preceded by whitespace)."
+msgstr "1st line (terminated by CR+LF)\r\n"
+" 2nd line (preceded by whitespace)."
+
+#. As much as possible, try to create file patterns that match
+#. as few files as possible. Each matching file *WILL* be scanned
+#. and cached, regardless of if there's a match.
+#: JNDI
+#, java-format
+msgctxt "JNDI"
+msgid "//server/mbean[@name='jboss:service=Naming']/attribute[@name='Port']"
+msgstr "//SERVER/mbean[@name='jboss:service=Naming']/ATTRIBUTE[@name='Port']"
+
+#: containing_quotes
+#, java-format
+msgctxt "containing_quotes"
+msgid "something \"or other\""
+msgstr "something 'or other'"
+
+#: another_key
+#, java-format
+msgctxt "another_key"
+msgid "Not found in es, should be empty msgid in messages_es.po"
+msgstr ""

@@ -142,20 +142,4 @@ public class XPath2PotTask extends MatchExtractingTask {
 	    return el.getNodeName();
 	return "*[local-name()='"+el.getLocalName()+"' and namespace-uri()=\'"+el.getNamespaceURI()+"']";
     }
-    
-    public static void main(String[] args) throws XPathExpressionException {
-	File f = new File("src/test/data/taskdefs/meta/studio_eclipse_option.meta");
-	XPath xpath = XPathFactory.newInstance().newXPath(); 
-	String expression = "//attribute::*[namespace-uri()='http://test.example.org/'] | //@displayName | //XModelAttribute/@name | //XModelAttribute/@default | //Constraint/value/@name"; 
-	InputSource inputSource = new InputSource(f.getPath());
-	NodeList nodes = (NodeList) xpath.evaluate(expression, inputSource, 
-		XPathConstants.NODESET);
-	for (int i = 0; i < nodes.getLength(); i++) {
-	    Node node = nodes.item(i);
-	    String key = node.getTextContent();
-	    Document doc = node.getOwnerDocument();
-	    String path = getXPathForElement(node, doc);
-	    System.out.println(key+": "+path);
-	}
-    } 
 }

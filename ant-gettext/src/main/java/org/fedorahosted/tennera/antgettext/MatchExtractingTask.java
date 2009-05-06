@@ -23,8 +23,7 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.MatchingTask;
 import org.fedorahosted.tennera.jgettext.Catalog;
 import org.fedorahosted.tennera.jgettext.Message;
-import org.fedorahosted.tennera.jgettext.Occurence;
-import org.fedorahosted.tennera.jgettext.catalog.write.CatalogWriter;
+import org.fedorahosted.tennera.jgettext.PoWriter;
 import org.xml.sax.SAXException;
 
 /**
@@ -168,7 +167,6 @@ public abstract class MatchExtractingTask extends MatchingTask
     private void generatePot(BufferedWriter out) throws IOException 
     {
 	Catalog cat = new Catalog(true);
-	CatalogWriter writer = new CatalogWriter(cat);
 	for (Map.Entry<String, Set<String>> mapEntry : mapKeyToLocationSet.entrySet())
 	{
 	    Message message = new Message();
@@ -177,7 +175,7 @@ public abstract class MatchExtractingTask extends MatchingTask
 	    
 	    for (String location : locations) 
 	    {
-		message.addOccurence(new Occurence(pathPrefix+location));
+		message.addSourceReference(pathPrefix+location);
 	    }
 	    
 	    if (!format.equals(""))
@@ -186,7 +184,9 @@ public abstract class MatchExtractingTask extends MatchingTask
 	    message.setMsgid(mapEntry.getKey());
 	    cat.addMessage(message);
 	}
-	writer.writeTo(out);
+	PoWriter writer = new PoWriter();
+	writer.setGenerateHeader(true);
+	writer.write(cat, out);
     }
 
 }

@@ -138,14 +138,14 @@ class StringUtil {
 
     public static void chomp(StringBuilder sb) 
     {
-	if (sb.length() == 0)
-	    return;
-        if (sb.charAt(sb.length()-1) == '\n')
-            sb.setLength(sb.length()-1);
-	if (sb.length() == 0)
-	    return;
-        if (sb.charAt(sb.length()-1) == '\r')
-            sb.setLength(sb.length()-1);
+    	chopIfMatch(sb, '\n');
+    	chopIfMatch(sb, '\r');
+    }
+    
+    private static void chopIfMatch(StringBuilder sb, char ch)
+    {
+    	if (sb.length() != 0 && sb.charAt(sb.length()-1) == ch)
+    		sb.setLength(sb.length()-1);
     }
     
     public static String chomp(String input) {
@@ -162,6 +162,14 @@ class StringUtil {
         String basename = filename.substring(0, 
         			filename.length()-extension.length());
         return basename;
+    }
+    
+    static boolean equals(String a, String b)
+    {
+    	if (a != null)
+    		return a.equals(b);
+    	else
+    		return b == null;
     }
 
     public static void main(String[] args) throws Exception 

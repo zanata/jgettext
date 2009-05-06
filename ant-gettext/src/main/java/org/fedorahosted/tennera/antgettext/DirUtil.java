@@ -13,7 +13,7 @@ import org.apache.tools.ant.BuildException;
 class DirUtil
 {
 
-   static void checkDir(File dir, String attrName, boolean ignoreNonexistent)
+   static void checkDir(File dir, String attrName, boolean ignoreNonexistent) throws DirMissingException
    {
       if (dir == null)
       {
@@ -27,7 +27,7 @@ class DirUtil
       } else {
          if (!ignoreNonexistent)
          {
-             throw new BuildException(attrName+" \""+dir+"\" does not exist!");
+        	 throw new DirMissingException(attrName+" \""+dir+"\" does not exist!");
          }
       }
    }

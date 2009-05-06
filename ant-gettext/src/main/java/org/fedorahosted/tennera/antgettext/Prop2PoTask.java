@@ -26,7 +26,7 @@ import org.fedorahosted.openprops.Properties;
  * @author <a href="sflaniga@redhat.com">Sean Flanigan</a>
  * @version $Revision: $
  */
-public class Prop2PoTask extends Prop2GettextTask
+public class Prop2PoTask extends AbstractProp2PoPotTask
 {
 	private String[] locales;
 	File srcTransDir;
@@ -50,27 +50,10 @@ public class Prop2PoTask extends Prop2GettextTask
 		return globMap;
 	}
 	
-	private class BasePropertiesSelector implements FileSelector
-	{
-		@Override
-		public boolean isSelected(File basedir, String filename, File file)
-				throws BuildException 
-		{
-			for (String loc : locales) 
-			{
-				if (filename.endsWith("_"+loc+".properties")) { //$NON-NLS-1$ //$NON-NLS-2$
-//					log("skipping translated property file for now: "+filename);
-					return false;
-				}
-			}
-			return true;
-		}
-	}
-
 	@Override
 	FileSelector[] getSelectors() 
 	{
-		return new FileSelector[] {new BasePropertiesSelector()};
+		return new FileSelector[] {new BasePropertiesSelector(locales)};
 	}
 
 	@Override
@@ -101,7 +84,7 @@ public class Prop2PoTask extends Prop2GettextTask
 				File propTransFile = new File(srcTransDir, propTransBasename);
             	if (propTransFile.exists()) 
             	{
-		            String[] outFile = mapper.mapFileName(propTransBasename);
+		            String[] outFile = getMapper().mapFileName(propTransBasename);
 		            if (outFile == null || outFile.length == 0)
 		            {
 		            	log("Skipping "+propTransFile+": filename mapped to null", Project.MSG_VERBOSE);

@@ -23,7 +23,7 @@ import org.fedorahosted.openprops.Properties;
  * @author <a href="sflaniga@redhat.com">Sean Flanigan</a>
  * @version $Revision: $
  */
-public class Prop2PotTask extends Prop2GettextTask
+public class Prop2PotTask extends AbstractProp2PoPotTask
 {
 
 	@Override
@@ -46,7 +46,7 @@ public class Prop2PotTask extends Prop2GettextTask
    void processFile(String propFilename) throws IOException
    {
             File propFile = new File(srcDir, propFilename);
-            String[] outFile = mapper.mapFileName(propFilename);
+            String[] outFile = getMapper().mapFileName(propFilename);
             if (outFile == null || outFile.length == 0)
             {
             	log("Skipping "+propFilename+": filename mapped to null", Project.MSG_VERBOSE);

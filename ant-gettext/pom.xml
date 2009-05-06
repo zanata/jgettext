@@ -18,9 +18,25 @@
   </description>
   <inceptionYear>2008</inceptionYear>
 
-  <!-- Needed when debugging junit tests:
+<!--  
   <build>
     <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-eclipse-plugin</artifactId>
+            <configuration>
+               <additionalProjectnatures>
+                  <projectnature>org.codehaus.groovy.eclipse.groovyNature</projectnature>
+               </additionalProjectnatures>
+               <additionalBuildcommands>
+                  <buildcommand>org.codehaus.groovy.eclipse.groovyBuilder</buildcommand>
+               </additionalBuildcommands>
+            </configuration>
+         </plugin>
+    </plugins>
+  </build>
+-->
+  <!-- Needed when debugging junit tests:
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -29,8 +45,6 @@
           <debugForkedProcess>true</debugForkedProcess>
         </configuration>
       </plugin>
-    </plugins>
-  </build>
   -->
 
     <reporting>
@@ -58,7 +72,7 @@
     <dependency>
       <groupId>org.fedorahosted.openprops</groupId>
       <artifactId>openprops</artifactId>
-      <version>0.3</version>
+      <version>0.4-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -79,7 +93,5 @@
 	    <version>4.0.1</version>
 	    <scope>test</scope>
     </dependency>
-<!-- 
- -->
   </dependencies>
 </project>

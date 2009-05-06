@@ -1,238 +1,208 @@
 package org.fedorahosted.tennera.antgettext;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
-import org.apache.tools.ant.taskdefs.MatchingTask;
-import org.apache.tools.ant.types.selectors.FileSelector;
-import org.apache.tools.ant.util.FileNameMapper;
+import org.apache.tools.ant.util.FileUtils;
 import org.fedorahosted.openprops.Properties;
 import org.fedorahosted.tennera.jgettext.Catalog;
 import org.fedorahosted.tennera.jgettext.Message;
-import org.fedorahosted.tennera.jgettext.Occurence;
-import org.fedorahosted.tennera.jgettext.catalog.write.CatalogWriter;
+import org.fedorahosted.tennera.jgettext.PoWriter;
+
+import antlr.RecognitionException;
+import antlr.TokenStreamException;
 
 /**
- * Converts Java Properties files into gettext files (PO).
+ * Converts a directory tree of Java Properties files into 
+ * one or more gettext files (PO/POT) (for a single gettext 
+ * domain, but optionally multiple locales).
  * 
  * @author <a href="sflaniga@redhat.com">Sean Flanigan</a>
  * @version $Revision: $
  */
-public abstract class Prop2GettextTask extends MatchingTask {
-	File srcDir;
-	File dstDir;
-	FileNameMapper mapper;
-	boolean includeAll;
-	EmptyStringPolicy emptyStringPolicy = EmptyStringPolicy.WARNANDSKIP;
-
-	// This should be pretty safe, at least for ISO-8859-1 files
-	static final String NEWLINE_REGEX = "(\r\n|\r|\n)"; //$NON-NLS-1$
-
-	public void setSrcDir(File srcDir)
+public class Prop2GettextTask extends AbstractPropGettextTask {
+	boolean generatePO = true;
+	boolean generatePOT = true;
+	private Catalog potCatalog = new Catalog(true);
+	
+	public void setPO(boolean generatePO) 
 	{
-		this.srcDir = srcDir;
+		this.generatePO = generatePO;
 	}
-
-	public void setDstDir(File dstDir)
+	
+	public void setPOT(boolean generatePOT) 
 	{
-		this.dstDir = dstDir;
-	}
-
-	public void setIncludeAll(boolean includeAll) 
-	{
-		this.includeAll = includeAll;
-	}
-
-	public void setWhenEmptyString(String policy)
-	{
-		emptyStringPolicy = EmptyStringPolicy.valueOf(policy.toUpperCase());
-	}
-
-	public void add(FileNameMapper mapper)
-	{
-		if (this.mapper != null)
-			throw new BuildException("mapper already set!");
-		this.mapper = mapper;
-	}
-
-	abstract FileNameMapper defaultMapper(); 
-	abstract FileSelector[] getSelectors();
-
-	void checkArgs()
-	{
-		DirUtil.checkDir(srcDir, "srcDir", false); //$NON-NLS-1$
-		DirUtil.checkDir(dstDir, "dstDir", true); //$NON-NLS-1$
-		if (mapper == null)
-		{
-			// use default filename mapping if unset:
-			mapper = defaultMapper();
-		}
-
+		this.generatePOT = generatePOT;
 	}
 
    @Override
-   public void execute() throws BuildException
+   Catalog initPOCatalog(String locale) 
+   		throws FileNotFoundException, IOException, RecognitionException, TokenStreamException 
    {
-	   checkArgs();
-	   try
-	   {
-         DirectoryScanner ds = super.getDirectoryScanner(srcDir);
-         // use default includes if unset:
-         if(!getImplicitFileSet().hasPatterns())
-         {
-             ds.setIncludes(new String[] {"**/*.properties"}); //$NON-NLS-1$
-         }
-         ds.setSelectors(getSelectors());
-         ds.scan();
-         String[] files = ds.getIncludedFiles();
-         
-
-         // for each of the props files in srcdir:
-         for (int i = 0; i < files.length; i++)
-         {
-        	 processFile(files[i]);
-         }
-      }
-      catch (Exception e)
-      {
-         throw new BuildException(e);
-      }
+	   return new Catalog(false);
    }
 
-	abstract void processFile(String propFilename) throws IOException;
+   private void saveCat(Catalog cat, File poFile) throws IOException 
+   {
+	   BufferedWriter out = new BufferedWriter(new FileWriter(poFile));
+	   try
+	   {
+		   PoWriter writer = new PoWriter();
+		   writer.setGenerateHeader(true);
+		   writer.write(cat, out);
+	   }
+	   finally
+	   {
+		   out.close();
+	   }
+   }
 
-//         FIXME use transProps
-void generatePO(File englishFile, Properties englishProps, File transFile, Properties transProps, File toPoFile)
-		throws IOException {
-	int messageCount = 0;
-	toPoFile.getParentFile().mkdirs();
-	BufferedWriter out = new BufferedWriter(new FileWriter(toPoFile));
-	try
+	void processFile(String propFilename) throws IOException
 	{
-		Catalog cat = new Catalog(true);
-		CatalogWriter writer = new CatalogWriter(cat);
-
-		// this will be >0 if we are inside a NON-TRANSLATABLE block
-		int nonTranslatable = 0;
+//	   		log("processFile "+propFilename);
+            File propFile = new File(srcDir, propFilename);
+            
+            String propBasename = StringUtil.removeFileExtension(
+            		propFilename, ".properties"); //$NON-NLS-1$
+            
+            List<File> propTransFiles = new ArrayList<File>(locales.length);
+            List<String> transLocales = new ArrayList<String>(locales.length);
+            
+            for (String locale : locales) 
+            {
+            	String propTransBasename = propBasename+"_"+locale+".properties"; //$NON-NLS-1$ //$NON-NLS-2$
+				File propTransFile = new File(srcDir, propTransBasename);
+            	if (propTransFile.exists()) 
+            	{
+	            	log(propTransFile+" added to list");
+	            	propTransFiles.add(propTransFile);
+	            	transLocales.add(locale);
+				}
+            	else
+            	{
+            		log(propTransFile+" does not exist");
+            	}
+			}
+            if (propTransFiles.isEmpty() && !generatePOT) 
+            {
+            	// no need to load this properties file
+            	return;
+            }
+            String englishFile;
+	        try {
+				englishFile = FileUtils.getRelativePath(relativeBase, propFile);
+			} catch (Exception e) {
+				throw new IOException(e);
+			}
+            Properties englishProps = new Properties();
+            BufferedInputStream in = new BufferedInputStream(new FileInputStream(propFile));
+            try
+            {
+            	englishProps.load(in);
+            }
+            finally
+            { 
+            	in.close();
+            }
+            
+            if (generatePOT)
+            	visitProperties(englishFile, englishProps, new POGenerator(potCatalog, null));
+//            	addToCatalog(englishFile, englishProps, null, potCat);
+            
+// indent from here            
+    for (int k = 0; k < propTransFiles.size(); k++) 
+    {
+		File propTransFile = propTransFiles.get(k);
+		String locale = transLocales.get(k);
+        log("Reading messages from "+propFile+" and "+ propTransFile, Project.MSG_VERBOSE);
+        Properties transProps = new Properties();
+        BufferedInputStream in2 = new BufferedInputStream(new FileInputStream(propTransFile));
+        try
+        {
+        	transProps.load(in2);
+        }
+        finally
+        { 
+        	in2.close();
+        }
+        Catalog poCat = poCatalogs.get(locale);
+        visitProperties(englishFile, englishProps, new POGenerator(poCat, transProps));
+//        addToCatalog(englishFile, englishProps, transProps, poCat);
+    }
+// indent to here            
+   }
 	
-PROPERTIES: 
-		for (String key : englishProps.stringPropertyNames())
-		{
-		   String englishString = englishProps.getProperty(key);
-		   
-		   if (englishString.length() == 0)
-		   {
-			   String message = "Empty value for key "+key+" in file "+englishFile;
-			   switch (emptyStringPolicy) {
-			     case SKIP:
-			       log(message, Project.MSG_DEBUG);
-				   continue PROPERTIES;
-			     case WARNANDSKIP:
-	  		       log(message, Project.MSG_WARN);
-	  			   continue PROPERTIES;
-			     case INCLUDE:
-	  		       log(message, Project.MSG_DEBUG);
-			       break;
-			     case WARNANDINCLUDE:
-			       log(message, Project.MSG_WARN);
-			       break;
-			       // if anyone ever implements this, don't forget to 
-			       // handle @@EMPTY@@ in pot2en and po2prop.  And
-			       // *please* come up with a better sentinel value,
-			       // but remember, translators may need to enter it as msgstr.
-//        		     case REPLACE:
-//        		       englishString = "@@EMPTY@@";
-//        		       break;
-			     case FAIL:
-			    	 throw new BuildException(message);
-				 default:
-				   throw new RuntimeException("unhandled switch case "+emptyStringPolicy);
-			   }
-		   }
-		   
-		   // NB java.util.Properties throws away comments...
-
-	       String comment;
-	       if (includeAll) 
-	       {
-	          comment = englishProps.getComment(key);
-	       } 
-	       else 
-	       {
-	       	  String raw = englishProps.getRawComment(key);
-
-	       	  if (raw != null && raw.length() != 0) // FIXME treat "" like null
-	          {
-	             StringBuilder sb = new StringBuilder(raw.length());
-	             String[] lines = raw.split(NEWLINE_REGEX);
-	             for (int j = 0; j < lines.length; j++) 
-	             {
-	                String line = lines[j];
-	                // See http://wiki.eclipse.org/Eclipse_Globalization_Guidelines#Non-translatable_Message_Strings
-	                if (line.startsWith("# START NON-TRANSLATABLE")) //$NON-NLS-1$ 
-	                {
-	                   ++nonTranslatable;
-	                } 
-	                else if (line.startsWith("# END NON-TRANSLATABLE")) //$NON-NLS-1$
-	                {
-	                   --nonTranslatable;
-	                   if (nonTranslatable < 0)
-	                      throw new BuildException(
-	                            "Found '# END NON-TRANSLATABLE' " +
-	                            "without matching " +
-	                            "'# START NON-TRANSLATABLE': file="+englishFile+" key="+key);
-	                } 
-	                else if (nonTranslatable == 0) 
-	                {
-	                   sb.append(Properties.cookCommentLine(line));
-	                   if (j+1 < lines.length)
-	                      sb.append('\n');
-	                }
-	             }
-	             comment = sb.toString();
-	          } 
-	          else 
-	          {
-	             comment = null;
-	          }
-	       }
-	       if (nonTranslatable == 0) 
-	       {
-	          Message message = new Message();
-	          if (comment != null)
-	        	  message.addExtractedComment(comment);
-	          message.addOccurence(new Occurence(key));
-	          message.addFormat("java-format"); //  FIXME check this //$NON-NLS-1$
-	          message.setMsgctxt(key);
-	          message.setMsgid(englishString);
-	          if (transProps != null)
-	          {
-	        	  message.setMsgstr(transProps.getProperty(key));
-	          }
-	          cat.addMessage(message);
-	          ++messageCount;
-	       }
-	    }
-		// FIXME include genComment in header ?
-//        String genComment = toPoFile+" generated by "+getClass().getName()+" from "+englishFile+" and "+transFile;
-		// TODO check that footerComment balances out nonTranslatable count 
-		if(transFile != null)
-			writer.writeTo(out, new Date(transFile.lastModified()));
-		else
-			writer.writeTo(out, new Date(englishFile.lastModified()));
-	}
-	finally
+	static class POGenerator implements PropertiesVisitor
 	{
-	   out.close();
+		private final Catalog cat;
+		private final Properties transProps;
+		
+		public POGenerator(Catalog cat, Properties transProps) {
+			this.cat = cat;
+			this.transProps = transProps;
+		}
+
+		@Override
+		public void visit(String key, String englishString, String comment, String englishFile, int lineNumber) {
+			String msgctxt = key;
+			String msgid = englishString;
+
+			Message message = cat.locateMessage(msgctxt, msgid);
+			if(message != null)
+			{
+				if (transProps != null)
+				{
+					assert StringUtil.equals(message.getMsgstr(), transProps.getProperty(key));
+				}
+			}
+			else
+			{
+				message = new Message();
+				message.addFormat("java-format"); //  TODO check this //$NON-NLS-1$
+				message.addSourceReference(msgctxt);
+				message.setMsgid(msgid);
+				message.setMsgctxt(msgctxt);
+				if (transProps != null)
+				{
+					message.setMsgstr(transProps.getProperty(key));
+				}
+				cat.addMessage(message);
+			}
+			if (comment != null)
+				message.addExtractedComment(comment);
+			message.addSourceReference(englishFile, lineNumber);
+		}
+		
 	}
-	if(messageCount == 0)
-		toPoFile.delete();
-}
+
+	@Override
+	void postExecute() throws IOException 
+	{
+		if (generatePO) 
+		{
+			for (String locale : locales) 
+			{
+				Catalog cat = poCatalogs.get(locale);
+				File poFile = new File(dstDir, locale+".po"); //$NON-NLS-1$
+				if (cat.isEmpty())
+					poFile.delete();
+				else
+					saveCat(cat, poFile);
+			}
+		}
+		if (generatePOT)
+		{
+			File potFile = new File(dstDir, dstDir.getName()+".pot"); //$NON-NLS-1$
+			saveCat(potCatalog, potFile);
+		}
+	}
 
 }
