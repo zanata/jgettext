@@ -138,8 +138,11 @@ public class Gettext2PropTask extends AbstractPropGettextTask
 			String msgid = englishString;
 			String msgctxt = key;
 			Message message = cat.locateMessage(msgctxt, msgid);
-			if (message != null && !message.isFuzzy())
-				properties.setProperty(key, message.getMsgstr());
+			if (message != null && !message.isFuzzy() ) {
+			    String msgstr = message.getMsgstr();
+			    if (msgstr != null && msgstr.length() != 0)
+				properties.setProperty(key, msgstr);
+			}
 		}
 	}
 	

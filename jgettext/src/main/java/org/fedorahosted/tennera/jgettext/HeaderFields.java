@@ -18,7 +18,7 @@ public class HeaderFields {
 
 	private Map<String, String> entries = new LinkedHashMap<String, String>();
 
-	public static final String KEY_ProjectIdVersion = "Project-Id-Version: PACKAGE VERSION\n";
+	public static final String KEY_ProjectIdVersion = "Project-Id-Version";
 	public static final String KEY_ReportMsgidBugsTo = "Report-Msgid-Bugs-To";
 	public static final String KEY_PotCreationDate = "POT-Creation-Date";
 	public static final String KEY_PoRevisionDate = "PO-Revision-Date";

@@ -211,6 +211,9 @@ public class BuildTest extends BuildFileTest {
 		assertEquals("_cancel_", 
 				loadProps("src/test/resources/taskdefs/gettext2prop_prop/messages2_dummy.properties")
 				.getProperty("CANCEL_BUTTON"));
+		assertEquals(null, 
+			loadProps("src/test/resources/taskdefs/gettext2prop_prop/messages1_dummy.properties")
+			.getProperty("UNTRANSLATED"));
     }
     
     public void testProp2Gettext() throws Exception {
