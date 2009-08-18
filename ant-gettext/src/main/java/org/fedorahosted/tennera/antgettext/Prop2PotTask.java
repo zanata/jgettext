@@ -39,7 +39,7 @@ public class Prop2PotTask extends AbstractProp2PoPotTask
 	@Override
 	FileSelector[] getSelectors() 
 	{
-		return null;
+		return new FileSelector[0];
 	}
    
    @Override

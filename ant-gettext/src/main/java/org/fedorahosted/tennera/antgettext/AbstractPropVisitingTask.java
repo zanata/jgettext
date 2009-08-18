@@ -26,7 +26,7 @@ public abstract class AbstractPropVisitingTask extends AbstractPropReadingTask {
 		if (locales != null)
 			return new FileSelector[] {new BasePropertiesSelector(locales)};
 		else
-			return null;
+			return new FileSelector[0];
 	}
 
 	@Override

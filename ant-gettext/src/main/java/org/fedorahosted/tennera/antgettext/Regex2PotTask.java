@@ -79,7 +79,7 @@ public class Regex2PotTask extends MatchExtractingTask
 		charNum += line.length()+1; // plus 1 for the newline
 	    }
 	}
-	Integer[] lineStarts = lineStartList.toArray(new Integer[0]);
+	Integer[] lineStarts = lineStartList.toArray(new Integer[lineStartList.size()]);
 	return lineStarts;
    }
 
