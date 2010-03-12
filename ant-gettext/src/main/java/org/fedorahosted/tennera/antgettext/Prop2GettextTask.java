@@ -172,7 +172,9 @@ public class Prop2GettextTask extends AbstractPropGettextTask {
 				message.setMsgctxt(msgctxt);
 				if (transProps != null)
 				{
-					message.setMsgstr(transProps.getProperty(key));
+					String msgstr = transProps.getProperty(key);
+					if (msgstr != null)
+						message.setMsgstr(msgstr);
 				}
 				cat.addMessage(message);
 			}
