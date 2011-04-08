@@ -48,7 +48,7 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <grammars>catalog.g</grammars>
+                    <grammars>org/fedorahosted/tennera/jgettext/catalog/parse/catalog.g</grammars>
                 </configuration>
                 <executions>
                     <execution>
