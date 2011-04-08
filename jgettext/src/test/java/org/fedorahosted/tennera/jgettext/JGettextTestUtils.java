@@ -18,10 +18,27 @@ import org.fedorahosted.tennera.jgettext.catalog.parse.ParseException;
 public class JGettextTestUtils {
 
 	public static void testRoundTrip(String message, File f) throws FileNotFoundException, ParseException, IOException{
+	   System.out.println(f.getPath()+":");
 		String output = roundtrip(f);
-		String msgCatOutput = readToStringFromMsgcat(output, false);
-		String originalString = readToStringFromMsgcat(f, false); 
-		assertEquals(message, originalString, msgCatOutput);
+
+//		System.out.println("(original):");
+//		String origInput = readToString(f);
+//		System.out.println(origInput);
+//		System.out.println();
+		String msgcatInput = readToStringFromMsgcat(f, false);
+//		System.out.println("(msgcat):");
+//		System.out.println(msgcatInput);
+//		System.out.println();
+
+//		System.out.println("(jgettext):");
+//		System.out.println(output);
+//		System.out.println();
+		String msgcatOutput = readToStringFromMsgcat(output, false);
+//		System.out.println("(jgettext+msgcat):");
+//		System.out.println(msgcatOutput);
+//		System.out.println();
+		
+		assertEquals(message, msgcatInput, msgcatOutput);
 	}
 
 	public static void testRoundTrip(File f) throws FileNotFoundException, ParseException, IOException{
