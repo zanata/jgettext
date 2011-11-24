@@ -63,9 +63,9 @@
 		</license>
 	</licenses>
 	<scm>
-		<connection>scm:svn:http://svn.fedorahosted.org/svn/tennera/trunk</connection>
-		<developerConnection>scm:svn:svn+ssh://svn.fedorahosted.org/svn/tennera/trunk</developerConnection>
-		<url>https://fedorahosted.org/tennera/browser/trunk</url>
+		<connection>scm:git:git://github.com/zanata/tennera.git</connection>
+		<developerConnection>scm:git:git@github.com:zanata/tennera.git</developerConnection>
+		<url>https://github.com/zanata/tennera</url>
 	</scm>
 	  <properties>
 	    <compileSource>1.6</compileSource>
@@ -180,37 +180,60 @@
 	</reporting>
 	<repositories>
 		<repository>
-			<name>Tennera release repository on fedorahosted.org</name>
-		<id>fhosted.tennera.svn</id>
-			<url>http://svn.fedorahosted.org/svn/tennera/m2repo/</url>
-                        <releases>
-                                <enabled>true</enabled>
-                        </releases>
+			<id>zanata-cloudbees-release</id>
+			<name>zanata-cloudbees-release</name>
+			<url>http://repository-zanata.forge.cloudbees.com/release/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
 		<repository>
-			<name>Tennera snapshot repository on fedorapeople.org</name>
-			<id>fpeople.tennera.snap</id>
-			<url>http://seanf.fedorapeople.org/maven2/snapshot/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
+			<id>zanata-cloudbees-snapshot</id>
+			<name>zanata-cloudbees-snapshot</name>
+			<url>http://repository-zanata.forge.cloudbees.com/snapshot/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
-        <repository>
-          <id>repository.jboss.org</id>
-          <url>http://repository.jboss.org/maven2</url>
-          <releases>
-            <enabled>true</enabled>
-          </releases>
-          <snapshots>
-            <enabled>false</enabled>
-          </snapshots>
-        </repository>
+		<repository>
+			<id>jboss-releases</id>
+			<name>jboss-releases</name>
+			<url>http://repository.jboss.org/nexus/content/repositories/releases/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>jboss-thirdparty-releases</id>
+			<name>jboss-thirdparty-releases</name>
+			<url>http://repository.jboss.org/nexus/content/repositories/thirdparty-releases/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>jboss-snapshots</id>
+			<name>jboss-snapshots</name>
+			<url>http://repository.jboss.org/nexus/content/repositories/snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
 	</repositories>
 	<dependencies>
 		<dependency>
@@ -221,33 +244,19 @@
 		</dependency>
 	</dependencies>
 	<distributionManagement>
-		<!--
-		<site> 
-                        <id>local-site</id>
-                        <url>file://${user.home}/public_html/tennera</url> 
-		</site>
-		-->
 		<repository>
-			<name>Tennera release repository on fedorahosted.org</name>
-			<id>fpeople.tennera.snap.local</id>
-			<url>file:///srv/maven2/repo</url>
+			<uniqueVersion>false</uniqueVersion>
+			<id>cloudbees-private-release-repository</id>
+			<name>cloudbees-private-release-repository</name>
+			<url>dav:https://repository-zanata.forge.cloudbees.com/release/</url>
+			<layout>default</layout>
 		</repository>
 		<snapshotRepository>
-			<name>Tennera snapshot repository on fedorapeople.org</name>
-			<id>fpeople.tennera.snap.local</id>
-			<url>file:///srv/maven2/snapshot</url>
+			<uniqueVersion>false</uniqueVersion>
+			<id>cloudbees-private-snapshot-repository</id>
+			<name>cloudbees-private-snapshot-repository</name>
+			<url>dav:https://repository-zanata.forge.cloudbees.com/snapshot/</url>
+			<layout>default</layout>
 		</snapshotRepository>
-		<!--
-			<repository> 
-			     <id>fhosted.tennera.repo</id> 
-			     <name>fedorahosted tennera repository</name> 
-			     <url>scpexe://fedorahosted.org:tennera/maven2</url>
-			</repository> 
-			<snapshotRepository> 
-			     <id>fhosted.tennera.snap</id>
-			     <name>fedorahosted tennera snapshot repository</name>
-			     <url>scpexe://fedorahosted.org:tennera/maven2-snapshot</url>
-			</snapshotRepository>
-		-->
 	</distributionManagement>
 </project>
