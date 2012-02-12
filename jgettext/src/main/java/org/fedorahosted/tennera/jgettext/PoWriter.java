@@ -347,13 +347,21 @@ public class PoWriter {
 		writeString(prefix, msgstr, writer, msgSpace.length());
 	}
 
+	protected void writeMsgStrPlural(String prefix, String msgstr, int i, Writer writer) throws IOException {
+		String msgSpace = "msgstr[" + i + "] ";
+		writer.write( prefix + msgSpace);
+		writeString(prefix, msgstr, writer, msgSpace.length());
+	}
+
 	protected void writeMsgstrPlurals(String prefix, List<String> msgstrPlurals, Writer writer) throws IOException {
-		int i = 0;
-		for ( String msgstr : msgstrPlurals ) {
-			String msgSpace = "msgstr[" + i + "] ";
-			writer.write( prefix + msgSpace);
-			writeString(prefix, msgstr, writer, msgSpace.length());
-			i++;
+		if ( msgstrPlurals.isEmpty() ) {
+			writeMsgStrPlural(prefix, "", 0, writer);
+		} else {
+			int i = 0;
+			for ( String msgstr : msgstrPlurals ) {
+				writeMsgStrPlural(prefix, msgstr, i, writer);
+				i++;
+			}
 		}
 	}
 	
