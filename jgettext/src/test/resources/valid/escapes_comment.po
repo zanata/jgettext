@@ -3,3 +3,16 @@
 # src\resources\valid\escapse_comment.po
 msgid "test"
 msgstr ""
+
+# Disembodied Comment
+
+# Comment 1
+msgid "test2"
+msgstr ""
+
+# Obsolete comment
+#~ msgid "Obsolete mssg"
+#~ msgstr "Obsolete string"
+
+
+# End comment

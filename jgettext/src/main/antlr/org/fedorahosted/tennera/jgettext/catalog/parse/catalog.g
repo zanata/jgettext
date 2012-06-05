@@ -137,6 +137,7 @@ catalog:
     mb:messageBlocks {
         #catalog = buildCatalogNode( #mb );
     }
+    ( catalogComment )*
     ;
 
 messageBlocks:
