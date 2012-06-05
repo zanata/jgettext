@@ -71,6 +71,13 @@
 	    <compileSource>1.6</compileSource>
 	  </properties>
 	<build>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-webdav-jackrabbit</artifactId>
+                <version>1.0</version>
+            </extension>
+        </extensions>
 	    <pluginManagement>
 	      <plugins>
 	        <plugin>
