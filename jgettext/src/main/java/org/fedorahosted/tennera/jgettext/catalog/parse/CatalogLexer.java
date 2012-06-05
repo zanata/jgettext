@@ -297,6 +297,10 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 				processContinuation( entry );
 				return;
 			}
+			else if( '|' == entry.charAt( 0 ) ) {
+				processPreviousEntry( stripFirstSpace( entry.substring(2) ) );
+				return;
+			}
 			
 			wrapUpandResetEntryCollector();
 			
