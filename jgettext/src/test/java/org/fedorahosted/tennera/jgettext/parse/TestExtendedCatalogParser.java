@@ -81,4 +81,22 @@ public class TestExtendedCatalogParser{
 		catch ( ParseException expected ) {
 		}
 	}
+
+   @Test
+   public void testPossiblyAmbigousFile() throws Throwable{
+      File poFile = new File( getClass().getResource( "/valid/excesive_comments.po" ).getFile() );
+      ExtendedCatalogParser parser = new ExtendedCatalogParser( poFile );
+      parser.catalog();
+      Catalog catalog = parser.getCatalog();
+
+      int entryCount = 0;
+      int obsoleteCount = 0;
+      for(Message m : catalog){
+         entryCount++;
+         if(m.isObsolete()) obsoleteCount++;
+      }
+      assertNotNull( catalog.locateHeader() );
+      assertEquals( 8, entryCount );
+      assertEquals( 3, obsoleteCount );
+   }
 }
