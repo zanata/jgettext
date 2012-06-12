@@ -137,18 +137,20 @@ catalog:
     mb:messageBlocks {
         #catalog = buildCatalogNode( #mb );
     }
-    ( catalogComment )*
     ;
 
+/*
+ * NB: If this changes, make sure you update
+ * MessageStreamParser.nextMessageBlock() to suit.
+ */
 messageBlocks:
-    ( messageBlock )*
+    ( catalogComment | extractedComment | reference | flag | messageBlock )*
     ;
 
 /**
  * A message block defines all the lines related to a single translatable message entry.
  */
 messageBlock:
-    ( catalogComment | extractedComment | reference | flag )*
     ( previousMsgctxt )?
     ( previousMsgid )?
     ( previousMsgidPlural )?

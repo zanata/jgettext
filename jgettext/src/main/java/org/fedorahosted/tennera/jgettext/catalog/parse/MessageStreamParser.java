@@ -34,6 +34,8 @@ public class MessageStreamParser{
 		internalParser = new InternalMessageStreamParser(inputStream, charset);
 	}
 
+	// TODO this class is a fragile, ugly hack to allow stream parsing
+	// by knowing far too much about the internals of the generated CatalogParser
 	private class InternalMessageStreamParser extends CatalogParser{
 		
 		private Message currentMessage = new Message();
@@ -77,7 +79,41 @@ public class MessageStreamParser{
 			AST messageBlocks_AST = null;
 			
 			try { // for error handling
-				if ((_tokenSet_1.member(LA(1)))) {
+            _pseudocomments:
+            // this do loop was pinched from the generated messageBlocks()
+            do {
+               switch ( LA(1)) {
+               case COMMENT:
+               {
+                  catalogComment();
+                  astFactory.addASTChild(currentAST, returnAST);
+                  break;
+               }
+               case EXTRACTION:
+               {
+                  extractedComment();
+                  astFactory.addASTChild(currentAST, returnAST);
+                  break;
+               }
+               case REFERENCE:
+               {
+                  reference();
+                  astFactory.addASTChild(currentAST, returnAST);
+                  break;
+               }
+               case FLAG:
+               {
+                  flag();
+                  astFactory.addASTChild(currentAST, returnAST);
+                  break;
+               }
+               default:
+               {
+                  break _pseudocomments;
+               }
+               }
+            } while (true);
+			   if (EOF != LA(1)) {
 					messageBlock();
 					astFactory.addASTChild(currentAST, returnAST);
 					ret = true;
