@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.fedorahosted.tennera</groupId>
 	<artifactId>tennera</artifactId>
-	<version>0.7-SNAPSHOT</version>
+	<version>0.7</version>
 	<name>Tennera</name>
 	<!--
 	FH apparently can't host Maven-generated sites...
@@ -66,7 +66,8 @@
 		<connection>scm:git:git://github.com/zanata/tennera.git</connection>
 		<developerConnection>scm:git:git@github.com:zanata/tennera.git</developerConnection>
 		<url>https://github.com/zanata/tennera</url>
-	</scm>
+	  <tag>tennera-0.7</tag>
+  </scm>
 	  <properties>
 	    <compileSource>1.6</compileSource>
 	  </properties>
