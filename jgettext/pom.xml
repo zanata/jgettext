@@ -12,7 +12,7 @@
     <version>0.8-SNAPSHOT</version>
     <name>Tennera JGettext</name>
     <description>
-    ${name} provides the ability to read/parse and write GNU Gettext catalog files (PO and POT files)
+    ${project.name} provides the ability to read/parse and write GNU Gettext catalog files (PO and POT files)
     </description>
 
     <inceptionYear>2007</inceptionYear>

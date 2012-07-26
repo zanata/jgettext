@@ -11,7 +11,7 @@
   <version>0.8-SNAPSHOT</version>
   <name>Tennera Ant-Gettext</name>
   <description>
-  ${name} provides several Ant tasks for dealing with GNU Gettext catalog
+  ${project.name} provides several Ant tasks for dealing with GNU Gettext catalog
   files and Java Properties files, including file conversion and comparison, 
   and also extracting translatable strings from source code using regular 
   expressions.

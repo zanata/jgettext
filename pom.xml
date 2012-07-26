@@ -5,10 +5,7 @@
 	<artifactId>tennera</artifactId>
 	<version>0.8-SNAPSHOT</version>
 	<name>Tennera</name>
-	<!--
-	FH apparently can't host Maven-generated sites...
-	<url>https://fedorahosted.org/tennera/${artifactId}</url>
-	-->
+	<url>https://fedorahosted.org/tennera</url>
 	<packaging>pom</packaging>
 	<description>Umbrella for several Java internationalisation
 		projects</description>
@@ -18,20 +15,21 @@
 		<url>http://www.redhat.com/</url>
 	</organization>
 	<developers>
+		<!-- in alphabetical order (by id field) -->
 		<developer>
-		        <id>asgeirf</id>
-			<name>Asgeir Frimannsson</name>
-			<email>asgeirf@redhat.com</email>
+			<id>camunoz@redhat.com</id>
+			<name>Carlos Munoz</name>
+			<email>camunoz@redhat.com</email>
 			<organization>Red Hat</organization>
-			<organizationUrl>http://www.redhat.com/
-			</organizationUrl>
+			<organizationUrl>http://www.redhat.com/</organizationUrl>
 			<roles>
 				<role>developer</role>
 			</roles>
 			<timezone>10</timezone>
 		</developer>
+
 		<developer>
-                        <id>seanf</id>
+			<id>seanf</id>
 			<name>Sean Flanigan</name>
 			<email>sflaniga@redhat.com</email>
 			<organization>Red Hat</organization>
@@ -138,15 +136,6 @@
 					<pushChanges>true</pushChanges>
 			    </configuration>
 			</plugin>
-			<!--
-			<plugin> 
-			    <artifactId>maven-release-plugin</artifactId>
-			    <version>2.0-beta-8</version> 
-			    <configuration> 
-			       <tagBase>scm:svn:svn+ssh://svn.fedorahosted.org/svn/tennera/tags/${artifactId}</tagBase> 
-			    </configuration> 
-			</plugin>
-			-->
 		</plugins>
 	</build>
 	<reporting>
@@ -196,63 +185,6 @@
 			</plugin>
 		</plugins>
 	</reporting>
-	<repositories>
-		<repository>
-			<id>zanata-cloudbees-release</id>
-			<name>zanata-cloudbees-release</name>
-			<url>http://repository-zanata.forge.cloudbees.com/release/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>zanata-cloudbees-snapshot</id>
-			<name>zanata-cloudbees-snapshot</name>
-			<url>http://repository-zanata.forge.cloudbees.com/snapshot/</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>jboss-releases</id>
-			<name>jboss-releases</name>
-			<url>http://repository.jboss.org/nexus/content/repositories/releases/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>jboss-thirdparty-releases</id>
-			<name>jboss-thirdparty-releases</name>
-			<url>http://repository.jboss.org/nexus/content/repositories/thirdparty-releases/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>jboss-snapshots</id>
-			<name>jboss-snapshots</name>
-			<url>http://repository.jboss.org/nexus/content/repositories/snapshots/</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -261,20 +193,4 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<distributionManagement>
-		<repository>
-			<uniqueVersion>false</uniqueVersion>
-			<id>cloudbees-private-release-repository</id>
-			<name>cloudbees-private-release-repository</name>
-			<url>dav:https://repository-zanata.forge.cloudbees.com/release/</url>
-			<layout>default</layout>
-		</repository>
-		<snapshotRepository>
-			<uniqueVersion>false</uniqueVersion>
-			<id>cloudbees-private-snapshot-repository</id>
-			<name>cloudbees-private-snapshot-repository</name>
-			<url>dav:https://repository-zanata.forge.cloudbees.com/snapshot/</url>
-			<layout>default</layout>
-		</snapshotRepository>
-	</distributionManagement>
 </project>
