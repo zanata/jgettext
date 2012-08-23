@@ -1,0 +1,59 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: RecordEditor 0.90\n"
+"Last-Translator: bm\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Content-Transfer-Encoding: 8bit\n"
+
+
+# Use: Message
+#  id: SqlError   Panel:
+#
+# English:
+#     SQL: {0}
+# Message: {1}
+#
+msgid "SqlError"
+msgstr ""
+ 
+# previous line has a space
+# Use: Message
+#  id:    Panel:
+#
+msgid " --> Adding Record Layout: {0}"
+msgstr "  - >添加记录布局：{0}"
+	
+# previous line has a tab
+# Use: Message
+#  id:    Panel:
+#
+msgid " --> Deleting Record Layout: {0}"
+msgstr "  - >删除记录的布局：{0}"
+	
+# NB previous/next lines have tab characters
+	
+	# this line has a leading tab
+
+# Use: Column_Heading
+#  id:    Panel:
+# Tbl- PropsEd_JDBC 4
+msgid " User"
+msgstr " 用户"
+ 
+# NB previous/next lines have space characters
+ 
+ # this line has a leading space character
+
+# Use: Message
+#  id: CopybookLoaded   Panel:
+#
+# English: -->> {0} processed
+#
+#       Copybook: {1}
+msgid "CopybookLoaded"
+msgstr ""
+

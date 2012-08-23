@@ -31,7 +31,13 @@ public class TestRoundTrips {
 		File original = getResource("/roundtrip/msgid_wordwrap.po");
 		JGettextTestUtils.testRoundTrip(original);
 	}
-	
+
+	@Test
+	public void testTab() throws Throwable{
+	   File original = getResource("/roundtrip/tab.po");
+	   JGettextTestUtils.testRoundTrip(original);
+	}
+
 	@Test
 	@Ignore("requires recent version of gettext")
 	public void testEmptyLineNote() throws Throwable{

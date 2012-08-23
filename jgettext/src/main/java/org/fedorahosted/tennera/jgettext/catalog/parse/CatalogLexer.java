@@ -214,8 +214,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 		}
 
 		private void processLine(String line) {
-			line = StringUtils.stripFront(line, ' ');
-
+			line = StringUtils.stripFront(line, " \t");
 			if ( line.length() == 0 ) {
 				return;
 			}
