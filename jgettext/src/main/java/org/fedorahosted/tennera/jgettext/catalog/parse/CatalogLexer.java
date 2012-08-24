@@ -17,8 +17,8 @@ package org.fedorahosted.tennera.jgettext.catalog.parse;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -111,7 +111,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 
 		public Tokenizer(File file)
 				throws FileNotFoundException, IOException {
-			this(file.getName(), new LineNumberReader( new FileReader( file ) ));
+			this(file.getName(), new LineNumberReader(new InputStreamReader(new FileInputStream(file), Charset.forName("UTF-8"))));
 		}
 		
 		public Tokenizer(String filename, LineNumberReader ioReader) {
