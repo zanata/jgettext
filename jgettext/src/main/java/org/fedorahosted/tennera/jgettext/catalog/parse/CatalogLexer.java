@@ -15,7 +15,7 @@
  */
 package org.fedorahosted.tennera.jgettext.catalog.parse;
 
-import java.io.BufferedReader;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -24,11 +24,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Queue;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.fedorahosted.tennera.jgettext.catalog.util.StringUtil;
 
@@ -45,6 +48,12 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 
 	private final Tokenizer tokenizer;
 
+	/**
+	 * Uses the charset encoding specified in the file's Gettext header.
+	 * @param file
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	public CatalogLexer(File file) throws FileNotFoundException, IOException {
 		tokenizer = new Tokenizer( file );
 	}
@@ -52,8 +61,13 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 	public CatalogLexer(Reader reader) {
 		tokenizer = new Tokenizer( reader );
 	}
-	
-	public CatalogLexer(InputStream inputStream){
+
+	/**
+	 * Uses the charset encoding specified in the stream's Gettext header.
+	 * @param inputStream
+	 * @throws IOException
+	 */
+	public CatalogLexer(InputStream inputStream) throws IOException {
 		tokenizer = new Tokenizer( inputStream );
 	}
 	
@@ -75,6 +89,50 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 		}
 		return tokenizer.next();
 	}
+
+   /**
+    * Searches the beginning (4096 bytes) of the InputStream for a Gettext
+    * charset declaration, and returns the charset name.  The InputStream
+    * must support "mark".  It will be reset to the beginning of the stream.
+    * If no charset is found, UTF-8 will be assumed.
+    * <p>
+    * As with the Gettext tools, this only works for
+    * ASCII-compatible charsets. UTF-16 is not supported.
+    * </p>
+    * @param markableStream
+    * @return
+    * @throws IOException
+    * @throws UnsupportedEncodingException
+    */
+   static String readGettextCharset(InputStream markableStream) throws IOException, UnsupportedEncodingException
+   {
+      String charset = "UTF-8";
+      int limit = 4096;
+      markableStream.mark(limit);
+      byte[] buf = new byte[limit];
+      int count = markableStream.read(buf);
+      markableStream.reset();
+      if (count < 0) {
+         throw new RuntimeException();
+      }
+      String s = new String(buf, 0, count, "ASCII");
+      Pattern pat = Pattern.compile("\"Content-Type:.*charset=([^ \t\\\\]*)[ \t\\\\]");
+      Matcher matcher = pat.matcher(s);
+      if (matcher.find()) {
+         charset = matcher.group(1);
+      } else {
+         // this regex is more prone to false positives inside comments, so
+         // we try the more specific regex (above) first
+         pat = Pattern.compile("charset=([^ \t\\\\]*)[ \t\\\\]");
+          if (matcher.find()) {
+             charset = matcher.group(1);
+          }
+      }
+      if (charset.equals("CHARSET")) {
+         charset = "ASCII";
+      }
+      return charset;
+   }
 
 
 	/**
@@ -109,9 +167,15 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 
 		private EntryCollector entryCollector;
 
+		/**
+		 * Uses the charset encoding specified in the file's Gettext header.
+		 * @param file
+		 * @throws FileNotFoundException
+		 * @throws IOException
+		 */
 		public Tokenizer(File file)
 				throws FileNotFoundException, IOException {
-			this(file.getName(), new LineNumberReader(new InputStreamReader(new FileInputStream(file), Charset.forName("UTF-8"))));
+			this(file.getName(), lineNumberReaderForCharset(new FileInputStream(file)));
 		}
 		
 		public Tokenizer(String filename, LineNumberReader ioReader) {
@@ -126,12 +190,37 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 				this.ioReader = new LineNumberReader(reader);
 			filename = null;
 		}
-		public Tokenizer(InputStream inputStream){
-			this(new LineNumberReader(new BufferedReader(new InputStreamReader(inputStream,Charset.forName("UTF-8")))));
+
+		/**
+		 * Uses the charset encoding specified in the stream's Gettext header.
+		 * @param inputStream
+		 * @throws IOException
+		 */
+		public Tokenizer(InputStream inputStream) throws IOException {
+			this(lineNumberReaderForCharset(inputStream));
 		}
 		
 		public Tokenizer(InputStream inputStream, Charset charset){
-			this(new LineNumberReader(new BufferedReader(new InputStreamReader(inputStream, charset))));
+			this(new LineNumberReader(new InputStreamReader(inputStream, charset)));
+		}
+
+		/**
+		 * Creates a LineNumberReader for the InputStream, using the charset
+		 * encoding specified in the Gettext header.
+		 * @param inputStream
+		 * @return
+		 * @throws IOException
+		 */
+      private static LineNumberReader lineNumberReaderForCharset(InputStream inputStream) throws IOException {
+		   InputStream markableStream;
+		   if (inputStream.markSupported()) {
+            markableStream = inputStream;
+         } else {
+            markableStream = new BufferedInputStream(inputStream);
+            assert markableStream.markSupported();
+         }
+		   String charset = readGettextCharset(markableStream);
+         return new LineNumberReader(new InputStreamReader(markableStream, charset));
 		}
 		
 		@Override

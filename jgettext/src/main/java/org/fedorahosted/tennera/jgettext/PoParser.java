@@ -42,7 +42,7 @@ public class PoParser {
 		return parseCatalog(parser);
 	}
 	
-	public Catalog parseCatalog(InputStream inputStream, boolean isPot) throws ParseException{
+	public Catalog parseCatalog(InputStream inputStream, boolean isPot) throws ParseException, IOException {
 		ExtendedCatalogParser parser = new ExtendedCatalogParser(inputStream, isPot);
 		return parseCatalog(parser);
 	}
@@ -73,7 +73,7 @@ public class PoParser {
 		return parseMessage(parser);
 	}
 	
-	public Message parseMessage(InputStream inputStream) throws ParseException{
+	public Message parseMessage(InputStream inputStream) throws ParseException, IOException {
 		MessageStreamParser parser = new MessageStreamParser(inputStream);
 		return parseMessage(parser);
 	}

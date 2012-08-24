@@ -17,7 +17,13 @@ import antlr.collections.AST;
 public class MessageStreamParser{
 
 	private InternalMessageStreamParser internalParser;
-	
+
+	/**
+	 * Uses the charset encoding specified in the file's Gettext header.
+	 * @param file
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	public MessageStreamParser(File file) throws FileNotFoundException, IOException{
 		internalParser = new InternalMessageStreamParser(file);
 	}
@@ -25,8 +31,13 @@ public class MessageStreamParser{
 	public MessageStreamParser(Reader reader){
 		internalParser = new InternalMessageStreamParser(reader);
 	}
-	
-	public MessageStreamParser(InputStream inputStream){
+
+	/**
+	 * Uses the charset encoding specified in the stream's Gettext header.
+	 * @param inputStream
+	 * @throws IOException
+	 */
+	public MessageStreamParser(InputStream inputStream) throws IOException {
 		internalParser = new InternalMessageStreamParser(inputStream);
 	}
 	
@@ -49,7 +60,7 @@ public class MessageStreamParser{
 			super( new CatalogLexer( reader ) );
 		}
 		
-		public InternalMessageStreamParser(InputStream inputStream){
+		public InternalMessageStreamParser(InputStream inputStream) throws IOException {
 			super( new CatalogLexer(inputStream) );
 		}
 		

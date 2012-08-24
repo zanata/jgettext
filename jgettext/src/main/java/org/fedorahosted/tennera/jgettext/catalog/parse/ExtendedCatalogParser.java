@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
-import java.util.StringTokenizer;
 
 import org.fedorahosted.tennera.jgettext.Catalog;
 import org.fedorahosted.tennera.jgettext.Message;
@@ -39,6 +38,12 @@ public class ExtendedCatalogParser extends CatalogParser {
 	private final Catalog catalog;
 	private Message currentMessage = new Message();
 
+	/**
+	 * Uses the charset encoding specified in the file's Gettext header.
+	 * @param file
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	public ExtendedCatalogParser(File file) throws FileNotFoundException, IOException {
 		super( new CatalogLexer( file ) );
 		catalog = new Catalog(isPot(file));
@@ -47,8 +52,14 @@ public class ExtendedCatalogParser extends CatalogParser {
 		super( new CatalogLexer( reader ) );	
 		catalog = new Catalog(isPot);
 	}
-	
-	public ExtendedCatalogParser(InputStream inputStream, boolean isPot){
+
+	/**
+	 * Uses the charset encoding specified in the stream's Gettext header.
+	 * @param inputStream
+	 * @param isPot
+	 * @throws IOException
+	 */
+	public ExtendedCatalogParser(InputStream inputStream, boolean isPot) throws IOException {
 		super( new CatalogLexer( inputStream ) );	
 		catalog = new Catalog(isPot);
 	}
