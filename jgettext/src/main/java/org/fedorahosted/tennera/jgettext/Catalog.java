@@ -17,7 +17,6 @@ package org.fedorahosted.tennera.jgettext;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Map.Entry;
 
 /**
@@ -36,6 +35,11 @@ public class Catalog implements Iterable<Message>{
     	public Catalog(boolean template) {
     	    this.template = template;
     	}
+    	
+    	public Catalog()
+      {
+         this(false);
+      }
     
     
 	private final LinkedHashMap<MessageHashKey,Message> messageMap = new LinkedHashMap<MessageHashKey,Message>();

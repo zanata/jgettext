@@ -32,23 +32,34 @@ import antlr.TokenStreamException;
 
 public class PoParser {
 
+   private Catalog catalog;
+
+   public PoParser() {
+      this(new Catalog());
+   }
+
+   public PoParser(Catalog catalog) {
+      this.catalog = catalog;
+   }
+   
+   
 	public Catalog parseCatalog(File file) throws FileNotFoundException, IOException, ParseException{
-		ExtendedCatalogParser parser = new ExtendedCatalogParser(file);
+		ExtendedCatalogParser parser = new ExtendedCatalogParser(catalog, file);
 		return parseCatalog(parser);
 	}
 	
 	public Catalog parseCatalog(Reader reader, boolean isPot) throws ParseException{
-		ExtendedCatalogParser parser = new ExtendedCatalogParser(reader, isPot);
+		ExtendedCatalogParser parser = new ExtendedCatalogParser(catalog, reader, isPot);
 		return parseCatalog(parser);
 	}
 	
 	public Catalog parseCatalog(InputStream inputStream, boolean isPot) throws ParseException, IOException {
-		ExtendedCatalogParser parser = new ExtendedCatalogParser(inputStream, isPot);
+		ExtendedCatalogParser parser = new ExtendedCatalogParser(catalog, inputStream, isPot);
 		return parseCatalog(parser);
 	}
 	
 	public Catalog parseCatalog(InputStream inputStream, Charset charset, boolean isPot) throws ParseException{
-		ExtendedCatalogParser parser = new ExtendedCatalogParser(inputStream, charset, isPot);
+		ExtendedCatalogParser parser = new ExtendedCatalogParser(catalog, inputStream, charset, isPot);
 		return parseCatalog(parser);
 	}
 	

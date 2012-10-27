@@ -40,33 +40,39 @@ public class ExtendedCatalogParser extends CatalogParser {
 
 	/**
 	 * Uses the charset encoding specified in the file's Gettext header.
+	 * @param catalog
 	 * @param file
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public ExtendedCatalogParser(File file) throws FileNotFoundException, IOException {
+	public ExtendedCatalogParser(Catalog catalog, File file) throws FileNotFoundException, IOException {
 		super( new CatalogLexer( file ) );
-		catalog = new Catalog(isPot(file));
+		catalog.setTemplate(isPot(file));
+      this.catalog = catalog;
 	}
-	public ExtendedCatalogParser(Reader reader, boolean isPot){
-		super( new CatalogLexer( reader ) );	
-		catalog = new Catalog(isPot);
+	public ExtendedCatalogParser(Catalog catalog, Reader reader, boolean isPot){
+		super( new CatalogLexer( reader ) );
+		catalog.setTemplate(isPot);
+      this.catalog = catalog;
 	}
 
 	/**
 	 * Uses the charset encoding specified in the stream's Gettext header.
+    * @param catalog
 	 * @param inputStream
 	 * @param isPot
 	 * @throws IOException
 	 */
-	public ExtendedCatalogParser(InputStream inputStream, boolean isPot) throws IOException {
-		super( new CatalogLexer( inputStream ) );	
-		catalog = new Catalog(isPot);
+	public ExtendedCatalogParser(Catalog catalog, InputStream inputStream, boolean isPot) throws IOException {
+		super( new CatalogLexer( inputStream ) );
+		catalog.setTemplate(isPot);
+      this.catalog = catalog;
 	}
 	
-	public ExtendedCatalogParser(InputStream inputStream, Charset charset, boolean isPot){
-		super( new CatalogLexer( inputStream, charset ) );	
-		catalog = new Catalog(isPot);
+	public ExtendedCatalogParser(Catalog catalog, InputStream inputStream, Charset charset, boolean isPot){
+		super( new CatalogLexer( inputStream, charset ) );
+		catalog.setTemplate(isPot);
+      this.catalog = catalog;
 	}
 	
 	private static boolean isPot(File file) {
