@@ -15,8 +15,9 @@ import java.util.Properties;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.junit.Test;
 
-public class TestDynamicRoundtrips extends TestSuite{
+public class TestDynamicRoundtrips {
     
     public final static void generateTests(TestSuite ts) throws Throwable{
     	final Properties properties = new Properties();
@@ -66,8 +67,8 @@ public class TestDynamicRoundtrips extends TestSuite{
     		}
     	}
     }
-    
-    
+
+    @Test
     public static TestSuite suite() throws Throwable{
             TestSuite ts=new TestSuite();
             generateTests(ts);

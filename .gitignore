@@ -2,4 +2,6 @@
 .project
 .settings
 .antlr-eclipse
+.idea
+*.iml
 */target
