@@ -28,13 +28,20 @@ import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.List;
 
-import antlr.StringUtils;
-
 public class PoWriter {
 
 	private boolean generateHeader = false;
 	private boolean wrap = true;
-	
+	private final boolean encodeTabs;
+
+	public PoWriter(boolean encodeTabs) {
+		this.encodeTabs = encodeTabs;
+	}
+
+	public PoWriter() {
+		this(true);
+	}
+
 	public void setGenerateHeader(boolean generateHeader) {
 		this.generateHeader = generateHeader;
 	}
@@ -244,8 +251,12 @@ public class PoWriter {
 				currentLine.append('r');
 				break;
 			case '\t':
-				currentLine.append('\\');
-				currentLine.append('t');
+				if (encodeTabs) {
+					currentLine.append('\\');
+					currentLine.append('t');
+				} else {
+					currentLine.append(currentChar);
+				}
 				break;
 			case '"':
 				currentLine.append('\\');
