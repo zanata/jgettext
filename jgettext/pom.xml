@@ -21,15 +21,35 @@
         <url>http://jboss.org/</url>
     </organization>
 
+    <developers>
+        <!-- in alphabetical order (by id field) -->
+        <developer>
+            <id>camunoz@redhat.com</id>
+            <name>Carlos Munoz</name>
+            <email>camunoz@redhat.com</email>
+            <organization>Red Hat</organization>
+            <organizationUrl>http://www.redhat.com/</organizationUrl>
+            <timezone>10</timezone>
+        </developer>
+        <developer>
+            <id>sflaniga@redhat.com</id>
+            <name>Sean Flanigan</name>
+            <email>sflaniga@redhat.com</email>
+            <organization>Red Hat</organization>
+            <organizationUrl>http://www.redhat.com/</organizationUrl>
+            <timezone>10</timezone>
+        </developer>
+    </developers>
+
   <contributors>
     <contributor>
             <name>Steve Ebersole</name>
             <email>steve@hibernate.org</email>
             <organization>JBoss, a division of Red Hat, Inc</organization>
             <organizationUrl>http://jboss.org</organizationUrl>
-	      <roles>
-	        <role>original developer</role>
-	      </roles>
+            <roles>
+                <role>original developer</role>
+            </roles>
             <timezone>-5</timezone>
     </contributor>
   </contributors>
