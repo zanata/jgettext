@@ -8,14 +8,17 @@ import java.util.regex.Pattern;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TestPoWriter {
+import static org.junit.matchers.JUnitMatchers.containsString;
 
-	private static String serializeMsg(Message msg) throws IOException {
+public class TestPoWriter {
+   boolean encodeTabs = true;
+
+	private String serializeMsg(Message msg) throws IOException {
 		Catalog catalog = new Catalog(true);
 		catalog.addMessage(msg);
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		Charset charset = Charset.forName("utf-8");
-		new PoWriter().write(catalog, bos, charset);
+		new PoWriter(encodeTabs).write(catalog, bos, charset);
 		bos.close();
 		return new String(bos.toByteArray(), charset);
 	}
@@ -44,4 +47,28 @@ public class TestPoWriter {
 		Assert.assertTrue(matcher.find());
 		Assert.assertFalse(matcher.find());
 	}
+
+   @Test
+   public void tabShouldNotBeEncoded() throws IOException {
+      Message msg = new Message();
+      msg.setMsgid("msgid\tmsgid");
+      msg.setMsgstr("msgstr\tmsgstr");
+
+      encodeTabs = false;
+      String str = serializeMsg(msg);
+      Assert.assertThat(str, containsString("msgid \"msgid\tmsgid\""));
+      Assert.assertThat(str, containsString("msgstr \"msgstr\tmsgstr\""));
+   }
+
+   @Test
+   public void tabShouldBeEncoded() throws IOException {
+      Message msg = new Message();
+      msg.setMsgid("msgid\tmsgid");
+      msg.setMsgstr("msgstr\tmsgstr");
+
+      encodeTabs = true;
+      String str = serializeMsg(msg);
+      Assert.assertThat(str, containsString("msgid \"msgid\\tmsgid\""));
+      Assert.assertThat(str, containsString("msgstr \"msgstr\\tmsgstr\""));
+   }
 }
