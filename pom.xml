@@ -5,7 +5,7 @@
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
 		<version>7</version>
-		<relativePath/>
+		<relativePath />
 	</parent>
 	<groupId>org.fedorahosted.tennera</groupId>
 	<artifactId>tennera</artifactId>
@@ -128,6 +128,13 @@
 					<showDeprecation>true</showDeprecation>
 					<showWarnings>true</showWarnings>
 					<optimize>true</optimize>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<configuration>
+					<useAgent>true</useAgent>
 				</configuration>
 			</plugin>
 			<plugin>
