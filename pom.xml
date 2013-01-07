@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>org.fedorahosted.tennera</groupId>
 	<artifactId>tennera</artifactId>
-	<version>0.11</version>
+	<version>0.12-SNAPSHOT</version>
 	<name>Tennera</name>
 	<url>https://fedorahosted.org/tennera</url>
 	<packaging>pom</packaging>
@@ -73,7 +73,7 @@
 		<connection>scm:git:git://github.com/zanata/tennera.git</connection>
 		<developerConnection>scm:git:git@github.com:zanata/tennera.git</developerConnection>
 		<url>https://github.com/zanata/tennera</url>
-	  <tag>tennera-0.11</tag>
+	  <tag>HEAD</tag>
   </scm>
 	  <properties>
 	    <compileSource>1.6</compileSource>
