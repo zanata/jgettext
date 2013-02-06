@@ -154,6 +154,6 @@
     </dependencies>
 
     <properties>
-        <antlr.version>2.7.6</antlr.version>
+        <antlr.version>2.7.7</antlr.version>
     </properties>
 </project>
