@@ -44,9 +44,8 @@
         </developer>
     </developers>
     <issueManagement>
-        <system>Trac</system>
-        <url>https://fedorahosted.org/tennera
-        </url>
+        <system>GitHub</system>
+        <url>https://github.com/zanata/jgettext/issues</url>
     </issueManagement>
     <licenses>
         <license>
