@@ -1,3 +1,5 @@
+JGettext includes an ANTLR-based parser for GNU Gettext PO/POT files and a PO/POT generator as well.
+
 To compile this project, you will need Maven 2.0.9.
 
 Eclipse:
