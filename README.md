@@ -118,4 +118,4 @@ Set up a classpath called "dependency.classpath" with the jars above, then:
 Licence
 -------
 
-LGPL
+LGPL 2.1
