@@ -1,16 +1,13 @@
-To compile this project, you will need Maven 2.0.9 and OpenProps.
+JGettext includes an ANTLR-based parser for GNU Gettext PO/POT files and a PO/POT generator as well.
 
-OpenProps dependency:
+To compile this project, you will need Maven 2.0.9.
 
-OpenProps is not currently available in the Maven repositories, so you 
-will need to compile it yourself.  Just download the source, run 'mvn 
-install', and you should now be able to build tennera/ant-gettext. 
+Eclipse:
 
-For Eclipse:
+From the jgettext directory, run 'mvn install eclipse:eclipse'.  
 
-From the tennera directory, run 'mvn install eclipse:eclipse'.  
+This will download required dependencies, run ANTLR against the jgettext 
+grammar, and create Eclipse's project files.  Eclipse should now be able 
+to compile the .java files, but you will need to run 'mvn install' again
+if you change the grammar.
 
-This will download required dependencies, compile jgettext and ant-gettext, 
-and create Eclipse's project files.  Eclipse should now be able 
-to compile both projects, but you will need to run 'mvn install' again
-if you change the jgettext grammar.
