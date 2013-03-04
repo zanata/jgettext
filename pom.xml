@@ -11,7 +11,7 @@
     <groupId>org.fedorahosted.tennera</groupId>
     <artifactId>jgettext</artifactId>
     <packaging>jar</packaging>
-    <version>0.13-SNAPSHOT</version>
+    <version>0.13</version>
     <name>JGettext</name>
     <description>
         ${project.name} provides the ability to read/parse and write GNU Gettext catalog files (PO and POT files)
