@@ -84,16 +84,19 @@ public class HeaderFields {
 	 * <p>Extracts key:value headers into a {@link HeaderFields}.</p>
 	 * 
 	 * <p>
-	 *   The expected format is one or more lines each in the form
+	 *   The expected format is zero or more lines each in the form
 	 *   <code> "[key]:[value]\n"</code>.
 	 * </p>
 	 * 
 	 * @param msgstr string describing one or more headers
 	 * @throws ParseException
-	 *            if msgstr is empty, or does not comply to the expected format.
+	 *            if msgstr does not comply to the expected format.
 	 */
 	public static HeaderFields wrap(String msgstr) throws ParseException {
 		HeaderFields header = new HeaderFields();
+		if (msgstr.isEmpty()) {
+			return header;
+		}
 		String[] entries = msgstr.split("\n");
 		for (String entry : entries) {
 			String[] keyval = entry.split("\\:", 2);
