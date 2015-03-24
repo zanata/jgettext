@@ -10,9 +10,13 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.fedorahosted.tennera.jgettext.catalog.parse.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("nls")
 public class HeaderFields {
+        private static final Logger log =
+            LoggerFactory.getLogger(HeaderFields.class);
 
 	private Map<String, String> entries = new LinkedHashMap<String, String>();
 
@@ -82,15 +86,18 @@ public class HeaderFields {
 
 	/**
 	 * <p>Extracts key:value headers into a {@link HeaderFields}.</p>
-	 * 
+	 *
 	 * <p>
 	 *   The expected format is zero or more lines each in the form
 	 *   <code> "[key]:[value]\n"</code>.
 	 * </p>
-	 * 
+     * <p>
+     *   Other format will be ignored with a warning. i.e.
+     *   <code>"\n"</code>
+     *   <code>"key\n"</code>
+     * </p>
+	 *
 	 * @param msgstr string describing one or more headers
-	 * @throws ParseException
-	 *            if msgstr does not comply to the expected format.
 	 */
 	public static HeaderFields wrap(String msgstr) throws ParseException {
 		HeaderFields header = new HeaderFields();
@@ -99,10 +106,14 @@ public class HeaderFields {
 		}
 		String[] entries = msgstr.split("\n");
 		for (String entry : entries) {
+            if (entry.trim().isEmpty()) {
+                log.warn("Empty header is found. This entry will be ignored.");  
+                continue;
+            }
 			String[] keyval = entry.split("\\:", 2);
 			if (keyval.length != 2) {
-				throw new ParseException("Could not parse header entry: "
-						+ entry, -1);
+                log.warn("Header entry is not key:value pair [{}]. It will be ignored.", entry);
+                continue;
 			}
 			header.entries.put(keyval[0].trim(), keyval[1].trim());
 		}
