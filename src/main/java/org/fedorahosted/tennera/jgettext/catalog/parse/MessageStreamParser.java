@@ -14,286 +14,288 @@ import antlr.RecognitionException;
 import antlr.TokenStreamException;
 import antlr.collections.AST;
 
-public class MessageStreamParser{
+public class MessageStreamParser {
 
-	private InternalMessageStreamParser internalParser;
+    private InternalMessageStreamParser internalParser;
 
-	/**
-	 * Uses the charset encoding specified in the file's Gettext header.
-	 * @param file
-	 * @throws FileNotFoundException
-	 * @throws IOException
-	 */
-	public MessageStreamParser(File file) throws FileNotFoundException, IOException{
-		internalParser = new InternalMessageStreamParser(file);
-	}
-	
-	public MessageStreamParser(Reader reader){
-		internalParser = new InternalMessageStreamParser(reader);
-	}
+    /**
+     * Uses the charset encoding specified in the file's Gettext header.
+     * 
+     * @param file
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public MessageStreamParser(File file) throws FileNotFoundException,
+            IOException {
+        internalParser = new InternalMessageStreamParser(file);
+    }
 
-	/**
-	 * Uses the charset encoding specified in the stream's Gettext header.
-	 * @param inputStream
-	 * @throws IOException
-	 */
-	public MessageStreamParser(InputStream inputStream) throws IOException {
-		internalParser = new InternalMessageStreamParser(inputStream);
-	}
-	
-	public MessageStreamParser(InputStream inputStream, Charset charset){
-		internalParser = new InternalMessageStreamParser(inputStream, charset);
-	}
+    public MessageStreamParser(Reader reader) {
+        internalParser = new InternalMessageStreamParser(reader);
+    }
 
-	// TODO this class is a fragile, ugly hack to allow stream parsing
-	// by knowing far too much about the internals of the generated CatalogParser
-	private class InternalMessageStreamParser extends CatalogParser{
-		
-		private Message currentMessage = new Message();
-		private Message nextMessage;
+    /**
+     * Uses the charset encoding specified in the stream's Gettext header.
+     * 
+     * @param inputStream
+     * @throws IOException
+     */
+    public MessageStreamParser(InputStream inputStream) throws IOException {
+        internalParser = new InternalMessageStreamParser(inputStream);
+    }
 
-		public InternalMessageStreamParser(File file) throws FileNotFoundException, IOException {
-			super( new CatalogLexer( file ) );
-		}
+    public MessageStreamParser(InputStream inputStream, Charset charset) {
+        internalParser = new InternalMessageStreamParser(inputStream, charset);
+    }
 
-		public InternalMessageStreamParser(Reader reader){
-			super( new CatalogLexer( reader ) );
-		}
-		
-		public InternalMessageStreamParser(InputStream inputStream) throws IOException {
-			super( new CatalogLexer(inputStream) );
-		}
-		
-		public InternalMessageStreamParser(InputStream inputStream, Charset charset){
-			super( new CatalogLexer(inputStream, charset) );
-		}
-		
+    // TODO this class is a fragile, ugly hack to allow stream parsing
+    // by knowing far too much about the internals of the generated
+    // CatalogParser
+    private class InternalMessageStreamParser extends CatalogParser {
 
-		public void reportError(RecognitionException e) {
-			UnexpectedTokenException utEx = new UnexpectedTokenException( e.getMessage(), e.getLine() );
-			utEx.initCause(e);
-			throw utEx;
-		}
+        private Message currentMessage = new Message();
+        private Message nextMessage;
 
-		public void reportError(String s) {
-			throw new ParseException( "error parsing catalog : " + s, -1 );
-		}
+        public InternalMessageStreamParser(File file)
+                throws FileNotFoundException, IOException {
+            super(new CatalogLexer(file));
+        }
 
-		public void reportWarning(String s) {
-		}
+        public InternalMessageStreamParser(Reader reader) {
+            super(new CatalogLexer(reader));
+        }
 
-		protected boolean nextMessageBlock() throws RecognitionException, TokenStreamException {
-			
-			boolean ret = false;
-			returnAST = null;
-			ASTPair currentAST = new ASTPair();
-			AST messageBlocks_AST = null;
-			
-			try { // for error handling
-            _pseudocomments:
-            // this do loop was pinched from the generated messageBlocks()
-            do {
-               switch ( LA(1)) {
-               case COMMENT:
-               {
-                  catalogComment();
-                  astFactory.addASTChild(currentAST, returnAST);
-                  break;
-               }
-               case EXTRACTION:
-               {
-                  extractedComment();
-                  astFactory.addASTChild(currentAST, returnAST);
-                  break;
-               }
-               case REFERENCE:
-               {
-                  reference();
-                  astFactory.addASTChild(currentAST, returnAST);
-                  break;
-               }
-               case FLAG:
-               {
-                  flag();
-                  astFactory.addASTChild(currentAST, returnAST);
-                  break;
-               }
-               default:
-               {
-                  break _pseudocomments;
-               }
-               }
-            } while (true);
-			   if (EOF != LA(1)) {
-					messageBlock();
-					astFactory.addASTChild(currentAST, returnAST);
-					ret = true;
-				}
-				else {
-					reportWarning("No more entries!");
-				}
-				messageBlocks_AST = (AST)currentAST.root;
-			}
-			catch (RecognitionException ex) {
-				reportError(ex);
-				recover(ex,_tokenSet_0);
-			}
-			returnAST = messageBlocks_AST;
-			
-			return ret;
-		}
-		
-		@Override
-		protected void handleMessageBlock(AST messageBlock) {
-			nextMessage = currentMessage;
-			currentMessage = new Message();
-		}
+        public InternalMessageStreamParser(InputStream inputStream)
+                throws IOException {
+            super(new CatalogLexer(inputStream));
+        }
 
-		@Override
-		protected void handleObsoleteMessageBlock(AST messageBlock) {
-			currentMessage.markObsolete();
-			handleMessageBlock( messageBlock );
-		}
+        public InternalMessageStreamParser(InputStream inputStream,
+                Charset charset) {
+            super(new CatalogLexer(inputStream, charset));
+        }
 
-		@Override
-		protected void handleCatalogComment(AST comment) {
-			currentMessage.addComment( extractText( comment ) );
-		}
+        public void reportError(RecognitionException e) {
+            UnexpectedTokenException utEx =
+                    new UnexpectedTokenException(e.getMessage(), e.getLine());
+            utEx.initCause(e);
+            throw utEx;
+        }
 
-		@Override
-		protected void handleExtractedComment(AST comment) {
-			currentMessage.addExtractedComment( extractText( comment ) );
-		}
+        public void reportError(String s) {
+            throw new ParseException("error parsing catalog : " + s, -1);
+        }
 
-		@Override
-		protected void handleReference(AST sourceRef) {
-			currentMessage.addSourceReference( parseSourceReference( sourceRef ) );
-		}
+        public void reportWarning(String s) {
+        }
 
-		@Override
-		protected void handleFlag(AST flag) {
-			String [] flags = flag.getText().split(",");
-			for(String flagStr : flags){
-				flagStr = flagStr.trim();
-				if(!flagStr.isEmpty())
-					currentMessage.addFormat(flagStr);
-			}
-		}
+        protected boolean nextMessageBlock() throws RecognitionException,
+                TokenStreamException {
 
-		@Override
-		protected void handlePreviousMsgctxt(AST previousMsgctxt) {
-			currentMessage.setPrevMsgctx( extractText( previousMsgctxt ) );
-		}
+            boolean ret = false;
+            returnAST = null;
+            ASTPair currentAST = new ASTPair();
+            AST messageBlocks_AST = null;
 
-		@Override
-		protected void handlePreviousMsgid(AST previousMsgid) {
-			currentMessage.setPrevMsgid( extractText( previousMsgid ) );
-		}
+            try { // for error handling
+                _pseudocomments:
+                // this do loop was pinched from the generated messageBlocks()
+                do {
+                    switch (LA(1)) {
+                    case COMMENT: {
+                        catalogComment();
+                        astFactory.addASTChild(currentAST, returnAST);
+                        break;
+                    }
+                    case EXTRACTION: {
+                        extractedComment();
+                        astFactory.addASTChild(currentAST, returnAST);
+                        break;
+                    }
+                    case REFERENCE: {
+                        reference();
+                        astFactory.addASTChild(currentAST, returnAST);
+                        break;
+                    }
+                    case FLAG: {
+                        flag();
+                        astFactory.addASTChild(currentAST, returnAST);
+                        break;
+                    }
+                    default: {
+                        break _pseudocomments;
+                    }
+                    }
+                } while (true);
+                if (EOF != LA(1)) {
+                    messageBlock();
+                    astFactory.addASTChild(currentAST, returnAST);
+                    ret = true;
+                }
+                else {
+                    reportWarning("No more entries!");
+                }
+                messageBlocks_AST = (AST) currentAST.root;
+            } catch (RecognitionException ex) {
+                reportError(ex);
+                recover(ex, _tokenSet_0);
+            }
+            returnAST = messageBlocks_AST;
 
-		@Override
-		protected void handlePreviousMsgidPlural(AST previousMsgidPlural) {
-			currentMessage.setPrevMsgidPlural( extractText( previousMsgidPlural ) );
-		}
+            return ret;
+        }
 
-		@Override
-		protected void handleDomain(AST domain) {
-			currentMessage.setDomain( extractText( domain ) );
-		}
+        @Override
+        protected void handleMessageBlock(AST messageBlock) {
+            nextMessage = currentMessage;
+            currentMessage = new Message();
+        }
 
-		@Override
-		protected void handleMsgctxt(AST msgctxt) {
-			currentMessage.setMsgctxt( extractText( msgctxt ) );
-		}
+        @Override
+        protected void handleObsoleteMessageBlock(AST messageBlock) {
+            currentMessage.markObsolete();
+            handleMessageBlock(messageBlock);
+        }
 
-		@Override
-		protected void handleMsgid(AST msgid) {
-			currentMessage.setMsgid( extractText( msgid ) );
-		}
+        @Override
+        protected void handleCatalogComment(AST comment) {
+            currentMessage.addComment(extractText(comment));
+        }
 
-		@Override
-		protected void handleMsgidPlural(AST msgidPlural) {
-			currentMessage.setMsgidPlural( extractText( msgidPlural ) );
-		}
+        @Override
+        protected void handleExtractedComment(AST comment) {
+            currentMessage.addExtractedComment(extractText(comment));
+        }
 
-		@Override
-		protected void handleMsgstr(AST msgstr) {
-			currentMessage.setMsgstr( extractText( msgstr ) );
-		}
+        @Override
+        protected void handleReference(AST sourceRef) {
+            currentMessage.addSourceReference(parseSourceReference(sourceRef));
+        }
 
-		@Override
-		protected void handleMsgstrPlural(AST msgstr, AST plurality) {
-			currentMessage.addMsgstrPlural( extractText( msgstr ), Integer.parseInt( plurality.getText() ) );
-		}
+        @Override
+        protected void handleFlag(AST flag) {
+            String[] flags = flag.getText().split(",");
+            for (String flagStr : flags) {
+                flagStr = flagStr.trim();
+                if (!flagStr.isEmpty())
+                    currentMessage.addFormat(flagStr);
+            }
+        }
 
-		private String extractText(AST ast) {
-			return ast == null ? "" : ast.getText();
-		}
+        @Override
+        protected void handlePreviousMsgctxt(AST previousMsgctxt) {
+            currentMessage.setPrevMsgctx(extractText(previousMsgctxt));
+        }
 
-		private String parseSourceReference(AST ast) {
-			return ast.getText();
-		}
+        @Override
+        protected void handlePreviousMsgid(AST previousMsgid) {
+            currentMessage.setPrevMsgid(extractText(previousMsgid));
+        }
 
-		public boolean hasNext() {
-			if(nextMessage != null){
-				return true;
-			}
-			
-			boolean next = true;
-			try{
-				next = nextMessageBlock();
-			}
-			catch(RecognitionException e){
-				currentRecognitionException = e;
-			}
-			catch(TokenStreamException e){
-				currentTokenStreamException = e;
-			}
-			
-			return next; 
-		}
+        @Override
+        protected void handlePreviousMsgidPlural(AST previousMsgidPlural) {
+            currentMessage.setPrevMsgidPlural(extractText(previousMsgidPlural));
+        }
 
-		private RecognitionException currentRecognitionException = null;
-		private TokenStreamException currentTokenStreamException = null;
-		
-		private void checkExceptions() throws RecognitionException, TokenStreamException{
-			if(currentRecognitionException != null){
-				RecognitionException e = currentRecognitionException;
-				currentRecognitionException = null;
-				throw e;
-			}
-			else if(currentTokenStreamException != null){
-				TokenStreamException e = currentTokenStreamException;
-				currentTokenStreamException = null;
-				throw e;
-			}
-			
-		}
-		
-		public Message next() throws RecognitionException, TokenStreamException{
-			checkExceptions();
-			
-			if(!hasNext()){
-				return null;
-			}
-			
-			Message next = nextMessage;
-			nextMessage = null;
-			return next;
-		}
-	}
+        @Override
+        protected void handleDomain(AST domain) {
+            currentMessage.setDomain(extractText(domain));
+        }
 
-	public boolean hasNext() {
-		return internalParser.hasNext();
-	}
+        @Override
+        protected void handleMsgctxt(AST msgctxt) {
+            currentMessage.setMsgctxt(extractText(msgctxt));
+        }
 
-	public Message next() throws ParseException {
-		try {
-			return internalParser.next();
-		} catch (RecognitionException e) {
-			throw new ParseException(e.getMessage(), e, e.getLine());
-		} catch (TokenStreamException e) {
-			throw new ParseException(e.getMessage(), e, -1);
-		}
-	}
+        @Override
+        protected void handleMsgid(AST msgid) {
+            currentMessage.setMsgid(extractText(msgid));
+        }
+
+        @Override
+        protected void handleMsgidPlural(AST msgidPlural) {
+            currentMessage.setMsgidPlural(extractText(msgidPlural));
+        }
+
+        @Override
+        protected void handleMsgstr(AST msgstr) {
+            currentMessage.setMsgstr(extractText(msgstr));
+        }
+
+        @Override
+        protected void handleMsgstrPlural(AST msgstr, AST plurality) {
+            currentMessage.addMsgstrPlural(extractText(msgstr),
+                    Integer.parseInt(plurality.getText()));
+        }
+
+        private String extractText(AST ast) {
+            return ast == null ? "" : ast.getText();
+        }
+
+        private String parseSourceReference(AST ast) {
+            return ast.getText();
+        }
+
+        public boolean hasNext() {
+            if (nextMessage != null) {
+                return true;
+            }
+
+            boolean next = true;
+            try {
+                next = nextMessageBlock();
+            } catch (RecognitionException e) {
+                currentRecognitionException = e;
+            } catch (TokenStreamException e) {
+                currentTokenStreamException = e;
+            }
+
+            return next;
+        }
+
+        private RecognitionException currentRecognitionException = null;
+        private TokenStreamException currentTokenStreamException = null;
+
+        private void checkExceptions() throws RecognitionException,
+                TokenStreamException {
+            if (currentRecognitionException != null) {
+                RecognitionException e = currentRecognitionException;
+                currentRecognitionException = null;
+                throw e;
+            }
+            else if (currentTokenStreamException != null) {
+                TokenStreamException e = currentTokenStreamException;
+                currentTokenStreamException = null;
+                throw e;
+            }
+
+        }
+
+        public Message next() throws RecognitionException, TokenStreamException {
+            checkExceptions();
+
+            if (!hasNext()) {
+                return null;
+            }
+
+            Message next = nextMessage;
+            nextMessage = null;
+            return next;
+        }
+    }
+
+    public boolean hasNext() {
+        return internalParser.hasNext();
+    }
+
+    public Message next() throws ParseException {
+        try {
+            return internalParser.next();
+        } catch (RecognitionException e) {
+            throw new ParseException(e.getMessage(), e, e.getLine());
+        } catch (TokenStreamException e) {
+            throw new ParseException(e.getMessage(), e, -1);
+        }
+    }
 
 }

@@ -29,163 +29,172 @@ import antlr.RecognitionException;
 import antlr.collections.AST;
 
 /**
- * Here we extend the Antlr-generated parser to provide implementations of the supplied callback hooks
- * in order to transform the AST into a more workable object model.
+ * Here we extend the Antlr-generated parser to provide implementations of the
+ * supplied callback hooks in order to transform the AST into a more workable
+ * object model.
  *
  * @author Steve Ebersole
  */
 public class ExtendedCatalogParser extends CatalogParser {
-	private final Catalog catalog;
-	private Message currentMessage = new Message();
+    private final Catalog catalog;
+    private Message currentMessage = new Message();
 
-	/**
-	 * Uses the charset encoding specified in the file's Gettext header.
-	 * @param catalog
-	 * @param file
-	 * @throws FileNotFoundException
-	 * @throws IOException
-	 */
-	public ExtendedCatalogParser(Catalog catalog, File file) throws FileNotFoundException, IOException {
-		super( new CatalogLexer( file ) );
-		catalog.setTemplate(isPot(file));
-      this.catalog = catalog;
-	}
-	public ExtendedCatalogParser(Catalog catalog, Reader reader, boolean isPot){
-		super( new CatalogLexer( reader ) );
-		catalog.setTemplate(isPot);
-      this.catalog = catalog;
-	}
+    /**
+     * Uses the charset encoding specified in the file's Gettext header.
+     * 
+     * @param catalog
+     * @param file
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public ExtendedCatalogParser(Catalog catalog, File file)
+            throws FileNotFoundException, IOException {
+        super(new CatalogLexer(file));
+        catalog.setTemplate(isPot(file));
+        this.catalog = catalog;
+    }
 
-	/**
-	 * Uses the charset encoding specified in the stream's Gettext header.
-    * @param catalog
-	 * @param inputStream
-	 * @param isPot
-	 * @throws IOException
-	 */
-	public ExtendedCatalogParser(Catalog catalog, InputStream inputStream, boolean isPot) throws IOException {
-		super( new CatalogLexer( inputStream ) );
-		catalog.setTemplate(isPot);
-      this.catalog = catalog;
-	}
-	
-	public ExtendedCatalogParser(Catalog catalog, InputStream inputStream, Charset charset, boolean isPot){
-		super( new CatalogLexer( inputStream, charset ) );
-		catalog.setTemplate(isPot);
-      this.catalog = catalog;
-	}
-	
-	private static boolean isPot(File file) {
-	    return file.getName().toLowerCase().endsWith(".pot");
-	}
+    public ExtendedCatalogParser(Catalog catalog, Reader reader, boolean isPot) {
+        super(new CatalogLexer(reader));
+        catalog.setTemplate(isPot);
+        this.catalog = catalog;
+    }
 
-	public Catalog getCatalog() {
-		return catalog;
-	}
+    /**
+     * Uses the charset encoding specified in the stream's Gettext header.
+     * 
+     * @param catalog
+     * @param inputStream
+     * @param isPot
+     * @throws IOException
+     */
+    public ExtendedCatalogParser(Catalog catalog, InputStream inputStream,
+            boolean isPot) throws IOException {
+        super(new CatalogLexer(inputStream));
+        catalog.setTemplate(isPot);
+        this.catalog = catalog;
+    }
 
-	@Override
-	public void reportError(RecognitionException e) {
-		UnexpectedTokenException utEx = new UnexpectedTokenException( e.getMessage(), e.getLine() );
-		utEx.initCause(e);
-		throw utEx;
-	}
+    public ExtendedCatalogParser(Catalog catalog, InputStream inputStream,
+            Charset charset, boolean isPot) {
+        super(new CatalogLexer(inputStream, charset));
+        catalog.setTemplate(isPot);
+        this.catalog = catalog;
+    }
 
-	@Override
-	public void reportError(String s) {
-		throw new ParseException( "error parsing catalog : " + s, -1 );
-	}
+    private static boolean isPot(File file) {
+        return file.getName().toLowerCase().endsWith(".pot");
+    }
 
-	@Override
-	public void reportWarning(String s) {
-	}
+    public Catalog getCatalog() {
+        return catalog;
+    }
 
-	@Override
-	protected void handleMessageBlock(AST messageBlock) {
-		catalog.addMessage( currentMessage );
-		currentMessage = new Message();
-	}
+    @Override
+    public void reportError(RecognitionException e) {
+        UnexpectedTokenException utEx =
+                new UnexpectedTokenException(e.getMessage(), e.getLine());
+        utEx.initCause(e);
+        throw utEx;
+    }
 
-	@Override
-	protected void handleObsoleteMessageBlock(AST messageBlock) {
-		currentMessage.markObsolete();
-		handleMessageBlock( messageBlock );
-	}
+    @Override
+    public void reportError(String s) {
+        throw new ParseException("error parsing catalog : " + s, -1);
+    }
 
-	@Override
-	protected void handleCatalogComment(AST comment) {
-		currentMessage.addComment( extractText( comment ) );
-	}
+    @Override
+    public void reportWarning(String s) {
+    }
 
-	@Override
-	protected void handleExtractedComment(AST comment) {
-		currentMessage.addExtractedComment( extractText( comment ) );
-	}
+    @Override
+    protected void handleMessageBlock(AST messageBlock) {
+        catalog.addMessage(currentMessage);
+        currentMessage = new Message();
+    }
 
-	@Override
-	protected void handleReference(AST sourceRef) {
-		currentMessage.addSourceReference( parseSourceReference( sourceRef ) );
-	}
+    @Override
+    protected void handleObsoleteMessageBlock(AST messageBlock) {
+        currentMessage.markObsolete();
+        handleMessageBlock(messageBlock);
+    }
 
-	@Override
-	protected void handleFlag(AST flag) {
-		String [] flags = flag.getText().split(",");
-		for(String flagStr : flags){
-			flagStr = flagStr.trim();
-			if(!flagStr.isEmpty())
-				currentMessage.addFormat(flagStr);
-		}
-	}
+    @Override
+    protected void handleCatalogComment(AST comment) {
+        currentMessage.addComment(extractText(comment));
+    }
 
-	@Override
-	protected void handlePreviousMsgctxt(AST previousMsgctxt) {
-		currentMessage.setPrevMsgctx( extractText( previousMsgctxt ) );
-	}
+    @Override
+    protected void handleExtractedComment(AST comment) {
+        currentMessage.addExtractedComment(extractText(comment));
+    }
 
-	@Override
-	protected void handlePreviousMsgid(AST previousMsgid) {
-		currentMessage.setPrevMsgid( extractText( previousMsgid ) );
-	}
+    @Override
+    protected void handleReference(AST sourceRef) {
+        currentMessage.addSourceReference(parseSourceReference(sourceRef));
+    }
 
-	@Override
-	protected void handlePreviousMsgidPlural(AST previousMsgidPlural) {
-		currentMessage.setPrevMsgidPlural( extractText( previousMsgidPlural ) );
-	}
+    @Override
+    protected void handleFlag(AST flag) {
+        String[] flags = flag.getText().split(",");
+        for (String flagStr : flags) {
+            flagStr = flagStr.trim();
+            if (!flagStr.isEmpty())
+                currentMessage.addFormat(flagStr);
+        }
+    }
 
-	@Override
-	protected void handleDomain(AST domain) {
-		currentMessage.setDomain( extractText( domain ) );
-	}
+    @Override
+    protected void handlePreviousMsgctxt(AST previousMsgctxt) {
+        currentMessage.setPrevMsgctx(extractText(previousMsgctxt));
+    }
 
-	@Override
-	protected void handleMsgctxt(AST msgctxt) {
-		currentMessage.setMsgctxt( extractText( msgctxt ) );
-	}
+    @Override
+    protected void handlePreviousMsgid(AST previousMsgid) {
+        currentMessage.setPrevMsgid(extractText(previousMsgid));
+    }
 
-	@Override
-	protected void handleMsgid(AST msgid) {
-		currentMessage.setMsgid( extractText( msgid ) );
-	}
+    @Override
+    protected void handlePreviousMsgidPlural(AST previousMsgidPlural) {
+        currentMessage.setPrevMsgidPlural(extractText(previousMsgidPlural));
+    }
 
-	@Override
-	protected void handleMsgidPlural(AST msgidPlural) {
-		currentMessage.setMsgidPlural( extractText( msgidPlural ) );
-	}
+    @Override
+    protected void handleDomain(AST domain) {
+        currentMessage.setDomain(extractText(domain));
+    }
 
-	@Override
-	protected void handleMsgstr(AST msgstr) {
-		currentMessage.setMsgstr( extractText( msgstr ) );
-	}
+    @Override
+    protected void handleMsgctxt(AST msgctxt) {
+        currentMessage.setMsgctxt(extractText(msgctxt));
+    }
 
-	@Override
-	protected void handleMsgstrPlural(AST msgstr, AST plurality) {
-		currentMessage.addMsgstrPlural( extractText( msgstr ), Integer.parseInt( plurality.getText() ) );
-	}
+    @Override
+    protected void handleMsgid(AST msgid) {
+        currentMessage.setMsgid(extractText(msgid));
+    }
 
-	private String extractText(AST ast) {
-		return ast == null ? "" : ast.getText();
-	}
+    @Override
+    protected void handleMsgidPlural(AST msgidPlural) {
+        currentMessage.setMsgidPlural(extractText(msgidPlural));
+    }
 
-	private String parseSourceReference(AST ast) {
-		return ast.getText();
-	}
+    @Override
+    protected void handleMsgstr(AST msgstr) {
+        currentMessage.setMsgstr(extractText(msgstr));
+    }
+
+    @Override
+    protected void handleMsgstrPlural(AST msgstr, AST plurality) {
+        currentMessage.addMsgstrPlural(extractText(msgstr),
+                Integer.parseInt(plurality.getText()));
+    }
+
+    private String extractText(AST ast) {
+        return ast == null ? "" : ast.getText();
+    }
+
+    private String parseSourceReference(AST ast) {
+        return ast.getText();
+    }
 }

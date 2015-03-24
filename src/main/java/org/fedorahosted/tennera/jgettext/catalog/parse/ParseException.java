@@ -21,21 +21,21 @@ package org.fedorahosted.tennera.jgettext.catalog.parse;
  * @author Steve Ebersole
  */
 public class ParseException extends RuntimeException {
-	private static final long serialVersionUID = -7441231267536604971L;
+    private static final long serialVersionUID = -7441231267536604971L;
 
-	private final int line;
+    private final int line;
 
-	public ParseException(String message, int line) {
-		super( message );
-		this.line = line;
-	}
+    public ParseException(String message, int line) {
+        super(message);
+        this.line = line;
+    }
 
-	public ParseException(String message, Throwable cause, int line) {
-		super( message, cause );
-		this.line = line;
-	}
+    public ParseException(String message, Throwable cause, int line) {
+        super(message, cause);
+        this.line = line;
+    }
 
-	public String toString() {
-		return super.toString() + " [line=" + line + "]";
-	}
+    public String toString() {
+        return super.toString() + " [line=" + line + "]";
+    }
 }

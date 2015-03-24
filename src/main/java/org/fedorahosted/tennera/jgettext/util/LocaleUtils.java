@@ -26,44 +26,46 @@ import java.util.StringTokenizer;
  */
 public class LocaleUtils {
 
-	public static final LocaleComparator LOCALE_COMPARATOR_INST = new LocaleComparator();
+    public static final LocaleComparator LOCALE_COMPARATOR_INST =
+            new LocaleComparator();
 
-	public static class LocaleComparator implements Comparator {
-		public int compare(Object o1, Object o2) {
-			return render( ( Locale ) o1, '-' ).compareTo( render( ( Locale ) o2, '-' ) );
-		}
-	}
+    public static class LocaleComparator implements Comparator {
+        public int compare(Object o1, Object o2) {
+            return render((Locale) o1, '-').compareTo(render((Locale) o2, '-'));
+        }
+    }
 
-	public static Locale parse(String locale) {
-		return parse( locale, '-' );
-	}
+    public static Locale parse(String locale) {
+        return parse(locale, '-');
+    }
 
-	public static Locale parse(String locale, char sep) {
-		StringTokenizer tokens = new StringTokenizer( locale, "" + sep );
-		int tokencount = tokens.countTokens();
-		switch ( tokencount ) {
-			case 3 :
-				return new Locale( tokens.nextToken(), tokens.nextToken(), tokens.nextToken() );
-			case 2 :
-				return new Locale( tokens.nextToken(), tokens.nextToken() );
-			case 1 :
-				return new Locale( tokens.nextToken() );
-			default:
-				return new Locale( "tbd" );
-		}
-	}
+    public static Locale parse(String locale, char sep) {
+        StringTokenizer tokens = new StringTokenizer(locale, "" + sep);
+        int tokencount = tokens.countTokens();
+        switch (tokencount) {
+        case 3:
+            return new Locale(tokens.nextToken(), tokens.nextToken(),
+                    tokens.nextToken());
+        case 2:
+            return new Locale(tokens.nextToken(), tokens.nextToken());
+        case 1:
+            return new Locale(tokens.nextToken());
+        default:
+            return new Locale("tbd");
+        }
+    }
 
-	public static String render(Locale locale, char sep) {
+    public static String render(Locale locale, char sep) {
         boolean l = locale.getLanguage().length() != 0;
         boolean c = locale.getCountry().length() != 0;
         boolean v = locale.getVariant().length() != 0;
-        StringBuffer result = new StringBuffer( locale.getLanguage() );
-        if (c||(l&&v)) {
-            result.append( sep ).append( locale.getCountry() );
+        StringBuffer result = new StringBuffer(locale.getLanguage());
+        if (c || (l && v)) {
+            result.append(sep).append(locale.getCountry());
         }
-        if (v&&(l||c)) {
-            result.append( sep ).append( locale.getVariant() );
+        if (v && (l || c)) {
+            result.append(sep).append(locale.getVariant());
         }
         return result.toString();
-	}
+    }
 }

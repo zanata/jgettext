@@ -24,12 +24,12 @@ import java.io.Writer;
  */
 public class NoOpWriter extends Writer {
 
-	public void write(char cbuf[], int off, int len) {
-	}
+    public void write(char cbuf[], int off, int len) {
+    }
 
-	public void flush() {
-	}
+    public void flush() {
+    }
 
-	public void close() {
-	}
+    public void close() {
+    }
 }
