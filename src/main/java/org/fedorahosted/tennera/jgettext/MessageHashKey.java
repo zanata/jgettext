@@ -21,67 +21,68 @@ package org.fedorahosted.tennera.jgettext;
  * @author Steve Ebersole
  */
 public class MessageHashKey {
-	private final String msgctxt;
-	private final String msgid;
-	private final int hashcode;
+    private final String msgctxt;
+    private final String msgid;
+    private final int hashcode;
 
-	public MessageHashKey(Message message) {
-		this( message.getMsgctxt(), message.getMsgid() );
-	}
+    public MessageHashKey(Message message) {
+        this(message.getMsgctxt(), message.getMsgid());
+    }
 
-	public MessageHashKey(String msgctxt, String msgid) {
-		this.msgctxt = msgctxt;
-		this.msgid = msgid;
-		this.hashcode = generateHashCode();
-	}
+    public MessageHashKey(String msgctxt, String msgid) {
+        this.msgctxt = msgctxt;
+        this.msgid = msgid;
+        this.hashcode = generateHashCode();
+    }
 
-	public boolean equals(Object o) {
-		if ( this == o ) {
-			return true;
-		}
-		if ( o == null || getClass() != o.getClass() ) {
-			return false;
-		}
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
-		MessageHashKey that = ( MessageHashKey ) o;
+        MessageHashKey that = (MessageHashKey) o;
 
-		return !( msgctxt != null ? !msgctxt.equals( that.msgctxt ) : that.msgctxt != null )
-				&& msgid.equals( that.msgid );
+        return !(msgctxt != null ? !msgctxt.equals(that.msgctxt)
+                : that.msgctxt != null)
+                && msgid.equals(that.msgid);
 
-	}
+    }
 
-	public int hashCode() {
-		return hashcode;
-	}
+    public int hashCode() {
+        return hashcode;
+    }
 
-	private int generateHashCode() {
-		int result;
-		result = ( msgctxt != null ? msgctxt.hashCode() : 0 );
-		result = 31 * result + msgid.hashCode();
-		return result;
-	}
-	
-	@SuppressWarnings("nls")
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("MessageHashKey(msgctxt ");
-		if(msgctxt == null) {
-			sb.append("null");
-		} else {
-			sb.append('\"');
-			sb.append(msgctxt);
-			sb.append('\"');
-		}
-		sb.append(", msgid ");
-		if(msgid == null) {
-			sb.append("null");
-		} else {
-			sb.append('\"');
-			sb.append(msgid);
-			sb.append('\"');
-		}
-		sb.append(")");
-		return sb.toString();
-	}
+    private int generateHashCode() {
+        int result;
+        result = (msgctxt != null ? msgctxt.hashCode() : 0);
+        result = 31 * result + msgid.hashCode();
+        return result;
+    }
+
+    @SuppressWarnings("nls")
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("MessageHashKey(msgctxt ");
+        if (msgctxt == null) {
+            sb.append("null");
+        } else {
+            sb.append('\"');
+            sb.append(msgctxt);
+            sb.append('\"');
+        }
+        sb.append(", msgid ");
+        if (msgid == null) {
+            sb.append("null");
+        } else {
+            sb.append('\"');
+            sb.append(msgid);
+            sb.append('\"');
+        }
+        sb.append(")");
+        return sb.toString();
+    }
 }

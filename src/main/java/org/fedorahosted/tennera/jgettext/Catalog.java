@@ -24,95 +24,95 @@ import java.util.Map.Entry;
  *
  * @author Steve Ebersole
  */
-public class Catalog implements Iterable<Message>{
-	// todo : segment by domain?
-    	
-        /**
-         * Is this a POT (template)? Or a PO?
-         */
-        private boolean template;
-        
-    	public Catalog(boolean template) {
-    	    this.template = template;
-    	}
-    	
-    	public Catalog()
-      {
-         this(false);
-      }
-    
-    
-	private final LinkedHashMap<MessageHashKey,Message> messageMap = new LinkedHashMap<MessageHashKey,Message>();
+public class Catalog implements Iterable<Message> {
+    // todo : segment by domain?
 
-	public void setTemplate(boolean template) {
-	    this.template = template;
-	}
-	
-	public boolean isTemplate() {
-	    return template;
-	}
-	
-	public void addMessage(Message message) {
-		messageMap.put( new MessageHashKey( message ), message );
-	}
+    /**
+     * Is this a POT (template)? Or a PO?
+     */
+    private boolean template;
 
-	public Message locateHeader() {
-		for ( Message message : messageMap.values() ) {
-			if ( message.isHeader() ) {
-				return message;
-			}
-		}
-		return null;
-	}
+    public Catalog(boolean template) {
+        this.template = template;
+    }
 
-	public Message locateMessage(String msgctxt, String msgid) {
-		return locateMessage( new MessageHashKey( msgctxt, msgid ) );
-	}
+    public Catalog()
+    {
+        this(false);
+    }
 
-	public Message locateMessage(MessageHashKey key) {
-		return messageMap.get( key );
-	}
+    private final LinkedHashMap<MessageHashKey, Message> messageMap =
+            new LinkedHashMap<MessageHashKey, Message>();
 
-	public boolean containsMessage(String msgctxt, String msgid) {
-		return containsMessage( new MessageHashKey( msgctxt, msgid ) );
-	}
+    public void setTemplate(boolean template) {
+        this.template = template;
+    }
 
-	public boolean containsMessage(MessageHashKey key) {
-		return messageMap.containsKey( key );
-	}
-	
-	public boolean isEmpty() {
-		return messageMap.isEmpty();
-	}
-	
-	public int size() {
-		return messageMap.size();
-	}
-	
-	@SuppressWarnings("nls")
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Catalog(");
-		for (Entry<MessageHashKey, Message> entry: messageMap.entrySet()) {
-//			sb.append(entry.getKey());
-//			sb.append(" => ");
-			sb.append(entry.getValue());
-			sb.append('\n');
-		}
-		sb.append(",template=");
-		sb.append(template);
-		sb.append(")");
-		return sb.toString();
-	}
+    public boolean isTemplate() {
+        return template;
+    }
 
-	public void processMessages(MessageProcessor processor) {
-		for ( Message message : messageMap.values() ) {
-			processor.processMessage( message );
-		}
-	}
-	
-	public Iterator<Message> iterator() {
-		return messageMap.values().iterator();
-	}
+    public void addMessage(Message message) {
+        messageMap.put(new MessageHashKey(message), message);
+    }
+
+    public Message locateHeader() {
+        for (Message message : messageMap.values()) {
+            if (message.isHeader()) {
+                return message;
+            }
+        }
+        return null;
+    }
+
+    public Message locateMessage(String msgctxt, String msgid) {
+        return locateMessage(new MessageHashKey(msgctxt, msgid));
+    }
+
+    public Message locateMessage(MessageHashKey key) {
+        return messageMap.get(key);
+    }
+
+    public boolean containsMessage(String msgctxt, String msgid) {
+        return containsMessage(new MessageHashKey(msgctxt, msgid));
+    }
+
+    public boolean containsMessage(MessageHashKey key) {
+        return messageMap.containsKey(key);
+    }
+
+    public boolean isEmpty() {
+        return messageMap.isEmpty();
+    }
+
+    public int size() {
+        return messageMap.size();
+    }
+
+    @SuppressWarnings("nls")
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Catalog(");
+        for (Entry<MessageHashKey, Message> entry : messageMap.entrySet()) {
+            // sb.append(entry.getKey());
+            // sb.append(" => ");
+            sb.append(entry.getValue());
+            sb.append('\n');
+        }
+        sb.append(",template=");
+        sb.append(template);
+        sb.append(")");
+        return sb.toString();
+    }
+
+    public void processMessages(MessageProcessor processor) {
+        for (Message message : messageMap.values()) {
+            processor.processMessage(message);
+        }
+    }
+
+    public Iterator<Message> iterator() {
+        return messageMap.values().iterator();
+    }
 }

@@ -31,72 +31,84 @@ import org.junit.Test;
  *
  * @author Steve Ebersole
  */
-public class TestExtendedCatalogParser{
-	
-	@Test
-	public void testBasic() throws Throwable {
-		File poFile = new File( getClass().getResource( "/valid/sample.po" ).getFile() );
-		ExtendedCatalogParser parser = new ExtendedCatalogParser(new Catalog(), poFile);
-		parser.catalog();
-		Catalog catalog = parser.getCatalog();
-		
-		int entryCount = 0;
-		int obsoleteCount = 0;
-		for(Message m : catalog){
-			entryCount++;
-			if(m.isObsolete()) obsoleteCount++;
-		}
-		assertNotNull( catalog.locateHeader() );
-		assertEquals( 7, entryCount );
-		assertEquals( 3, obsoleteCount );
-	}
+public class TestExtendedCatalogParser {
 
-	@Test
-	public void testObsoleteEntries() throws Throwable {
-		File poFile = new File( getClass().getResource( "/valid/obsolete.po" ).getFile() );
-      ExtendedCatalogParser parser = new ExtendedCatalogParser(new Catalog(), poFile);
-		parser.catalog();
-		Catalog catalog = parser.getCatalog();
+    @Test
+    public void testBasic() throws Throwable {
+        File poFile =
+                new File(getClass().getResource("/valid/sample.po").getFile());
+        ExtendedCatalogParser parser =
+                new ExtendedCatalogParser(new Catalog(), poFile);
+        parser.catalog();
+        Catalog catalog = parser.getCatalog();
 
-		int entryCount = 0;
-		int obsoleteCount = 0;
-		for(Message m : catalog){
-			entryCount++;
-			if(m.isObsolete()) obsoleteCount++;
-		}
+        int entryCount = 0;
+        int obsoleteCount = 0;
+        for (Message m : catalog) {
+            entryCount++;
+            if (m.isObsolete())
+                obsoleteCount++;
+        }
+        assertNotNull(catalog.locateHeader());
+        assertEquals(7, entryCount);
+        assertEquals(3, obsoleteCount);
+    }
 
-		assertNotNull( catalog.locateHeader() );
-		assertEquals( 5, entryCount );
-		assertEquals( 4, obsoleteCount ); // - header...
-	}
+    @Test
+    public void testObsoleteEntries() throws Throwable {
+        File poFile =
+                new File(getClass().getResource("/valid/obsolete.po").getFile());
+        ExtendedCatalogParser parser =
+                new ExtendedCatalogParser(new Catalog(), poFile);
+        parser.catalog();
+        Catalog catalog = parser.getCatalog();
 
-	@Test
-	public void testPartialObsoleteEntries() throws Throwable {
-		File poFile = new File( getClass().getResource( "/invalid/mixed_up_obsolete.po" ).getFile() );
-      ExtendedCatalogParser parser = new ExtendedCatalogParser(new Catalog(), poFile);
-		try {
-			parser.catalog();
-			fail( "was expecting exception" );
-		}
-		catch ( ParseException expected ) {
-		}
-	}
+        int entryCount = 0;
+        int obsoleteCount = 0;
+        for (Message m : catalog) {
+            entryCount++;
+            if (m.isObsolete())
+                obsoleteCount++;
+        }
 
-   @Test
-   public void testPossiblyAmbigousFile() throws Throwable{
-      File poFile = new File( getClass().getResource( "/valid/excesive_comments.po" ).getFile() );
-      ExtendedCatalogParser parser = new ExtendedCatalogParser(new Catalog(), poFile);
-      parser.catalog();
-      Catalog catalog = parser.getCatalog();
+        assertNotNull(catalog.locateHeader());
+        assertEquals(5, entryCount);
+        assertEquals(4, obsoleteCount); // - header...
+    }
 
-      int entryCount = 0;
-      int obsoleteCount = 0;
-      for(Message m : catalog){
-         entryCount++;
-         if(m.isObsolete()) obsoleteCount++;
-      }
-      assertNotNull( catalog.locateHeader() );
-      assertEquals( 8, entryCount );
-      assertEquals( 3, obsoleteCount );
-   }
+    @Test
+    public void testPartialObsoleteEntries() throws Throwable {
+        File poFile =
+                new File(getClass()
+                        .getResource("/invalid/mixed_up_obsolete.po").getFile());
+        ExtendedCatalogParser parser =
+                new ExtendedCatalogParser(new Catalog(), poFile);
+        try {
+            parser.catalog();
+            fail("was expecting exception");
+        } catch (ParseException expected) {
+        }
+    }
+
+    @Test
+    public void testPossiblyAmbigousFile() throws Throwable {
+        File poFile =
+                new File(getClass().getResource("/valid/excesive_comments.po")
+                        .getFile());
+        ExtendedCatalogParser parser =
+                new ExtendedCatalogParser(new Catalog(), poFile);
+        parser.catalog();
+        Catalog catalog = parser.getCatalog();
+
+        int entryCount = 0;
+        int obsoleteCount = 0;
+        for (Message m : catalog) {
+            entryCount++;
+            if (m.isObsolete())
+                obsoleteCount++;
+        }
+        assertNotNull(catalog.locateHeader());
+        assertEquals(8, entryCount);
+        assertEquals(3, obsoleteCount);
+    }
 }

@@ -21,9 +21,9 @@ package org.fedorahosted.tennera.jgettext.catalog.parse;
  * @author Steve Ebersole
  */
 public class UnexpectedTokenException extends ParseException {
-	private static final long serialVersionUID = -2659398412795354302L;
+    private static final long serialVersionUID = -2659398412795354302L;
 
-	public UnexpectedTokenException(String message, int line) {
-		super( message, line );
-	}
+    public UnexpectedTokenException(String message, int line) {
+        super(message, line);
+    }
 }

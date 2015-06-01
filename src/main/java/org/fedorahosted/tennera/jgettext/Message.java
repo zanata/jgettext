@@ -27,228 +27,229 @@ import org.fedorahosted.tennera.jgettext.catalog.util.StringUtil;
  * @author Steve Ebersole
  */
 public class Message {
-	private String domain;
-	private String msgctxt;
-	private String msgid;
-	private String msgidPlural;
-	private String msgstr;
-	private List<String> msgstrPlural =	new ArrayList<String>();
+    private String domain;
+    private String msgctxt;
+    private String msgid;
+    private String msgidPlural;
+    private String msgstr;
+    private List<String> msgstrPlural = new ArrayList<String>();
 
-	private String prevMsgctx;
-	private String prevMsgid;
-	private String prevMsgidPlural;
+    private String prevMsgctx;
+    private String prevMsgid;
+    private String prevMsgidPlural;
 
-	private Collection<String> comments = new ArrayList<String>();
-	private Collection<String> extractedComments = new ArrayList<String>();
-	private List<String> sourceRefs = new ArrayList<String>();
-	private Collection<String> formats = new ArrayList<String>();
+    private Collection<String> comments = new ArrayList<String>();
+    private Collection<String> extractedComments = new ArrayList<String>();
+    private List<String> sourceRefs = new ArrayList<String>();
+    private Collection<String> formats = new ArrayList<String>();
 
-	private boolean obsolete;
+    private boolean obsolete;
 
-	private Boolean allowWrap;
+    private Boolean allowWrap;
 
-	public String getDomain() {
-		return domain;
-	}
+    public String getDomain() {
+        return domain;
+    }
 
-	public void setDomain(String domain) {
-		this.domain = domain;
-	}
+    public void setDomain(String domain) {
+        this.domain = domain;
+    }
 
-	public String getMsgctxt() {
-		return msgctxt;
-	}
+    public String getMsgctxt() {
+        return msgctxt;
+    }
 
-	public void setMsgctxt(String msgctxt) {
-		this.msgctxt = msgctxt;
-	}
+    public void setMsgctxt(String msgctxt) {
+        this.msgctxt = msgctxt;
+    }
 
-	public String getPrevMsgctx() {
-		return prevMsgctx;
-	}
+    public String getPrevMsgctx() {
+        return prevMsgctx;
+    }
 
-	public void setPrevMsgctx(String prevMsgctx) {
-		this.prevMsgctx = prevMsgctx;
-	}
+    public void setPrevMsgctx(String prevMsgctx) {
+        this.prevMsgctx = prevMsgctx;
+    }
 
-	public String getMsgid() {
-		return msgid;
-	}
+    public String getMsgid() {
+        return msgid;
+    }
 
-	public void setMsgid(String msgid) {
-		this.msgid = msgid;
-	}
+    public void setMsgid(String msgid) {
+        this.msgid = msgid;
+    }
 
-	public String getPrevMsgid() {
-		return prevMsgid;
-	}
+    public String getPrevMsgid() {
+        return prevMsgid;
+    }
 
-	public void setPrevMsgid(String prevMsgid) {
-		this.prevMsgid = prevMsgid;
-	}
+    public void setPrevMsgid(String prevMsgid) {
+        this.prevMsgid = prevMsgid;
+    }
 
-	public String getMsgidPlural() {
-		return msgidPlural;
-	}
+    public String getMsgidPlural() {
+        return msgidPlural;
+    }
 
-	public void setMsgidPlural(String msgidPlural) {
-		this.msgidPlural = msgidPlural;
-	}
+    public void setMsgidPlural(String msgidPlural) {
+        this.msgidPlural = msgidPlural;
+    }
 
-	public String getPrevMsgidPlural() {
-		return prevMsgidPlural;
-	}
+    public String getPrevMsgidPlural() {
+        return prevMsgidPlural;
+    }
 
-	public void setPrevMsgidPlural(String prevMsgidPlural) {
-		this.prevMsgidPlural = prevMsgidPlural;
-	}
+    public void setPrevMsgidPlural(String prevMsgidPlural) {
+        this.prevMsgidPlural = prevMsgidPlural;
+    }
 
-	public String getMsgstr() {
-		return msgstr;
-	}
+    public String getMsgstr() {
+        return msgstr;
+    }
 
-	public void setMsgstr(String msgstr) {
-		if(msgstr == null)
-			throw new NullPointerException("msgstr cannot be null");
-		this.msgstr = msgstr;
-		clearPlurals();
-	}
+    public void setMsgstr(String msgstr) {
+        if (msgstr == null)
+            throw new NullPointerException("msgstr cannot be null");
+        this.msgstr = msgstr;
+        clearPlurals();
+    }
 
-	private void clearPlurals() {
-		if(this.msgstrPlural == null)
-			return;
-		this.msgstrPlural.clear();
-		
-	}
-	public void addMsgstrPlural(String msgstr, int position) {
-		if(msgstr == null)
-			throw new NullPointerException("msgstr cannot be null");
-		if ( msgstrPlural == null ) {
-			msgstrPlural = new ArrayList<String>();
-		}
-		msgstrPlural.add( position, msgstr );
-	}
+    private void clearPlurals() {
+        if (this.msgstrPlural == null)
+            return;
+        this.msgstrPlural.clear();
 
-	public void markFuzzy() {
-		if(!formats.contains("fuzzy")){
-			formats.add("fuzzy");
-		}
-	}
+    }
 
-	public boolean isFuzzy() {
-		if(this.getMsgstr()!=null) {
-			if(this.getMsgstr().isEmpty())
-				return false;
-		}
-		
-		return formats.contains("fuzzy");
-	}
+    public void addMsgstrPlural(String msgstr, int position) {
+        if (msgstr == null)
+            throw new NullPointerException("msgstr cannot be null");
+        if (msgstrPlural == null) {
+            msgstrPlural = new ArrayList<String>();
+        }
+        msgstrPlural.add(position, msgstr);
+    }
 
-	public void setFuzzy(boolean fuzzy) {
-		boolean containsFuzzy = formats.contains("fuzzy");
-		if(fuzzy){
-			if(!containsFuzzy)
-				formats.add("fuzzy");
-		}
-		else{
-			if(containsFuzzy)
-				formats.remove("fuzzy");
-		}
-	}
-	
-	public void markObsolete() {
-		this.obsolete = true;
-	}
+    public void markFuzzy() {
+        if (!formats.contains("fuzzy")) {
+            formats.add("fuzzy");
+        }
+    }
 
-	public boolean isObsolete() {
-		return obsolete;
-	}
-	
-	public void setObsolete(boolean obsolete) {
-		this.obsolete = obsolete;
-	}
+    public boolean isFuzzy() {
+        if (this.getMsgstr() != null) {
+            if (this.getMsgstr().isEmpty())
+                return false;
+        }
 
-	public Boolean getAllowWrap() {
-		return allowWrap;
-	}
+        return formats.contains("fuzzy");
+    }
 
-	public void setAllowWrap(Boolean allowWrap) {
-		this.allowWrap = allowWrap;
-	}
+    public void setFuzzy(boolean fuzzy) {
+        boolean containsFuzzy = formats.contains("fuzzy");
+        if (fuzzy) {
+            if (!containsFuzzy)
+                formats.add("fuzzy");
+        }
+        else {
+            if (containsFuzzy)
+                formats.remove("fuzzy");
+        }
+    }
 
-	public void addComment(String comment) {
-		comments.add( comment );
-	}
+    public void markObsolete() {
+        this.obsolete = true;
+    }
 
-	public void addExtractedComment(String comment) {
-		extractedComments.add( comment );
-	}
-	
-	public void addSourceReference(String ref) {
-		sourceRefs.add(ref);
-	}
+    public boolean isObsolete() {
+        return obsolete;
+    }
 
-	public void addSourceReference(String file, int line) {
-		addSourceReference(file+':'+line);
-	}
+    public void setObsolete(boolean obsolete) {
+        this.obsolete = obsolete;
+    }
 
-	public void addFormat(String format) {
-		formats.add( format );
-	}
+    public Boolean getAllowWrap() {
+        return allowWrap;
+    }
 
-	public boolean isHeader() {
-		return msgctxt == null && "".equals( msgid );
-	}
+    public void setAllowWrap(Boolean allowWrap) {
+        this.allowWrap = allowWrap;
+    }
 
-	public List<String> getMsgstrPlural() {
-		if(msgstrPlural == null){
-			msgstrPlural = new ArrayList<String>();
-		}
-		return msgstrPlural;
-	}
-	
-	public boolean isPlural(){
-		return msgidPlural != null;
-	}
+    public void addComment(String comment) {
+        comments.add(comment);
+    }
 
-	public List<String> getSourceReferences() {
-		return sourceRefs;
-	}
+    public void addExtractedComment(String comment) {
+        extractedComments.add(comment);
+    }
 
-	public Collection<String> getComments() {
-		return comments;
-	}
+    public void addSourceReference(String ref) {
+        sourceRefs.add(ref);
+    }
 
-	public Collection<String> getExtractedComments() {
-		return extractedComments;
-	}
+    public void addSourceReference(String file, int line) {
+        addSourceReference(file + ':' + line);
+    }
 
-	public Collection<String> getFormats() {
-		return formats;
-	}
-	
-	/**
-	 * Returns a string representation of the Message, in a format 
-	 * suitable for inclusion in debug messages.
-	 */
-	@SuppressWarnings("nls")
-	@Override
-	public String toString() {
-	    StringBuilder sb = new StringBuilder();
-	    sb.append("Message(msgctxt ").append(StringUtil.quote(msgctxt)).
-	    	append(", msgid ").append(StringUtil.quote(getMsgid())).
-	    	append(", msgstr \"").append(getMsgstr());
-	    if(!getComments().isEmpty())
-	    	sb.append("\", transComments \"").append(getComments());
-	    if(!getExtractedComments().isEmpty())
-	    	sb.append("\", extComments \"").append(getExtractedComments());
-	    if(!getFormats().isEmpty())
-	    	sb.append("\", flags \"").append(getFormats());
-	    if(!getSourceReferences().isEmpty())
-	    	sb.append("\", references \"").append(getSourceReferences());
-	    	// TODO should include fuzzy, obsolete, plurals, domain, prevMsg
-	    	sb.append("\")");
-	    return sb.toString();
-	}
+    public void addFormat(String format) {
+        formats.add(format);
+    }
+
+    public boolean isHeader() {
+        return msgctxt == null && "".equals(msgid);
+    }
+
+    public List<String> getMsgstrPlural() {
+        if (msgstrPlural == null) {
+            msgstrPlural = new ArrayList<String>();
+        }
+        return msgstrPlural;
+    }
+
+    public boolean isPlural() {
+        return msgidPlural != null;
+    }
+
+    public List<String> getSourceReferences() {
+        return sourceRefs;
+    }
+
+    public Collection<String> getComments() {
+        return comments;
+    }
+
+    public Collection<String> getExtractedComments() {
+        return extractedComments;
+    }
+
+    public Collection<String> getFormats() {
+        return formats;
+    }
+
+    /**
+     * Returns a string representation of the Message, in a format suitable for
+     * inclusion in debug messages.
+     */
+    @SuppressWarnings("nls")
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Message(msgctxt ").append(StringUtil.quote(msgctxt)).
+                append(", msgid ").append(StringUtil.quote(getMsgid())).
+                append(", msgstr \"").append(getMsgstr());
+        if (!getComments().isEmpty())
+            sb.append("\", transComments \"").append(getComments());
+        if (!getExtractedComments().isEmpty())
+            sb.append("\", extComments \"").append(getExtractedComments());
+        if (!getFormats().isEmpty())
+            sb.append("\", flags \"").append(getFormats());
+        if (!getSourceReferences().isEmpty())
+            sb.append("\", references \"").append(getSourceReferences());
+        // TODO should include fuzzy, obsolete, plurals, domain, prevMsg
+        sb.append("\")");
+        return sb.toString();
+    }
 
 }
