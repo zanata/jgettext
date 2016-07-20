@@ -10,7 +10,7 @@
 
     <groupId>org.fedorahosted.tennera</groupId>
     <artifactId>jgettext</artifactId>
-    <packaging>jar</packaging>
+    <packaging>takari-jar</packaging>
     <version>0.15-SNAPSHOT</version>
     <name>JGettext</name>
     <description>
@@ -73,8 +73,21 @@
         </contributor>
     </contributors>
 
+    <properties>
+        <antlr.version>2.7.7</antlr.version>
+        <slf4j.version>1.7.21</slf4j.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
     <build>
         <plugins>
+            <plugin>
+                <groupId>io.takari.maven.plugins</groupId>
+                <artifactId>takari-lifecycle-plugin</artifactId>
+                <version>1.12.0</version>
+                <extensions>true</extensions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
@@ -150,8 +163,4 @@
         </dependency>
     </dependencies>
 
-    <properties>
-        <antlr.version>2.7.7</antlr.version>
-        <slf4j.version>1.7.5</slf4j.version>
-    </properties>
 </project>
