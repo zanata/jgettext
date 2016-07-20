@@ -4,28 +4,45 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.fedorahosted.tennera.jgettext.catalog.parse.MessageStreamParser;
 import org.fedorahosted.tennera.jgettext.catalog.parse.ParseException;
+import org.junit.internal.AssumptionViolatedException;
 
 public class JGettextTestUtils
 {
+    private static String msgcat = "/usr/bin/msgcat";
 
     // NOTE: We assume all po files in test are using UTF-8 in their header. If
     // this is not true test will break
     public static final String CHARSET_NAME = "UTF-8";
 
-    public static void testRoundTrip(String message, File f)
-            throws FileNotFoundException, ParseException, IOException
+    public static Path getResource(String resource)
     {
-        System.out.println(f.getPath() + ":");
+        try
+        {
+            URL url = JGettextTestUtils.class.getResource(resource);
+            return Paths.get(url.toURI());
+        }
+        catch (URISyntaxException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void testRoundTrip(String message, Path f)
+            throws ParseException, IOException
+    {
+        System.out.println(f.toString() + ":");
         String output = roundTrip(f);
 
         // System.out.println("(original):");
@@ -48,12 +65,12 @@ public class JGettextTestUtils
         assertEquals(message, msgcatInput, msgcatOutput);
     }
 
-    public static void testRoundTrip(File f) throws ParseException, IOException
+    public static void testRoundTrip(Path f) throws ParseException, IOException
     {
         testRoundTrip(null, f);
     }
 
-    public static String roundTrip(File original) throws ParseException,
+    public static String roundTrip(Path original) throws ParseException,
             IOException
     {
         PoWriter poWriter = new PoWriter();
@@ -67,12 +84,16 @@ public class JGettextTestUtils
         return outputWriter.toString();
     }
 
+    private static boolean isWindows() {
+        return System.getProperty("os.name").startsWith("Windows");
+    }
+
     public static String
-            readToStringFromMsgcat(File file, boolean ignoreErrors)
+            readToStringFromMsgcat(Path file, boolean ignoreErrors)
     {
         BufferedReader reader = null;
         StringBuilder sb = new StringBuilder();
-        String[] cmd_elements = { "/usr/bin/msgcat", file.getAbsolutePath() };
+        String[] cmd_elements = { msgcat, file.toAbsolutePath().toString() };
         try
         {
             Process process = Runtime.getRuntime().exec(cmd_elements);
@@ -101,7 +122,7 @@ public class JGettextTestUtils
             }
         } catch (IOException e)
         {
-            e.printStackTrace();
+            throw new AssumptionViolatedException(e, null);
         } finally
         {
             closeQuietly(reader);
@@ -115,7 +136,7 @@ public class JGettextTestUtils
     {
         BufferedReader reader = null;
         StringBuilder sb = new StringBuilder();
-        String[] cmd_elements = { "/usr/bin/msgcat", "-" };
+        String[] cmd_elements = { msgcat, "-" };
         try
         {
             Process prcess = Runtime.getRuntime().exec(cmd_elements);
@@ -150,7 +171,7 @@ public class JGettextTestUtils
 
         } catch (IOException e)
         {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         } finally
         {
             closeQuietly(reader);

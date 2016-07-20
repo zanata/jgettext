@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
 
 import org.fedorahosted.tennera.jgettext.Catalog;
 import org.fedorahosted.tennera.jgettext.Message;
@@ -41,17 +42,23 @@ public class ExtendedCatalogParser extends CatalogParser {
 
     /**
      * Uses the charset encoding specified in the file's Gettext header.
-     * 
+     *
      * @param catalog
      * @param file
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public ExtendedCatalogParser(Catalog catalog, File file)
-            throws FileNotFoundException, IOException {
+    public ExtendedCatalogParser(Catalog catalog, Path file)
+            throws IOException {
         super(new CatalogLexer(file));
         catalog.setTemplate(isPot(file));
         this.catalog = catalog;
+    }
+
+    @Deprecated
+    public ExtendedCatalogParser(Catalog catalog, File file)
+            throws IOException {
+        this(catalog, file.toPath());
     }
 
     public ExtendedCatalogParser(Catalog catalog, Reader reader, boolean isPot) {
@@ -82,8 +89,8 @@ public class ExtendedCatalogParser extends CatalogParser {
         this.catalog = catalog;
     }
 
-    private static boolean isPot(File file) {
-        return file.getName().toLowerCase().endsWith(".pot");
+    private static boolean isPot(Path file) {
+        return file.toString().toLowerCase().endsWith(".pot");
     }
 
     public Catalog getCatalog() {

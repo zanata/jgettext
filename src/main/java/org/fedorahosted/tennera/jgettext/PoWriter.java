@@ -25,6 +25,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
 
@@ -46,9 +48,14 @@ public class PoWriter {
         this.generateHeader = generateHeader;
     }
 
-    public void write(Catalog catalog, File file) throws IOException {
-        Writer writer = new BufferedWriter(new FileWriter(file));
+    public void write(Catalog catalog, Path file) throws IOException {
+        Writer writer = Files.newBufferedWriter(file);
         write(catalog, writer);
+    }
+
+    @Deprecated
+    public void write(Catalog catalog, File file) throws IOException {
+        write(catalog, file.toPath());
     }
 
     public void write(Catalog catalog, Writer writer) throws IOException {
@@ -100,9 +107,14 @@ public class PoWriter {
         write(catalog, writer);
     }
 
-    public void write(Message message, File file) throws IOException {
-        Writer writer = new BufferedWriter(new FileWriter(file));
+    public void write(Message message, Path file) throws IOException {
+        Writer writer = Files.newBufferedWriter(file);
         write(message, writer);
+    }
+
+    @Deprecated
+    public void write(Message message, File file) throws IOException {
+        write(message, file.toPath());
     }
 
     public void write(Message message, Writer writer) throws IOException {

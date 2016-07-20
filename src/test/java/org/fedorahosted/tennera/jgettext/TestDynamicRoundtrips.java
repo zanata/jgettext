@@ -8,6 +8,7 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,7 +54,7 @@ public class TestDynamicRoundtrips {
             if (!rootDir.exists() || !rootDir.isDirectory())
                 return;
 
-            List<File> files = new LinkedList<File>();
+            List<File> files = new LinkedList<>();
             getChildPoFilesRecursively(rootDir, files);
 
             for (int i = 0; i < files.size(); i++) {
@@ -63,7 +64,7 @@ public class TestDynamicRoundtrips {
                                 rootDir.getAbsolutePath().length())) {
                             @Override
                             public void runTest() throws Throwable {
-                                JGettextTestUtils.testRoundTrip(null, f);
+                                JGettextTestUtils.testRoundTrip(null, f.toPath());
                             }
                         };
                 suite.addTest(testCase);

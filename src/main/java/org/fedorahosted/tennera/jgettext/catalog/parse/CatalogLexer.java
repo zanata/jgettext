@@ -17,7 +17,6 @@ package org.fedorahosted.tennera.jgettext.catalog.parse;
 
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,6 +25,8 @@ import java.io.LineNumberReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
@@ -51,13 +52,18 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
 
     /**
      * Uses the charset encoding specified in the file's Gettext header.
-     * 
+     *
      * @param file
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public CatalogLexer(File file) throws FileNotFoundException, IOException {
+    public CatalogLexer(Path file) throws IOException {
         tokenizer = new Tokenizer(file);
+    }
+
+    @Deprecated
+    public CatalogLexer(File file) throws IOException {
+        this(file.toPath());
     }
 
     public CatalogLexer(Reader reader) {
@@ -181,10 +187,9 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
          * @throws FileNotFoundException
          * @throws IOException
          */
-        public Tokenizer(File file)
-                throws FileNotFoundException, IOException {
-            this(file.getName(),
-                    lineNumberReaderForCharset(new FileInputStream(file)));
+        public Tokenizer(Path file) throws IOException {
+            this(file.getFileName().toString(),
+                    lineNumberReaderForCharset(Files.newInputStream(file)));
         }
 
         public Tokenizer(String filename, LineNumberReader ioReader) {

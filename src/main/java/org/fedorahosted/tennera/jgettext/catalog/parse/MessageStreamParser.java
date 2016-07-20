@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
 
 import org.fedorahosted.tennera.jgettext.Message;
 
@@ -25,9 +26,13 @@ public class MessageStreamParser {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public MessageStreamParser(File file) throws FileNotFoundException,
-            IOException {
+    public MessageStreamParser(Path file) throws  IOException {
         internalParser = new InternalMessageStreamParser(file);
+    }
+
+    @Deprecated
+    public MessageStreamParser(File file) throws  IOException {
+        this(file.toPath());
     }
 
     public MessageStreamParser(Reader reader) {
@@ -56,8 +61,8 @@ public class MessageStreamParser {
         private Message currentMessage = new Message();
         private Message nextMessage;
 
-        public InternalMessageStreamParser(File file)
-                throws FileNotFoundException, IOException {
+        public InternalMessageStreamParser(Path file)
+                throws IOException {
             super(new CatalogLexer(file));
         }
 

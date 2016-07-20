@@ -5,9 +5,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.StringReader;
+import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.fedorahosted.tennera.jgettext.Message;
 import org.fedorahosted.tennera.jgettext.catalog.parse.MessageStreamParser;
@@ -16,11 +18,12 @@ import org.junit.Test;
 
 public class TestMessageStreamParser {
 
-    File poFile;
+    private Path poFile;
 
     @Before
-    public void setup() {
-        poFile = new File(getClass().getResource("/valid/sample.po").getFile());
+    public void setup() throws Exception {
+        URL resource = getClass().getResource("/valid/sample.po");
+        poFile = Paths.get(resource.toURI());
     }
 
     @Test
