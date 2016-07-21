@@ -5,7 +5,6 @@ import static org.junit.Assert.fail;
 import java.io.File;
 
 import org.fedorahosted.tennera.jgettext.catalog.parse.UnexpectedTokenException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestRoundTrips {
@@ -19,7 +18,6 @@ public class TestRoundTrips {
     }
 
     @Test
-    @Ignore("requires recent version of gettext")
     public void testRoundtrip1() throws Throwable {
         File original = getResource("/roundtrip/sample.po");
         JGettextTestUtils.testRoundTrip(original);
@@ -38,7 +36,6 @@ public class TestRoundTrips {
     }
 
     @Test
-    @Ignore("requires recent version of gettext")
     public void testEmptyLineNote() throws Throwable {
         File original =
                 getResource("/roundtrip/translate-toolkit/emptylines_notes.po");
@@ -75,7 +72,6 @@ public class TestRoundTrips {
     }
 
     @Test
-    @Ignore("requires recent version of gettext")
     public void testMultilineContext() throws Throwable {
         File original =
                 getResource("/roundtrip/translate-toolkit/multiline_context.po");

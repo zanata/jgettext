@@ -32,6 +32,9 @@ msgstr "Documentação da Referência do Hibernate"
 msgid "Red Hat Middleware, LLC."
 msgstr ""
 
+msgid "Hello \"World\""
+msgstr ""
+
 #~ msgid "&copyrightHolder;"
 #~ msgstr "&copyrightHolder;"
 
