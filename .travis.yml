@@ -1,0 +1,29 @@
+# use http://docs.travis-ci.com/user/workers/container-based-infrastructure/
+sudo: false
+
+# cache local Maven repo: http://docs.travis-ci.com/user/caching/
+cache:
+  directories:
+  - $HOME/.m2/repository
+  - $HOME/.m2/wrapper
+
+language: java
+
+# Use the 'true' command to avoid up-front dependency fetching, for faster builds
+# See http://docs.travis-ci.com/user/languages/java/#Dependency-Management
+install: /bin/true
+
+script: |
+  ./mvnw verify \
+    --batch-mode \
+    --settings .travis-settings.xml \
+    --update-snapshots
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
+jdk:
+  - oraclejdk8
+
+matrix:
+  fast_finish: true
