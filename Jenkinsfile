@@ -27,7 +27,7 @@ try {
           info.printEnv()
           def testReports = '**/target/surefire-reports/TEST-*.xml'
           sh "shopt -s globstar && rm -f $testReports"
-          sh """./mvnw clean verify \
+          sh """./mvnw -e clean verify \
                      --batch-mode \
                      --settings .travis-settings.xml \
                      --update-snapshots \
