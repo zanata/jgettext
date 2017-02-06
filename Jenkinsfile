@@ -31,7 +31,7 @@ try {
                      -Dmaven.test.failure.ignore \
                      -DstaticAnalysis \
           """
-          junit testReports
+          junit testResults: testReports, testDataPublishers: [[$class: 'StabilityTestDataPublisher']]
 
           //sh "curl -s https://codecov.io/bash | bash"
         }
