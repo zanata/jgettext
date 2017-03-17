@@ -3,6 +3,7 @@ package org.fedorahosted.tennera.jgettext;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.net.URISyntaxException;
 
 import org.junit.Test;
 
@@ -36,7 +37,7 @@ public class TestHeaderFields {
 
     }
 
-    private File getResource(String file) {
-        return new File(getClass().getResource(file).getFile());
+    private File getResource(String file) throws URISyntaxException {
+        return new File(getClass().getResource(file).toURI());
     }
 }

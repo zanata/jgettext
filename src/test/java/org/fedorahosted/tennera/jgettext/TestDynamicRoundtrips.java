@@ -31,7 +31,7 @@ public class TestDynamicRoundtrips {
             properties.load(
                     new BufferedInputStream(
                             new FileInputStream(
-                                    new File(url.getFile()))));
+                                    new File(url.toURI()))));
         } catch (IOException e) {
             fail("unable to load properties file");
         }
