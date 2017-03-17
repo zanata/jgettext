@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.StringReader;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 
 import org.fedorahosted.tennera.jgettext.Message;
@@ -19,8 +20,8 @@ public class TestMessageStreamParser {
     File poFile;
 
     @Before
-    public void setup() {
-        poFile = new File(getClass().getResource("/valid/sample.po").getFile());
+    public void setup() throws URISyntaxException {
+        poFile = new File(getClass().getResource("/valid/sample.po").toURI());
     }
 
     @Test

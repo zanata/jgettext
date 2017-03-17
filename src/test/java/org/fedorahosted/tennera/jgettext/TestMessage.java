@@ -4,6 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.net.URISyntaxException;
 
 import org.fedorahosted.tennera.jgettext.catalog.parse.MessageStreamParser;
 import org.junit.Test;
@@ -57,8 +58,8 @@ public class TestMessage {
 
     }
 
-    private File getResource(String file) {
-        return new File(getClass().getResource(file).getFile());
+    private File getResource(String file) throws URISyntaxException {
+        return new File(getClass().getResource(file).toURI());
     }
 
 }

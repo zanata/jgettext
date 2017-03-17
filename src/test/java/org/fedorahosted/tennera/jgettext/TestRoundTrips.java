@@ -3,6 +3,7 @@ package org.fedorahosted.tennera.jgettext;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.net.URISyntaxException;
 
 import org.fedorahosted.tennera.jgettext.catalog.parse.UnexpectedTokenException;
 import org.junit.Test;
@@ -84,8 +85,8 @@ public class TestRoundTrips {
         JGettextTestUtils.testRoundTrip(original);
     }
 
-    private File getResource(String file) {
-        return new File(getClass().getResource(file).getFile());
+    private File getResource(String file) throws URISyntaxException {
+        return new File(getClass().getResource(file).toURI());
     }
 
 }

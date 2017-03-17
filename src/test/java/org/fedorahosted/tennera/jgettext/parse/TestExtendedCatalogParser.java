@@ -36,7 +36,7 @@ public class TestExtendedCatalogParser {
     @Test
     public void testBasic() throws Throwable {
         File poFile =
-                new File(getClass().getResource("/valid/sample.po").getFile());
+                new File(getClass().getResource("/valid/sample.po").toURI());
         ExtendedCatalogParser parser =
                 new ExtendedCatalogParser(new Catalog(), poFile);
         parser.catalog();
@@ -57,7 +57,7 @@ public class TestExtendedCatalogParser {
     @Test
     public void testObsoleteEntries() throws Throwable {
         File poFile =
-                new File(getClass().getResource("/valid/obsolete.po").getFile());
+                new File(getClass().getResource("/valid/obsolete.po").toURI());
         ExtendedCatalogParser parser =
                 new ExtendedCatalogParser(new Catalog(), poFile);
         parser.catalog();
@@ -80,7 +80,7 @@ public class TestExtendedCatalogParser {
     public void testPartialObsoleteEntries() throws Throwable {
         File poFile =
                 new File(getClass()
-                        .getResource("/invalid/mixed_up_obsolete.po").getFile());
+                        .getResource("/invalid/mixed_up_obsolete.po").toURI());
         ExtendedCatalogParser parser =
                 new ExtendedCatalogParser(new Catalog(), poFile);
         try {
@@ -94,7 +94,7 @@ public class TestExtendedCatalogParser {
     public void testPossiblyAmbigousFile() throws Throwable {
         File poFile =
                 new File(getClass().getResource("/valid/excesive_comments.po")
-                        .getFile());
+                        .toURI());
         ExtendedCatalogParser parser =
                 new ExtendedCatalogParser(new Catalog(), poFile);
         parser.catalog();

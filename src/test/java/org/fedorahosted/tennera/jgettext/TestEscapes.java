@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.StringWriter;
+import java.net.URISyntaxException;
 
 import org.junit.Test;
 
@@ -68,8 +69,8 @@ public class TestEscapes {
         return outputWriter.toString();
     }
 
-    private File getResource(String file) {
-        return new File(getClass().getResource(file).getFile());
+    private File getResource(String file) throws URISyntaxException {
+        return new File(getClass().getResource(file).toURI());
     }
 
 }
