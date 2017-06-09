@@ -35,7 +35,9 @@ public class ParseException extends RuntimeException {
         this.line = line;
     }
 
-    public String toString() {
-        return super.toString() + " [line=" + line + "]";
+    @Override
+    public String getMessage() {
+        String msg = super.getMessage();
+        return (msg != null ? msg + " " : "") + "[line=" + line + "]";
     }
 }
