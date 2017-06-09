@@ -74,7 +74,7 @@ public class PoParser {
         try {
             parser.catalog();
         } catch (RecognitionException e) {
-            throw new UnexpectedTokenException(e.getMessage(), e.getLine());
+            throw new UnexpectedTokenException(e.getMessage(), e, e.getLine());
         } catch (TokenStreamException e) {
             throw new ParseException(e.getMessage(), e, -1);
         }
