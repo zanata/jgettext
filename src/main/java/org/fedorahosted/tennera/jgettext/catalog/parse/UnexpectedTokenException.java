@@ -26,4 +26,8 @@ public class UnexpectedTokenException extends ParseException {
     public UnexpectedTokenException(String message, int line) {
         super(message, line);
     }
+
+    public UnexpectedTokenException(String message, Throwable cause, int line) {
+        super(message, cause, line);
+    }
 }

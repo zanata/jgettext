@@ -306,7 +306,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
                 String line = ioReader.readLine();
                 return line;
             } catch (IOException e) {
-                throw new ParseException("unable to read line", lineNumber());
+                throw new ParseException("unable to read line", e, lineNumber());
             }
         }
 

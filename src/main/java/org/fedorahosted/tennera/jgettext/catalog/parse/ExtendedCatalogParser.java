@@ -92,10 +92,7 @@ public class ExtendedCatalogParser extends CatalogParser {
 
     @Override
     public void reportError(RecognitionException e) {
-        UnexpectedTokenException utEx =
-                new UnexpectedTokenException(e.getMessage(), e.getLine());
-        utEx.initCause(e);
-        throw utEx;
+        throw new UnexpectedTokenException(e.getMessage(), e, e.getLine());
     }
 
     @Override
