@@ -24,6 +24,7 @@ import org.fedorahosted.tennera.jgettext.Catalog;
 import org.fedorahosted.tennera.jgettext.Message;
 import org.fedorahosted.tennera.jgettext.catalog.parse.ExtendedCatalogParser;
 import org.fedorahosted.tennera.jgettext.catalog.parse.ParseException;
+import org.fedorahosted.tennera.jgettext.catalog.parse.UnexpectedTokenException;
 import org.junit.Test;
 
 /**
@@ -52,6 +53,21 @@ public class TestExtendedCatalogParser {
         assertNotNull(catalog.locateHeader());
         assertEquals(7, entryCount);
         assertEquals(3, obsoleteCount);
+    }
+
+    @Test
+    public void testBadToken() throws Throwable {
+        File poFile =
+                new File(getClass()
+                        .getResource("/invalid/badtoken.po").toURI());
+        ExtendedCatalogParser parser =
+                new ExtendedCatalogParser(new Catalog(), poFile);
+        try {
+            parser.catalog();
+            fail("was expecting exception");
+        } catch (UnexpectedTokenException expected) {
+            // ignore
+        }
     }
 
     @Test
@@ -91,7 +107,7 @@ public class TestExtendedCatalogParser {
     }
 
     @Test
-    public void testPossiblyAmbigousFile() throws Throwable {
+    public void testPossiblyAmbiguousFile() throws Throwable {
         File poFile =
                 new File(getClass().getResource("/valid/excesive_comments.po")
                         .toURI());
