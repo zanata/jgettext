@@ -11,7 +11,7 @@
     <groupId>org.fedorahosted.tennera</groupId>
     <artifactId>jgettext</artifactId>
     <packaging>jar</packaging>
-    <version>0.16-SNAPSHOT</version>
+    <version>0.15.1</version>
     <name>JGettext</name>
     <description>
         ${project.name} provides the ability to read/parse and write GNU Gettext catalog files (PO and POT files)
@@ -58,7 +58,7 @@
         <connection>scm:git:git://github.com/zanata/jgettext.git</connection>
         <developerConnection>scm:git:git@github.com:zanata/jgettext.git</developerConnection>
         <url>https://github.com/zanata/jgettext</url>
-        <tag>HEAD</tag>
+        <tag>jgettext-0.15.1</tag>
     </scm>
 
     <contributors>
