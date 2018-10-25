@@ -523,6 +523,7 @@ public class CatalogLexer implements TokenStream, CatalogTokenTypes {
                 collect(initial);
             }
 
+            @Override
             protected void wrapUp(String entry, boolean isPrevious) {
                 if (isPrevious) {
                     addToken(new Token(PREV_MSGCTXT, entry));

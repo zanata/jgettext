@@ -112,6 +112,7 @@ public class Catalog implements Iterable<Message> {
         }
     }
 
+    @Override
     public Iterator<Message> iterator() {
         return messageMap.values().iterator();
     }
